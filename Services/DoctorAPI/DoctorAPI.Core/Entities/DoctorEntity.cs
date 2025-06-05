@@ -12,4 +12,5 @@ public class DoctorEntity
     public DateOnly BirthDate { get; set; }
     public DateOnly CareerStartDay { get; set; }
     public Guid SpecializationId { get; set; }
+    public SpecializationEntity Specialization { get; set; }
 }
