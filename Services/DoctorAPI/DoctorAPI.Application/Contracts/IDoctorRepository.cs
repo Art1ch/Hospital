@@ -9,7 +9,7 @@ public interface IDoctorRepository
     Task<DoctorEntity> GetById<T>(T id, CancellationToken ct);
     Task<DoctorEntity> GetBySpecialization<T>(T specializationId, CancellationToken ct);
     Task<List<DoctorEntity>> GetByStatus(StatusEnum status, CancellationToken ct);
-    Task Create(DoctorEntity doctor, CancellationToken ct);
+    Task<T> Create<T>(DoctorEntity doctor, CancellationToken ct);
     Task<T> Update<T>(DoctorEntity doctor, CancellationToken ct);
     Task Delete<T>(T id, CancellationToken ct);
 }

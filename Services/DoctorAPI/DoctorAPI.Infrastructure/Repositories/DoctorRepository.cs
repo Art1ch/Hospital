@@ -16,7 +16,7 @@ public class DoctorRepository : IDoctorRepository
         _dbContext = dbContext;
     }
 
-    public async Task Create(DoctorEntity doctor, CancellationToken ct)
+    public async Task<T> Create<T>(DoctorEntity doctor, CancellationToken ct)
     {
         await using var transaction = await _dbContext.Database.BeginTransactionAsync(ct);
         try
@@ -24,6 +24,7 @@ public class DoctorRepository : IDoctorRepository
             await _dbContext.Doctors.AddAsync(doctor, ct);
             await _dbContext.SaveChangesAsync(ct);
             await transaction.CommitAsync(ct);
+            return (T)(object)doctor.Id;
         }
         catch (Exception ex)
         {
@@ -54,7 +55,7 @@ public class DoctorRepository : IDoctorRepository
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .AsNoTracking()
-            .ToListAsync();
+            .ToListAsync(ct);
         return doctors;
     }
 
@@ -62,7 +63,7 @@ public class DoctorRepository : IDoctorRepository
     {
         var doctor = await _dbContext.Doctors
             .AsNoTracking()
-            .FirstOrDefaultAsync(d => d.Id.Equals(id));
+            .FirstOrDefaultAsync(d => d.Id.Equals(id), ct);
         return doctor ?? throw new NullReferenceException();
     }
 
@@ -70,7 +71,7 @@ public class DoctorRepository : IDoctorRepository
     {
         var doctor = await _dbContext.Doctors
             .AsNoTracking()
-            .FirstOrDefaultAsync(d => d.SpecializationId.Equals(specializationId));
+            .FirstOrDefaultAsync(d => d.SpecializationId.Equals(specializationId), ct);
         return doctor ?? throw new NullReferenceException();
     }
 
@@ -79,7 +80,7 @@ public class DoctorRepository : IDoctorRepository
         var doctors = await _dbContext.Doctors
             .AsNoTracking()
             .Where(d => d.Status.Equals(status))
-            .ToListAsync();
+            .ToListAsync(ct);
         return doctors;
     }
 
