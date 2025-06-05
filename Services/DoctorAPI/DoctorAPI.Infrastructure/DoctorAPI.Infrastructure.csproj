@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DoctorAPI.Application\DoctorAPI.Application.csproj" />
     <ProjectReference Include="..\DoctorAPI.Core\DoctorAPI.Core.csproj" />
   </ItemGroup>
 
