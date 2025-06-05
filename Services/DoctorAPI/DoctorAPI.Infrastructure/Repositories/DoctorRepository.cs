@@ -66,11 +66,11 @@ public class DoctorRepository : IDoctorRepository
         return doctor ?? throw new NullReferenceException();
     }
 
-    public async Task<DoctorEntity> GetBySpecialization(SpecializationEntity specialization, CancellationToken ct)
+    public async Task<DoctorEntity> GetBySpecialization<T>(T specializationId, CancellationToken ct)
     {
         var doctor = await _dbContext.Doctors
             .AsNoTracking()
-            .FirstOrDefaultAsync(d => d.Specialization.Equals(specialization));
+            .FirstOrDefaultAsync(d => d.SpecializationId.Equals(specializationId));
         return doctor ?? throw new NullReferenceException();
     }
 
