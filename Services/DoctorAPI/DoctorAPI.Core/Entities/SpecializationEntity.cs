@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace DoctorAPI.Core.Entities;
 
-namespace DoctorAPI.Core.Entities
+public class SpecializationEntity
 {
-    internal class SpecializationEntity
-    {
-    }
+    public Guid Id { get; set; }
+    public string Name { get; set; }
 }
