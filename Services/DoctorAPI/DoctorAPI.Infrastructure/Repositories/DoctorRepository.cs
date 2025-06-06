@@ -3,20 +3,52 @@ using DoctorAPI.Core.Entities;
 using DoctorAPI.Core.Enums;
 using DoctorAPI.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
-using System.Numerics;
 
 namespace DoctorAPI.Infrastructure.Repositories;
 
-public class DoctorRepository : IDoctorRepository
+public class DoctorRepository<TId1, TId2> : IDoctorRepository<TId1, TId2>
 {
-    private readonly DoctorDbContext _dbContext;
+    private readonly DoctorDbContext<TId1, TId2> _dbContext;
 
-    public DoctorRepository(DoctorDbContext dbContext)
+    public DoctorRepository(DoctorDbContext<TId1, TId2> dbContext)
     {
         _dbContext = dbContext;
     }
 
-    public async Task<T> Create<T>(DoctorEntity doctor, CancellationToken ct)
+    public async Task<List<DoctorEntity<TId1, TId2>>> GetAll(int page, int pageSize, CancellationToken ct)
+    {
+        return await _dbContext.Doctors
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .AsNoTracking()
+            .ToListAsync(ct);
+    }
+
+    public async Task<DoctorEntity<TId1, TId2>> GetById(TId1 id, CancellationToken ct)
+    {
+        var doctor = await _dbContext.Doctors
+            .AsNoTracking()
+            .FirstOrDefaultAsync(d => d.Id!.Equals(id), ct);
+        return doctor ?? throw new NullReferenceException();
+    }
+
+    public async Task<DoctorEntity<TId1, TId2>> GetBySpecialization(TId2 specializationId, CancellationToken ct)
+    {
+        var doctor = await _dbContext.Doctors
+            .AsNoTracking()
+            .FirstOrDefaultAsync(d => d.SpecializationId!.Equals(specializationId), ct);
+        return doctor ?? throw new NullReferenceException();
+    }
+
+    public async Task<List<DoctorEntity<TId1, TId2>>> GetByStatus(StatusEnum status, CancellationToken ct)
+    {
+        return await _dbContext.Doctors
+            .Where(d => d.Status == status)
+            .AsNoTracking()
+            .ToListAsync(ct);
+    }
+
+    public async Task<TId1> Create(DoctorEntity<TId1, TId2> doctor, CancellationToken ct)
     {
         await using var transaction = await _dbContext.Database.BeginTransactionAsync(ct);
         try
@@ -24,93 +56,60 @@ public class DoctorRepository : IDoctorRepository
             await _dbContext.Doctors.AddAsync(doctor, ct);
             await _dbContext.SaveChangesAsync(ct);
             await transaction.CommitAsync(ct);
-            return (T)(object)doctor.Id;
+            return doctor.Id;
         }
-        catch (Exception ex)
+        catch
         {
             await transaction.RollbackAsync(ct);
             throw;
         }
     }
 
-    public async Task Delete<T>(T id, CancellationToken ct)
+    public async Task<TId1> Update(DoctorEntity<TId1, TId2> doctor, CancellationToken ct)
     {
-        await using var transaction = await _dbContext.Database.BeginTransactionAsync(ct);
-        try
-        {
-            await _dbContext.Doctors.Where(d => d.Id.Equals(id)).ExecuteDeleteAsync(ct);
-            await _dbContext.SaveChangesAsync(ct);
-            await transaction.CommitAsync(ct);
-        }
-        catch (Exception ex)
-        {
-            await transaction.RollbackAsync(ct);
-            throw;
-        }
-    }
-
-    public async Task<List<DoctorEntity>> GetAll(int page, int pageSize, CancellationToken ct)
-    {
-        var doctors = await _dbContext.Doctors
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .AsNoTracking()
-            .ToListAsync(ct);
-        return doctors;
-    }
-
-    public async Task<DoctorEntity> GetById<T>(T id, CancellationToken ct)
-    {
-        var doctor = await _dbContext.Doctors
-            .AsNoTracking()
-            .FirstOrDefaultAsync(d => d.Id.Equals(id), ct);
-        return doctor ?? throw new NullReferenceException();
-    }
-
-    public async Task<DoctorEntity> GetBySpecialization<T>(T specializationId, CancellationToken ct)
-    {
-        var doctor = await _dbContext.Doctors
-            .AsNoTracking()
-            .FirstOrDefaultAsync(d => d.SpecializationId.Equals(specializationId), ct);
-        return doctor ?? throw new NullReferenceException();
-    }
-
-    public async Task<List<DoctorEntity>> GetByStatus(StatusEnum status, CancellationToken ct)
-    {
-        var doctors = await _dbContext.Doctors
-            .AsNoTracking()
-            .Where(d => d.Status.Equals(status))
-            .ToListAsync(ct);
-        return doctors;
-    }
-
-    public async Task<T> Update<T>(DoctorEntity doctor, CancellationToken ct)
-    {
-        if (doctor == null)
-            throw new ArgumentNullException();
-
         await using var transaction = await _dbContext.Database.BeginTransactionAsync(ct);
         try
         {
             await _dbContext.Doctors
-                .Where(d => d.Id.Equals(doctor.Id))
+                .Where(d => d.Id!.Equals(doctor.Id))
                 .ExecuteUpdateAsync(s => s
-                .SetProperty(d => d.FirstName, doctor.FirstName)
-                .SetProperty(d => d.LastName, doctor.LastName)
-                .SetProperty(d => d.MiddleName, doctor.MiddleName)
-                .SetProperty(d => d.Status, doctor.Status)
-                .SetProperty(d => d.BirthDate, doctor.BirthDate)
-                .SetProperty(d => d.CareerStartDay, doctor.CareerStartDay)
-                .SetProperty(d => d.Specialization, doctor.Specialization),
-                ct);
+                    .SetProperty(d => d.FirstName, doctor.FirstName)
+                    .SetProperty(d => d.LastName, doctor.LastName)
+                    .SetProperty(d => d.MiddleName, doctor.MiddleName)
+                    .SetProperty(d => d.Status, doctor.Status)
+                    .SetProperty(d => d.BirthDate, doctor.BirthDate)
+                    .SetProperty(d => d.CareerStartDay, doctor.CareerStartDay)
+                    .SetProperty(d => d.Specialization, doctor.Specialization),
+                    ct);
+
             await _dbContext.SaveChangesAsync(ct);
             await transaction.CommitAsync(ct);
-            return (T)(object)doctor.Id;
+            return doctor.Id;
         }
-        catch (Exception ex)
+        catch
+        {
+            await transaction.RollbackAsync(ct);
+            throw;
+        }
+    }
+
+    public async Task Delete(TId1 id, CancellationToken ct)
+    {
+        await using var transaction = await _dbContext.Database.BeginTransactionAsync(ct);
+        try
+        {
+            await _dbContext.Doctors
+                .Where(d => d.Id!.Equals(id))
+                .ExecuteDeleteAsync(ct);
+
+            await _dbContext.SaveChangesAsync(ct);
+            await transaction.CommitAsync(ct);
+        }
+        catch
         {
             await transaction.RollbackAsync(ct);
             throw;
         }
     }
 }
+
