@@ -3,14 +3,19 @@ using DoctorAPI.Core.Enums;
 
 namespace DoctorAPI.Application.Contracts;
 
-public interface IDoctorRepository<TId1, TId2>
+public interface IDoctorRepository<TDoctorId, TSpecializationId>
 {
-    Task<List<DoctorEntity<TId1, TId2>>> GetAll(int page, int pageSize, CancellationToken ct);
-    Task<DoctorEntity<TId1, TId2>> GetById(TId1 id, CancellationToken ct);
-    Task<DoctorEntity<TId1, TId2>> GetBySpecialization(TId2 specializationId, CancellationToken ct);
-    Task<List<DoctorEntity<TId1, TId2>>> GetByStatus(StatusEnum status, CancellationToken ct);
-    Task<TId1> Create(DoctorEntity<TId1, TId2> doctor, CancellationToken ct);
-    Task<TId1> Update(DoctorEntity<TId1, TId2> doctor, CancellationToken ct);
-    Task Delete(TId1 id, CancellationToken ct);
+    Task<List<DoctorEntity<TDoctorId, TSpecializationId>>> GetAllAsync(
+        int page, int pageSize, CancellationToken ct);
+    Task<DoctorEntity<TDoctorId, TSpecializationId>> GetByIdAsync(
+        TDoctorId id, CancellationToken ct);
+    Task<DoctorEntity<TDoctorId, TSpecializationId>> GetBySpecializationAsync(
+        TSpecializationId specializationId, CancellationToken ct);
+    Task<List<DoctorEntity<TDoctorId, TSpecializationId>>> GetByStatusAsync(
+        StatusEnum status, CancellationToken ct);
+    Task<TDoctorId> CreateAsync(
+        DoctorEntity<TDoctorId, TSpecializationId> doctor, CancellationToken ct);
+    Task<TDoctorId> UpdateAsync(
+        DoctorEntity<TDoctorId, TSpecializationId> doctor, CancellationToken ct);
+    Task DeleteAsync(TDoctorId id, CancellationToken ct);
 }
-

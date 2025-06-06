@@ -4,5 +4,7 @@ using MediatR;
 
 namespace DoctorAPI.Application.Commands.Doctor.Create;
 
-public record UpdateDoctorCommand<TId1, TId2>(
-    UpdateDoctorRequestDto<TId1, TId2> Dto) : IRequest<UpdateDoctorResponseDto<TId1>>;
+public record UpdateDoctorCommand<TDoctorId,
+    TSpecializationId>(
+    UpdateDoctorRequestDto<TDoctorId,
+        TSpecializationId> Dto) : IRequest<UpdateDoctorResponseDto<TDoctorId>>;

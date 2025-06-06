@@ -4,21 +4,25 @@ using MediatR;
 
 namespace DoctorAPI.Application.Commands.Doctor.Delete;
 
-public class DeleteDoctorCommandHandler<TId1, TId2>
-    : IRequestHandler<DeleteDoctorCommand<TId1>, DeleteDoctorResponseDto>
+public class DeleteDoctorCommandHandler<TDoctorId,
+    TSpecializationId>
+    : IRequestHandler<DeleteDoctorCommand<TDoctorId>,
+        DeleteDoctorResponseDto>
 {
-    private readonly IDoctorRepository<TId1, TId2> _doctorRepository;
+    private readonly IDoctorRepository<TDoctorId,
+        TSpecializationId> _doctorRepository;
 
-    public DeleteDoctorCommandHandler(IDoctorRepository<TId1, TId2> doctorRepository)
+    public DeleteDoctorCommandHandler(IDoctorRepository<TDoctorId,
+        TSpecializationId> doctorRepository)
     {
         _doctorRepository = doctorRepository;
     }
 
     public async Task<DeleteDoctorResponseDto> Handle(
-        DeleteDoctorCommand<TId1> request,
+        DeleteDoctorCommand<TDoctorId> request,
         CancellationToken ct)
     {
-        await _doctorRepository.Delete(request.Dto.Id, ct);
+        await _doctorRepository.DeleteAsync(request.Dto.Id, ct);
         return new DeleteDoctorResponseDto();
     }
 }

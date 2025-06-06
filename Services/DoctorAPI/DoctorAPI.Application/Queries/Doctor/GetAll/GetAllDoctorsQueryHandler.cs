@@ -5,28 +5,34 @@ using MediatR;
 
 namespace DoctorAPI.Application.Queries.Doctor.GetAll;
 
-public class GetAllDoctorsQueryHandler<TId1, TId2>
-    : IRequestHandler<GetAllDoctorsQuery<TId1, TId2>, GetAllDoctorsResponseDto<TId1, TId2>>
+public class GetAllDoctorsQueryHandler<TDoctorId, TSpecializationId>
+    : IRequestHandler<GetAllDoctorsQuery<TDoctorId,
+        TSpecializationId>,
+        GetAllDoctorsResponseDto<TDoctorId,
+            TSpecializationId>>
 {
-    private readonly IDoctorRepository<TId1, TId2> _doctorRepository;
+    private readonly IDoctorRepository<TDoctorId,
+        TSpecializationId> _doctorRepository;
     private readonly IMapper _mapper;
 
     public GetAllDoctorsQueryHandler(
-        IDoctorRepository<TId1, TId2> doctorRepository,
+        IDoctorRepository<TDoctorId,
+            TSpecializationId> doctorRepository,
         IMapper mapper)
     {
         _doctorRepository = doctorRepository;
         _mapper = mapper;
     }
-    public async Task<GetAllDoctorsResponseDto<TId1, TId2>> Handle(
-        GetAllDoctorsQuery<TId1, TId2> request,
+    public async Task<GetAllDoctorsResponseDto<TDoctorId, TSpecializationId>> Handle(
+        GetAllDoctorsQuery<TDoctorId, TSpecializationId> request,
         CancellationToken ct)
     {
-        var doctors = await _doctorRepository.GetAll(
+        var doctors = await _doctorRepository.GetAllAsync(
             request.Page,
             request.PageSize,
             ct);
-        var response = _mapper.Map<GetAllDoctorsResponseDto<TId1, TId2>>(doctors);
+        var response = _mapper.Map<GetAllDoctorsResponseDto<TDoctorId,
+            TSpecializationId>>(doctors);
         return response;
     }
 }

@@ -6,16 +6,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DoctorAPI.Infrastructure.Repositories;
 
-public class DoctorRepository<TId1, TId2> : IDoctorRepository<TId1, TId2>
+public class DoctorRepository<TDoctorId, TSpecializationId> :
+    IDoctorRepository<TDoctorId, TSpecializationId>
 {
-    private readonly DoctorDbContext<TId1, TId2> _dbContext;
+    private readonly DoctorDbContext<TDoctorId, TSpecializationId> _dbContext;
 
-    public DoctorRepository(DoctorDbContext<TId1, TId2> dbContext)
+    public DoctorRepository(
+        DoctorDbContext<TDoctorId, TSpecializationId> dbContext)
     {
         _dbContext = dbContext;
     }
 
-    public async Task<List<DoctorEntity<TId1, TId2>>> GetAll(int page, int pageSize, CancellationToken ct)
+    public async Task<List<DoctorEntity<TDoctorId, TSpecializationId>>> GetAllAsync(
+        int page, int pageSize, CancellationToken ct)
     {
         return await _dbContext.Doctors
             .Skip((page - 1) * pageSize)
@@ -24,7 +27,9 @@ public class DoctorRepository<TId1, TId2> : IDoctorRepository<TId1, TId2>
             .ToListAsync(ct);
     }
 
-    public async Task<DoctorEntity<TId1, TId2>> GetById(TId1 id, CancellationToken ct)
+    public async Task<DoctorEntity<TDoctorId, TSpecializationId>> GetByIdAsync(
+        TDoctorId id,
+        CancellationToken ct)
     {
         var doctor = await _dbContext.Doctors
             .AsNoTracking()
@@ -32,7 +37,8 @@ public class DoctorRepository<TId1, TId2> : IDoctorRepository<TId1, TId2>
         return doctor ?? throw new NullReferenceException();
     }
 
-    public async Task<DoctorEntity<TId1, TId2>> GetBySpecialization(TId2 specializationId, CancellationToken ct)
+    public async Task<DoctorEntity<TDoctorId, TSpecializationId>> GetBySpecializationAsync(
+        TSpecializationId specializationId, CancellationToken ct)
     {
         var doctor = await _dbContext.Doctors
             .AsNoTracking()
@@ -40,7 +46,8 @@ public class DoctorRepository<TId1, TId2> : IDoctorRepository<TId1, TId2>
         return doctor ?? throw new NullReferenceException();
     }
 
-    public async Task<List<DoctorEntity<TId1, TId2>>> GetByStatus(StatusEnum status, CancellationToken ct)
+    public async Task<List<DoctorEntity<TDoctorId, TSpecializationId>>> GetByStatusAsync(
+        StatusEnum status, CancellationToken ct)
     {
         return await _dbContext.Doctors
             .Where(d => d.Status == status)
@@ -48,7 +55,8 @@ public class DoctorRepository<TId1, TId2> : IDoctorRepository<TId1, TId2>
             .ToListAsync(ct);
     }
 
-    public async Task<TId1> Create(DoctorEntity<TId1, TId2> doctor, CancellationToken ct)
+    public async Task<TDoctorId> CreateAsync(
+        DoctorEntity<TDoctorId, TSpecializationId> doctor, CancellationToken ct)
     {
         await using var transaction = await _dbContext.Database.BeginTransactionAsync(ct);
         try
@@ -65,7 +73,8 @@ public class DoctorRepository<TId1, TId2> : IDoctorRepository<TId1, TId2>
         }
     }
 
-    public async Task<TId1> Update(DoctorEntity<TId1, TId2> doctor, CancellationToken ct)
+    public async Task<TDoctorId> UpdateAsync(
+        DoctorEntity<TDoctorId, TSpecializationId> doctor, CancellationToken ct)
     {
         await using var transaction = await _dbContext.Database.BeginTransactionAsync(ct);
         try
@@ -93,7 +102,8 @@ public class DoctorRepository<TId1, TId2> : IDoctorRepository<TId1, TId2>
         }
     }
 
-    public async Task Delete(TId1 id, CancellationToken ct)
+    public async Task DeleteAsync(
+        TDoctorId id, CancellationToken ct)
     {
         await using var transaction = await _dbContext.Database.BeginTransactionAsync(ct);
         try

@@ -7,32 +7,37 @@ using MediatR;
 
 namespace DoctorAPI.Application.Commands.Doctor.Create;
 
-public class CreateDoctorCommandHandler<TId1, TId2>
-    : IRequestHandler<CreateDoctorCommand<TId1, TId2>, CreateDoctorResponseDto<TId1>>
+public class CreateDoctorCommandHandler<TDoctorId, TSpecializationId>
+    : IRequestHandler<CreateDoctorCommand<TDoctorId,
+        TSpecializationId>,
+        CreateDoctorResponseDto<TDoctorId>>
 {
-    private readonly IDoctorRepository<TId1, TId2> _doctorRepository;
-    private readonly IValidator<DoctorEntity<TId1, TId2>> _validator;
+    private readonly IDoctorRepository<TDoctorId, TSpecializationId> _doctorRepository;
+    private readonly IValidator<DoctorEntity<TDoctorId, TSpecializationId>> _validator;
     private readonly IMapper _mapper;
 
     public CreateDoctorCommandHandler(
-        IDoctorRepository<TId1, TId2> doctorRepository,
-        IValidator<DoctorEntity<TId1, TId2>> validator)
+        IDoctorRepository<TDoctorId, TSpecializationId> doctorRepository,
+        IValidator<DoctorEntity<TDoctorId, TSpecializationId>> validator,
+        IMapper mapper)
     {
         _doctorRepository = doctorRepository;
         _validator = validator;
+        _mapper = mapper;
     }
 
-    public async Task<CreateDoctorResponseDto<TId1>> Handle(
-        CreateDoctorCommand<TId1, TId2> request, 
+    public async Task<CreateDoctorResponseDto<TDoctorId>> Handle(
+        CreateDoctorCommand<TDoctorId,
+            TSpecializationId> request, 
         CancellationToken ct)
     {
-        var doctorEntity = _mapper.Map<DoctorEntity<TId1, TId2>>(request.Dto);
+        var doctorEntity = _mapper.Map<DoctorEntity<TDoctorId, TSpecializationId>>(request.Dto);
         var validationResult = await _validator.ValidateAsync(doctorEntity, ct);
         if (!validationResult.IsValid)
         {
             throw new Exception();
         }
-        await _doctorRepository.Create(doctorEntity, ct);
-        return _mapper.Map<CreateDoctorResponseDto<TId1>>(doctorEntity);
+        await _doctorRepository.CreateAsync(doctorEntity, ct);
+        return _mapper.Map<CreateDoctorResponseDto<TDoctorId>>(doctorEntity);
     }
 }

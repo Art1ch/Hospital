@@ -2,5 +2,5 @@
 
 namespace DoctorAPI.Application.WebDto_s.Doctor.GetAll;
 
-public record GetAllDoctorsResponseDto<TId1, TId2>(
-    List<DoctorEntity<TId1, TId2>> Doctors);
+public record GetAllDoctorsResponseDto<TDoctorId, TSpecializationId>(
+    List<DoctorEntity<TDoctorId, TSpecializationId>> Doctors);

@@ -1,4 +1,4 @@
 ﻿namespace DoctorAPI.Application.WebDto_s.Doctor.Update;
 
-public record UpdateDoctorResponseDto<T>(
-    T Id);
+public record UpdateDoctorResponseDto<TDoctorId>(
+    TDoctorId Id);

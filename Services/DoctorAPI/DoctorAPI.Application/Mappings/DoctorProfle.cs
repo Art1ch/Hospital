@@ -9,11 +9,12 @@ using DoctorAPI.Core.Entities;
 
 namespace DoctorAPI.Application.Mappings;
 
-public class DoctorProfle<TId1, TId2> : Profile
+public class DoctorProfle<TDoctorId, TSpecializationId> : Profile
 {
     public DoctorProfle()
     {
-        CreateMap<CreateDoctorRequestDto<TId1, TId2>, DoctorEntity<TId1, TId2>>()
+        CreateMap<CreateDoctorRequestDto<TDoctorId, TSpecializationId>,
+            DoctorEntity<TDoctorId, TSpecializationId>>()
             .ForMember(dest => dest.Id,
             opt => opt.MapFrom(_ => Guid.NewGuid()))
             .ForMember(dest => dest.FirstName,
@@ -31,11 +32,13 @@ public class DoctorProfle<TId1, TId2> : Profile
             .ForMember(dest => dest.Specialization,
             opt => opt.MapFrom(d => d.Specialization));
 
-        CreateMap<DoctorEntity<TId1, TId2>, CreateDoctorResponseDto<TId1>>()
+        CreateMap<DoctorEntity<TDoctorId, TSpecializationId>,
+            CreateDoctorResponseDto<TDoctorId>>()
             .ForMember(dest => dest.Id,
             opt => opt.MapFrom(d => d.Id));
 
-        CreateMap<UpdateDoctorRequestDto<TId1, TId2>, DoctorEntity<TId1, TId2>>()
+        CreateMap<UpdateDoctorRequestDto<TDoctorId, TSpecializationId>,
+            DoctorEntity<TDoctorId, TSpecializationId>>()
             .ForMember(dest => dest.Id,
             opt => opt.MapFrom(d => d.Id))
             .ForMember(dest => dest.FirstName,
@@ -53,19 +56,23 @@ public class DoctorProfle<TId1, TId2> : Profile
             .ForMember(dest => dest.Specialization,
             opt => opt.MapFrom(d => d.Specialization));
 
-        CreateMap<DoctorEntity<TId1, TId2>, UpdateDoctorResponseDto<TId1>>()
+        CreateMap<DoctorEntity<TDoctorId, TSpecializationId>,
+            UpdateDoctorResponseDto<TDoctorId>>()
             .ForMember(dest => dest.Id,
             opt => opt.MapFrom(d => d.Id));
 
-        CreateMap<List<DoctorEntity<TId1, TId2>>, GetAllDoctorsResponseDto<TId1, TId2>>()
+        CreateMap<List<DoctorEntity<TDoctorId, TSpecializationId>>,
+            GetAllDoctorsResponseDto<TDoctorId, TSpecializationId>>()
             .ForMember(dest => dest.Doctors,
             opt => opt.MapFrom(d => d));
 
-        CreateMap<List<DoctorEntity<TId1, TId2>>, GetByStatusDoctorsResponseDto<TId1, TId2>>()
+        CreateMap<List<DoctorEntity<TDoctorId, TSpecializationId>>,
+            GetByStatusDoctorsResponseDto<TDoctorId, TSpecializationId>>()
             .ForMember(dest => dest.Doctors,
             opt => opt.MapFrom(d => d));
 
-        CreateMap<DoctorEntity<TId1, TId2>, GetByIdDoctorResponseDto<TId1, TId2>>()
+        CreateMap<DoctorEntity<TDoctorId, TSpecializationId>,
+            GetByIdDoctorResponseDto<TDoctorId, TSpecializationId>>()
             .ForMember(dest => dest.Doctor,
             opt => opt.MapFrom(d => d));
     }

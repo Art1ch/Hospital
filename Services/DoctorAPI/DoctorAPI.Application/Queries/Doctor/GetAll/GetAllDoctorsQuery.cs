@@ -3,6 +3,9 @@ using MediatR;
 
 namespace DoctorAPI.Application.Queries.Doctor.GetAll;
 
-public record GetAllDoctorsQuery<TId1, TId2>(
+public record GetAllDoctorsQuery<TDoctorId,
+    TSpecializationId>(
     int Page,
-    int PageSize) : IRequest<GetAllDoctorsResponseDto<TId1, TId2>>;
+    int PageSize) 
+    : IRequest<GetAllDoctorsResponseDto<TDoctorId,
+        TSpecializationId>>;

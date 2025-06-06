@@ -8,32 +8,36 @@ using MediatR;
 
 namespace DoctorAPI.Application.Commands.Doctor.Update;
 
-public class UpdateDoctorCommandHandler<TId1, TId2>
-    : IRequestHandler<UpdateDoctorCommand<TId1, TId2>, UpdateDoctorResponseDto<TId1>>
+public class UpdateDoctorCommandHandler<TDoctorId,
+    TSpecializationId>
+    : IRequestHandler<UpdateDoctorCommand<TDoctorId,
+        TSpecializationId>, UpdateDoctorResponseDto<TDoctorId>>
 {
-    private readonly IDoctorRepository<TId1, TId2> _doctorRepository;
-    private readonly IValidator<DoctorEntity<TId1, TId2>> _validator;
+    private readonly IDoctorRepository<TDoctorId,
+        TSpecializationId> _doctorRepository;
+    private readonly IValidator<DoctorEntity<TDoctorId,
+        TSpecializationId>> _validator;
     private readonly IMapper _mapper;
     public UpdateDoctorCommandHandler
-        (IDoctorRepository<TId1, TId2> doctorRepository,
-        IValidator<DoctorEntity<TId1, TId2>> validator,
+        (IDoctorRepository<TDoctorId, TSpecializationId> doctorRepository,
+        IValidator<DoctorEntity<TDoctorId, TSpecializationId>> validator,
         IMapper mapper)
     {
         _doctorRepository = doctorRepository;
         _validator = validator;
         _mapper = mapper;
     }
-    public async Task<UpdateDoctorResponseDto<TId1>> Handle(
-        UpdateDoctorCommand<TId1, TId2> request,
+    public async Task<UpdateDoctorResponseDto<TDoctorId>> Handle(
+        UpdateDoctorCommand<TDoctorId, TSpecializationId> request,
         CancellationToken ct)
     {
-        var doctorEntity = _mapper.Map<DoctorEntity<TId1, TId2>>(request.Dto);
+        var doctorEntity = _mapper.Map<DoctorEntity<TDoctorId, TSpecializationId>>(request.Dto);
         var validationResult = await _validator.ValidateAsync(doctorEntity);
         if (!validationResult.IsValid)
         {
             throw new Exception();
         }
-        await _doctorRepository.Update(doctorEntity, ct);
-        return _mapper.Map<UpdateDoctorResponseDto<TId1>>(doctorEntity);
+        await _doctorRepository.UpdateAsync(doctorEntity, ct);
+        return _mapper.Map<UpdateDoctorResponseDto<TDoctorId>>(doctorEntity);
     }
 }

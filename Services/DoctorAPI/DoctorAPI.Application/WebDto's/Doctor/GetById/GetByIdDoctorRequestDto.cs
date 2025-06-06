@@ -2,5 +2,5 @@
 
 namespace DoctorAPI.Application.WebDto_s.Doctor.GetById;
 
-public record GetByIdDoctorRequestDto<T>(
-    T Id);
+public record GetByIdDoctorRequestDto<TDoctorId>(
+    TDoctorId Id);

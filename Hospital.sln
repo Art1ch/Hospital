@@ -7,11 +7,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{04
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DoctorAPI", "DoctorAPI", "{37659377-91C6-4D5F-92F4-72746446E9BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoctorAPI.Core", "Services\DoctorAPI\DoctorAPI.Core\DoctorAPI.Core.csproj", "{46A429BE-AAA4-459D-88FD-F436CD4ED049}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoctorAPI.Core", "Services\DoctorAPI\DoctorAPI.Core\DoctorAPI.Core.csproj", "{46A429BE-AAA4-459D-88FD-F436CD4ED049}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoctorAPI.Infrastructure", "Services\DoctorAPI\DoctorAPI.Infrastructure\DoctorAPI.Infrastructure.csproj", "{DDBC4A65-F9F2-482B-B82B-D68C14F08CBB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoctorAPI.Infrastructure", "Services\DoctorAPI\DoctorAPI.Infrastructure\DoctorAPI.Infrastructure.csproj", "{DDBC4A65-F9F2-482B-B82B-D68C14F08CBB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoctorAPI.Application", "Services\DoctorAPI\DoctorAPI.Application\DoctorAPI.Application.csproj", "{95B1B969-AA44-4863-8CE2-560E0A34DA3E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoctorAPI.Application", "Services\DoctorAPI\DoctorAPI.Application\DoctorAPI.Application.csproj", "{95B1B969-AA44-4863-8CE2-560E0A34DA3E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoctorAPI", "Services\DoctorAPI\DoctorAPI\DoctorAPI.csproj", "{18B9FBB2-BDCE-4121-832E-E0D6DFC6ECC8}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{7E7F0CFE-4D20-4617-ACD0-262D94A84673}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +35,14 @@ Global
 		{95B1B969-AA44-4863-8CE2-560E0A34DA3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95B1B969-AA44-4863-8CE2-560E0A34DA3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95B1B969-AA44-4863-8CE2-560E0A34DA3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18B9FBB2-BDCE-4121-832E-E0D6DFC6ECC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18B9FBB2-BDCE-4121-832E-E0D6DFC6ECC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18B9FBB2-BDCE-4121-832E-E0D6DFC6ECC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18B9FBB2-BDCE-4121-832E-E0D6DFC6ECC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E7F0CFE-4D20-4617-ACD0-262D94A84673}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E7F0CFE-4D20-4617-ACD0-262D94A84673}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E7F0CFE-4D20-4617-ACD0-262D94A84673}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E7F0CFE-4D20-4617-ACD0-262D94A84673}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -40,6 +52,7 @@ Global
 		{46A429BE-AAA4-459D-88FD-F436CD4ED049} = {37659377-91C6-4D5F-92F4-72746446E9BB}
 		{DDBC4A65-F9F2-482B-B82B-D68C14F08CBB} = {37659377-91C6-4D5F-92F4-72746446E9BB}
 		{95B1B969-AA44-4863-8CE2-560E0A34DA3E} = {37659377-91C6-4D5F-92F4-72746446E9BB}
+		{18B9FBB2-BDCE-4121-832E-E0D6DFC6ECC8} = {37659377-91C6-4D5F-92F4-72746446E9BB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {59028BF5-CB03-477C-8169-0ED85E6E44D9}

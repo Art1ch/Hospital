@@ -3,6 +3,6 @@ using MediatR;
 
 namespace DoctorAPI.Application.Commands.Doctor.Delete;
 
-public record DeleteDoctorCommand<TId1>(
-    DeleteDoctorRequestDto<TId1> Dto) : IRequest<DeleteDoctorResponseDto>;
+public record DeleteDoctorCommand<TDoctorId>(
+    DeleteDoctorRequestDto<TDoctorId> Dto) : IRequest<DeleteDoctorResponseDto>;
 
