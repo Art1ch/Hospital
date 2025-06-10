@@ -1,21 +1,28 @@
-﻿using DoctorAPI.Core.Entities;
+﻿using DoctorAPI.Application.Dto_s.RepoDto_s.Doctor.Create;
+using DoctorAPI.Application.Dto_s.RepoDto_s.Doctor.Delete;
+using DoctorAPI.Application.Dto_s.RepoDto_s.Doctor.Update;
+using DoctorAPI.Application.WebDto_s.Doctor.GetAll;
+using DoctorAPI.Application.WebDto_s.Doctor.GetById;
+using DoctorAPI.Application.WebDto_s.Doctor.GetBySpecialization;
+using DoctorAPI.Application.WebDto_s.Doctor.GetByStatus;
+using DoctorAPI.Core.Entities;
 using DoctorAPI.Core.Enums;
 
 namespace DoctorAPI.Application.Contracts;
 
-public interface IDoctorRepository<TDoctorId, TSpecializationId>
+public interface IDoctorRepository
 {
-    Task<List<DoctorEntity<TDoctorId, TSpecializationId>>> GetAllAsync(
+    Task<List<GetAllDoctorsRepoDto>> GetAllAsync(
         int page, int pageSize, CancellationToken ct);
-    Task<DoctorEntity<TDoctorId, TSpecializationId>> GetByIdAsync(
-        TDoctorId id, CancellationToken ct);
-    Task<DoctorEntity<TDoctorId, TSpecializationId>> GetBySpecializationAsync(
-        TSpecializationId specializationId, CancellationToken ct);
-    Task<List<DoctorEntity<TDoctorId, TSpecializationId>>> GetByStatusAsync(
+    Task<GetByIdDoctorRepoDto> GetByIdAsync(
+        Guid id, CancellationToken ct);
+    Task<GetBySpecializationRepoDto> GetBySpecializationAsync(
+        int specializationId, CancellationToken ct);
+    Task<List<GetByStatusRepoDto>> GetByStatusAsync(
         StatusEnum status, CancellationToken ct);
-    Task<TDoctorId> CreateAsync(
-        DoctorEntity<TDoctorId, TSpecializationId> doctor, CancellationToken ct);
-    Task<TDoctorId> UpdateAsync(
-        DoctorEntity<TDoctorId, TSpecializationId> doctor, CancellationToken ct);
-    Task DeleteAsync(TDoctorId id, CancellationToken ct);
+    Task<CreateDoctorRepoDto> CreateAsync(
+        DoctorEntity doctor, CancellationToken ct);
+    Task<UpdateDoctorRepoDto> UpdateAsync(
+        DoctorEntity doctor, CancellationToken ct);
+    Task<DeleteDoctorRepoDto> DeleteAsync(Guid id, CancellationToken ct);
 }

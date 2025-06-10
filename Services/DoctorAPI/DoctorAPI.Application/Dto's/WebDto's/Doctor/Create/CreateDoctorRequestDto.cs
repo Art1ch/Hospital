@@ -3,12 +3,11 @@ using DoctorAPI.Core.Enums;
 
 namespace DoctorAPI.Application.WebRequests.Doctor.Create;
 
-public record CreateDoctorRequestDto<TDoctorId, TSpecializationId>(
+public record CreateDoctorRequestDto(
     string FirstName,
     string LastName,
     string MiddleName,
     StatusEnum Status,
     DateOnly BirthDate,
     DateOnly CareerStartDay,
-    SpecializationEntity<TDoctorId,
-        TSpecializationId> Specialization);
+    string SpecializationName);

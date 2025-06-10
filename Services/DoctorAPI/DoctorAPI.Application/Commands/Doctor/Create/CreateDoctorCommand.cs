@@ -3,7 +3,7 @@ using MediatR;
 
 namespace DoctorAPI.Application.Commands.Doctor.Create;
 
-public record CreateDoctorCommand<TDoctorId, TSpecializationId>(
-    CreateDoctorRequestDto<TDoctorId,
-        TSpecializationId> Dto) : IRequest<CreateDoctorResponseDto<TDoctorId>>;
+public record CreateDoctorCommand(
+    CreateDoctorRequestDto Dto)
+    : IRequest<CreateDoctorResponseDto>;
 

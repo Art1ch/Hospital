@@ -11,12 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="WebDto%27s\Specialization\Create\" />
-    <Folder Include="WebDto%27s\Specialization\Update\" />
-    <Folder Include="WebDto%27s\Specialization\Delete\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="14.0.0" />
     <PackageReference Include="FluentValidation" Version="12.0.0" />
     <PackageReference Include="MediatR" Version="12.5.0" />

@@ -3,8 +3,6 @@ using MediatR;
 
 namespace DoctorAPI.Application.Queries.Doctor.GetBySpecialization;
 
-public record GetBySpecializationDoctorQuery<TDoctorId,
-    TSpecializationId>(
-    GetBySpecializationDoctorRequestDto<TSpecializationId> Dto)
-    : IRequest<GetBySpecializationDoctorResponseDto<TDoctorId,
-        TSpecializationId>>;
+public record GetBySpecializationDoctorQuery(
+    GetBySpecializationDoctorRequestDto Dto)
+    : IRequest<GetBySpecializationDoctorResponseDto>;

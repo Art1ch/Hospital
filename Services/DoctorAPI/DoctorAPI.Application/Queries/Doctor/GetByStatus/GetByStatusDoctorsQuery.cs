@@ -3,9 +3,7 @@ using MediatR;
 
 namespace DoctorAPI.Application.Queries.Doctor.GetByStatus;
 
-public record GetByStatusDoctorsQuery<TDoctorId,
-    TSpecializationId>(
+public record GetByStatusDoctorsQuery(
    GetByStatusDoctorsRequestDto Dto) 
-    : IRequest<GetByStatusDoctorsResponseDto<TDoctorId,
-        TSpecializationId>>;
+    : IRequest<GetByStatusDoctorsResponseDto>;
 

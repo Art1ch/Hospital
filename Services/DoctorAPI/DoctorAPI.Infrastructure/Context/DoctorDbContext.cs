@@ -3,38 +3,39 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DoctorAPI.Infrastructure.Context;
 
-public class DoctorDbContext<TDoctorId, TSpecializationId>
+public class DoctorDbContext
     : DbContext
 {
     public DoctorDbContext(
-        DbContextOptions<DoctorDbContext<TDoctorId, TSpecializationId>> options)
+        DbContextOptions<DoctorDbContext> options)
         : base(options)
     {
+        Database.EnsureCreated();
     }
 
-    public DbSet<DoctorEntity<TDoctorId, TSpecializationId>> Doctors { get; set; }
-    public DbSet<SpecializationEntity<TDoctorId, TSpecializationId>> Specializations { get; set; }
+    public DbSet<DoctorEntity> Doctors { get; set; }
+    public DbSet<SpecializationEntity> Specializations { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<DoctorEntity<TDoctorId, TSpecializationId>>(entity =>
+        modelBuilder.Entity<DoctorEntity>(entity =>
         {
             entity.HasKey(d => d.Id);
 
             entity.HasOne(d => d.Specialization)
                   .WithOne(s => s.Doctor)
-                  .HasForeignKey<DoctorEntity<TDoctorId, TSpecializationId>>(
+                  .HasForeignKey<DoctorEntity>(
                 d => d.SpecializationId)
                   .OnDelete(DeleteBehavior.Cascade);
         });
 
-        modelBuilder.Entity<SpecializationEntity<TDoctorId, TSpecializationId>>(entity =>
+        modelBuilder.Entity<SpecializationEntity>(entity =>
         {
             entity.HasKey(s => s.Id);
 
             entity.HasOne(s => s.Doctor)
                   .WithOne(d => d.Specialization)
-                  .HasForeignKey<SpecializationEntity<TDoctorId, TSpecializationId>>(
+                  .HasForeignKey<SpecializationEntity>(
                 s => s.DoctorId)
                   .OnDelete(DeleteBehavior.Cascade);
         });

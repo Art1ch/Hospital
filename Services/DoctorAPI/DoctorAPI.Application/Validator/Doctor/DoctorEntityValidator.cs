@@ -5,8 +5,8 @@ using DoctorAPI.Core.Constants.Doctor;
 
 namespace DoctorAPI.Application.Validator.Doctor;
 
-public class DoctorEntityValidator<TDoctorId, TSpecializationId> :
-    AbstractValidator<DoctorEntity<TDoctorId, TSpecializationId>>
+public class DoctorEntityValidator :
+    AbstractValidator<DoctorEntity>
 {
     public DoctorEntityValidator()
     {

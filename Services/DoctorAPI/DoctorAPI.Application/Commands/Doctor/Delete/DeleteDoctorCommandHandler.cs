@@ -1,28 +1,31 @@
-﻿using DoctorAPI.Application.Contracts;
+﻿using AutoMapper;
+using DoctorAPI.Application.Contracts;
 using DoctorAPI.Application.WebDto_s.Doctor.Delete;
 using MediatR;
 
 namespace DoctorAPI.Application.Commands.Doctor.Delete;
 
-public class DeleteDoctorCommandHandler<TDoctorId,
-    TSpecializationId>
-    : IRequestHandler<DeleteDoctorCommand<TDoctorId>,
+public class DeleteDoctorCommandHandler
+    : IRequestHandler<DeleteDoctorCommand,
         DeleteDoctorResponseDto>
 {
-    private readonly IDoctorRepository<TDoctorId,
-        TSpecializationId> _doctorRepository;
+    private readonly IDoctorRepository _doctorRepository;
+    private readonly IMapper _mapper;
 
-    public DeleteDoctorCommandHandler(IDoctorRepository<TDoctorId,
-        TSpecializationId> doctorRepository)
+    public DeleteDoctorCommandHandler(
+        IDoctorRepository doctorRepository,
+        IMapper mapper)
     {
         _doctorRepository = doctorRepository;
+        _mapper = mapper;
     }
 
     public async Task<DeleteDoctorResponseDto> Handle(
-        DeleteDoctorCommand<TDoctorId> request,
+        DeleteDoctorCommand request,
         CancellationToken ct)
     {
-        await _doctorRepository.DeleteAsync(request.Dto.Id, ct);
-        return new DeleteDoctorResponseDto();
+        var response = await _doctorRepository.DeleteAsync(request.Dto.Id, ct);
+        var result = _mapper.Map<DeleteDoctorResponseDto>(response);
+        return result;
     }
 }

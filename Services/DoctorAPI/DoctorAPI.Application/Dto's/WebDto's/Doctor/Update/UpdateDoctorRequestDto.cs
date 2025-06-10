@@ -3,14 +3,12 @@ using DoctorAPI.Core.Enums;
 
 namespace DoctorAPI.Application.WebRequests.Doctor.Update;
 
-public record UpdateDoctorRequestDto<TDoctorId,
-    TSpecializationId>(
-    TDoctorId Id,
+public record UpdateDoctorRequestDto(
+    Guid Id,
     string FirstName,
     string LastName,
     string MiddleName,
     StatusEnum Status,
     DateOnly BirthDate,
     DateOnly CareerStartDay,
-    SpecializationEntity<TDoctorId,
-        TSpecializationId> Specialization);
+    string SpecializationName);

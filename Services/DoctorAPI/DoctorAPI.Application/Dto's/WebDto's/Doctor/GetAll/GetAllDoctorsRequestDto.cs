@@ -2,4 +2,4 @@
 
 public record GetAllDoctorsRequestDto(
     int Page,
-    int PageSIze);
+    int PageSize);

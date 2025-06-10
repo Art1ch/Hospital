@@ -1,9 +1,9 @@
 ﻿namespace DoctorAPI.Core.Entities;
 
-public class SpecializationEntity<TDoctorId, TSpecializationId>
+public class SpecializationEntity
 {
-    public TSpecializationId Id { get; set; }
+    public int Id { get; set; }
     public string Name { get; set; }
-    public TDoctorId DoctorId { get; set; }
-    public DoctorEntity<TDoctorId, TSpecializationId> Doctor { get; set; }
+    public Guid DoctorId { get; set; }
+    public DoctorEntity Doctor { get; set; }
 }

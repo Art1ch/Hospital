@@ -5,32 +5,29 @@ using MediatR;
 
 namespace DoctorAPI.Application.Queries.Doctor.GetBySpecialization;
 
-public class GetBySpecializationDoctorQueryHandler<TDoctorId,
-    TSpecializationId>
-    : IRequestHandler<GetBySpecializationDoctorQuery<TDoctorId,
-        TSpecializationId>,
-        GetBySpecializationDoctorResponseDto<TDoctorId, TSpecializationId>>
+public class GetBySpecializationDoctorQueryHandler
+    : IRequestHandler<GetBySpecializationDoctorQuery,
+        GetBySpecializationDoctorResponseDto>
 {
-    private readonly IDoctorRepository<TDoctorId, TSpecializationId> _doctorRepository;
+    private readonly IDoctorRepository _doctorRepository;
     private readonly IMapper _mapper;
 
     public GetBySpecializationDoctorQueryHandler(
-        IDoctorRepository<TDoctorId,
-            TSpecializationId> doctorRepository, 
+        IDoctorRepository doctorRepository, 
         IMapper mapper)
     {
         _doctorRepository = doctorRepository;
         _mapper = mapper;
     }
 
-    public async Task<GetBySpecializationDoctorResponseDto<TDoctorId, TSpecializationId>> Handle(
-        GetBySpecializationDoctorQuery<TDoctorId, TSpecializationId> request,
+    public async Task<GetBySpecializationDoctorResponseDto> Handle(
+        GetBySpecializationDoctorQuery request,
         CancellationToken ct)
     {
-        var doctor = await _doctorRepository.GetBySpecializationAsync(
+        var doctorInfo = await _doctorRepository.GetBySpecializationAsync(
             request.Dto.SpecializationId, ct);
         var response = _mapper.Map
-            <GetBySpecializationDoctorResponseDto<TDoctorId, TSpecializationId>>(doctor);
+            <GetBySpecializationDoctorResponseDto>(doctorInfo);
         return response;
     }
 }

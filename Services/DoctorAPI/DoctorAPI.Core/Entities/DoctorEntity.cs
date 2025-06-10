@@ -2,15 +2,15 @@
 
 namespace DoctorAPI.Core.Entities;
 
-public class DoctorEntity<TDoctorId, TSpecializationId>
+public class DoctorEntity
 {
-    public TDoctorId Id { get; set; }
+    public Guid Id { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string MiddleName { get; set; }
     public StatusEnum Status { get; set; }
     public DateOnly BirthDate { get; set; }
     public DateOnly CareerStartDay { get; set; }
-    public TSpecializationId SpecializationId { get; set; }
-    public SpecializationEntity<TDoctorId, TSpecializationId> Specialization { get; set; }
+    public int SpecializationId { get; set; }
+    public SpecializationEntity Specialization { get; set; }
 }

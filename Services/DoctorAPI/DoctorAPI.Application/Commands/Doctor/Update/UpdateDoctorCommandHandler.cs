@@ -5,39 +5,42 @@ using DoctorAPI.Application.WebDto_s.Doctor.Update;
 using DoctorAPI.Core.Entities;
 using FluentValidation;
 using MediatR;
+using System.Text;
 
 namespace DoctorAPI.Application.Commands.Doctor.Update;
 
-public class UpdateDoctorCommandHandler<TDoctorId,
-    TSpecializationId>
-    : IRequestHandler<UpdateDoctorCommand<TDoctorId,
-        TSpecializationId>, UpdateDoctorResponseDto<TDoctorId>>
+public class UpdateDoctorCommandHandler
+    : IRequestHandler<UpdateDoctorCommand, UpdateDoctorResponseDto>
 {
-    private readonly IDoctorRepository<TDoctorId,
-        TSpecializationId> _doctorRepository;
-    private readonly IValidator<DoctorEntity<TDoctorId,
-        TSpecializationId>> _validator;
+    private readonly IDoctorRepository _doctorRepository;
+    private readonly IValidator<DoctorEntity> _validator;
     private readonly IMapper _mapper;
     public UpdateDoctorCommandHandler
-        (IDoctorRepository<TDoctorId, TSpecializationId> doctorRepository,
-        IValidator<DoctorEntity<TDoctorId, TSpecializationId>> validator,
+        (IDoctorRepository doctorRepository,
+        IValidator<DoctorEntity> validator,
         IMapper mapper)
     {
         _doctorRepository = doctorRepository;
         _validator = validator;
         _mapper = mapper;
     }
-    public async Task<UpdateDoctorResponseDto<TDoctorId>> Handle(
-        UpdateDoctorCommand<TDoctorId, TSpecializationId> request,
+    public async Task<UpdateDoctorResponseDto> Handle(
+        UpdateDoctorCommand request,
         CancellationToken ct)
     {
-        var doctorEntity = _mapper.Map<DoctorEntity<TDoctorId, TSpecializationId>>(request.Dto);
+        var doctorEntity = _mapper.Map<DoctorEntity>(request.Dto);
         var validationResult = await _validator.ValidateAsync(doctorEntity);
         if (!validationResult.IsValid)
         {
-            throw new Exception();
+            var messages = new StringBuilder();
+            foreach(var error in validationResult.Errors)
+            {
+                messages.AppendLine(error.ErrorMessage);
+            }
+            throw new Exception(messages.ToString());
         }
-        await _doctorRepository.UpdateAsync(doctorEntity, ct);
-        return _mapper.Map<UpdateDoctorResponseDto<TDoctorId>>(doctorEntity);
+        var response = await _doctorRepository.UpdateAsync(doctorEntity, ct);
+        var result = _mapper.Map<UpdateDoctorResponseDto>(response);
+        return result;
     }
 }

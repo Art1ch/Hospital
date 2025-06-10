@@ -5,34 +5,29 @@ using MediatR;
 
 namespace DoctorAPI.Application.Queries.Doctor.GetByStatus;
 
-public class GetByStatusDoctorsQueryHandler<TDoctorId,
-    TSpecializationId>
-    : IRequestHandler<GetByStatusDoctorsQuery<TDoctorId,
-        TSpecializationId>,
-        GetByStatusDoctorsResponseDto<TDoctorId,
-            TSpecializationId>>
+public class GetByStatusDoctorsQueryHandler
+    : IRequestHandler<GetByStatusDoctorsQuery,
+        GetByStatusDoctorsResponseDto>
 {
-    private readonly IDoctorRepository<TDoctorId,
-        TSpecializationId> _doctorRepository;
+    private readonly IDoctorRepository _doctorRepository;
     private readonly IMapper _mapper;
 
     public GetByStatusDoctorsQueryHandler(
-        IDoctorRepository<TDoctorId,
-            TSpecializationId> doctorRepository,
+        IDoctorRepository doctorRepository,
         IMapper mapper)
     {
         _doctorRepository = doctorRepository;
         _mapper = mapper;
     }
 
-    public async Task<GetByStatusDoctorsResponseDto<TDoctorId, TSpecializationId>> Handle(
-        GetByStatusDoctorsQuery<TDoctorId, TSpecializationId> request,
+    public async Task<GetByStatusDoctorsResponseDto> Handle(
+        GetByStatusDoctorsQuery request,
         CancellationToken ct)
     {
-        var doctors = await _doctorRepository.GetByStatusAsync(
+        var doctorInfos = await _doctorRepository.GetByStatusAsync(
             request.Dto.Status, ct);
         var response = _mapper.Map
-            <GetByStatusDoctorsResponseDto<TDoctorId, TSpecializationId>>(doctors);
+            <GetByStatusDoctorsResponseDto>(doctorInfos);
         return response;
     }
 }

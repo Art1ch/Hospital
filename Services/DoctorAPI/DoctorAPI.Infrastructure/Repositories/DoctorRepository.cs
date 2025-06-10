@@ -1,4 +1,11 @@
 ﻿using DoctorAPI.Application.Contracts;
+using DoctorAPI.Application.Dto_s.RepoDto_s.Doctor.Create;
+using DoctorAPI.Application.Dto_s.RepoDto_s.Doctor.Delete;
+using DoctorAPI.Application.Dto_s.RepoDto_s.Doctor.Update;
+using DoctorAPI.Application.WebDto_s.Doctor.GetAll;
+using DoctorAPI.Application.WebDto_s.Doctor.GetById;
+using DoctorAPI.Application.WebDto_s.Doctor.GetBySpecialization;
+using DoctorAPI.Application.WebDto_s.Doctor.GetByStatus;
 using DoctorAPI.Core.Entities;
 using DoctorAPI.Core.Enums;
 using DoctorAPI.Infrastructure.Context;
@@ -6,57 +13,86 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DoctorAPI.Infrastructure.Repositories;
 
-public class DoctorRepository<TDoctorId, TSpecializationId> :
-    IDoctorRepository<TDoctorId, TSpecializationId>
+public class DoctorRepository : IDoctorRepository
 {
-    private readonly DoctorDbContext<TDoctorId, TSpecializationId> _dbContext;
+    private readonly DoctorDbContext _dbContext;
 
     public DoctorRepository(
-        DoctorDbContext<TDoctorId, TSpecializationId> dbContext)
+        DoctorDbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
-    public async Task<List<DoctorEntity<TDoctorId, TSpecializationId>>> GetAllAsync(
+    public async Task<List<GetAllDoctorsRepoDto>> GetAllAsync(
         int page, int pageSize, CancellationToken ct)
     {
-        return await _dbContext.Doctors
+        var a = _dbContext.Doctors.Count();
+        var doctorInfos = await _dbContext.Doctors
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .AsNoTracking()
+            .Select(d => new GetAllDoctorsRepoDto(
+                d.Id,
+                d.FirstName,
+                d.LastName,
+                d.MiddleName))
             .ToListAsync(ct);
+
+        return doctorInfos;
     }
 
-    public async Task<DoctorEntity<TDoctorId, TSpecializationId>> GetByIdAsync(
-        TDoctorId id,
-        CancellationToken ct)
+    public async Task<GetByIdDoctorRepoDto> GetByIdAsync
+        (Guid id, CancellationToken ct)
     {
         var doctor = await _dbContext.Doctors
+            .Include(d => d.Specialization)
+            .Where(d => d.Id == id)
+            .Select(d => new GetByIdDoctorRepoDto(
+               d.Id,
+               d.FirstName,
+               d.LastName,
+               d.MiddleName,
+               d.Status,
+               d.BirthDate,
+               d.CareerStartDay,
+               d.Specialization))
             .AsNoTracking()
-            .FirstOrDefaultAsync(d => d.Id!.Equals(id), ct);
+            .FirstOrDefaultAsync(ct);
+
         return doctor ?? throw new NullReferenceException();
     }
 
-    public async Task<DoctorEntity<TDoctorId, TSpecializationId>> GetBySpecializationAsync(
-        TSpecializationId specializationId, CancellationToken ct)
+    public async Task<GetBySpecializationRepoDto> GetBySpecializationAsync(
+        int specializationId, CancellationToken ct)
     {
-        var doctor = await _dbContext.Doctors
+        var doctorInfo = await _dbContext.Doctors
+            .Select(d => new GetBySpecializationRepoDto(
+                d.Id,
+                d.FirstName,
+                d.LastName,
+                d.MiddleName))
             .AsNoTracking()
-            .FirstOrDefaultAsync(d => d.SpecializationId!.Equals(specializationId), ct);
-        return doctor ?? throw new NullReferenceException();
+            .FirstOrDefaultAsync(ct);
+        return doctorInfo ?? throw new NullReferenceException();
     }
 
-    public async Task<List<DoctorEntity<TDoctorId, TSpecializationId>>> GetByStatusAsync(
+    public async Task<List<GetByStatusRepoDto>> GetByStatusAsync(
         StatusEnum status, CancellationToken ct)
     {
-        return await _dbContext.Doctors
+        var doctorInfos = await _dbContext.Doctors
             .Where(d => d.Status == status)
-            .AsNoTracking()
+            .Select(d => new GetByStatusRepoDto(
+                d.Id,
+                d.FirstName,
+                d.LastName,
+                d.MiddleName))
             .ToListAsync(ct);
+        return doctorInfos;
     }
 
-    public async Task<TDoctorId> CreateAsync(
-        DoctorEntity<TDoctorId, TSpecializationId> doctor, CancellationToken ct)
+    public async Task<CreateDoctorRepoDto> CreateAsync(
+        DoctorEntity doctor,
+        CancellationToken ct)
     {
         await using var transaction = await _dbContext.Database.BeginTransactionAsync(ct);
         try
@@ -64,7 +100,8 @@ public class DoctorRepository<TDoctorId, TSpecializationId> :
             await _dbContext.Doctors.AddAsync(doctor, ct);
             await _dbContext.SaveChangesAsync(ct);
             await transaction.CommitAsync(ct);
-            return doctor.Id;
+            var result = new CreateDoctorRepoDto(doctor.Id);
+            return result;
         }
         catch
         {
@@ -73,8 +110,9 @@ public class DoctorRepository<TDoctorId, TSpecializationId> :
         }
     }
 
-    public async Task<TDoctorId> UpdateAsync(
-        DoctorEntity<TDoctorId, TSpecializationId> doctor, CancellationToken ct)
+    public async Task<UpdateDoctorRepoDto> UpdateAsync(
+        DoctorEntity doctor,
+        CancellationToken ct)
     {
         await using var transaction = await _dbContext.Database.BeginTransactionAsync(ct);
         try
@@ -87,13 +125,22 @@ public class DoctorRepository<TDoctorId, TSpecializationId> :
                     .SetProperty(d => d.MiddleName, doctor.MiddleName)
                     .SetProperty(d => d.Status, doctor.Status)
                     .SetProperty(d => d.BirthDate, doctor.BirthDate)
-                    .SetProperty(d => d.CareerStartDay, doctor.CareerStartDay)
-                    .SetProperty(d => d.Specialization, doctor.Specialization),
+                    .SetProperty(d => d.CareerStartDay, doctor.CareerStartDay),
                     ct);
 
             await _dbContext.SaveChangesAsync(ct);
+
+            await _dbContext.Specializations
+                .Where(s => s.Id == doctor.SpecializationId)
+                .ExecuteUpdateAsync(s => s
+                    .SetProperty(s => s.Name, doctor.Specialization.Name),
+                    ct);
+
+            await _dbContext.SaveChangesAsync();
+
             await transaction.CommitAsync(ct);
-            return doctor.Id;
+            var response = new UpdateDoctorRepoDto(doctor.Id);
+            return response;
         }
         catch
         {
@@ -102,8 +149,7 @@ public class DoctorRepository<TDoctorId, TSpecializationId> :
         }
     }
 
-    public async Task DeleteAsync(
-        TDoctorId id, CancellationToken ct)
+    public async Task<DeleteDoctorRepoDto> DeleteAsync(Guid id, CancellationToken ct)
     {
         await using var transaction = await _dbContext.Database.BeginTransactionAsync(ct);
         try
@@ -114,6 +160,7 @@ public class DoctorRepository<TDoctorId, TSpecializationId> :
 
             await _dbContext.SaveChangesAsync(ct);
             await transaction.CommitAsync(ct);
+            return new DeleteDoctorRepoDto();
         }
         catch
         {
@@ -122,4 +169,3 @@ public class DoctorRepository<TDoctorId, TSpecializationId> :
         }
     }
 }
-
