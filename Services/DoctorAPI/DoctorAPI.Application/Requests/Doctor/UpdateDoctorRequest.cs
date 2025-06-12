@@ -1,0 +1,13 @@
+﻿using DoctorAPI.Core.Enums;
+
+namespace DoctorAPI.Application.Requests.Doctor;
+
+public record UpdateDoctorRequest(
+    Guid Id,
+    string FirstName,
+    string LastName,
+    string MiddleName,
+    DoctorStatus Status,
+    DateOnly BirthDate,
+    DateOnly CareerStartDay,
+    string SpecializationName);

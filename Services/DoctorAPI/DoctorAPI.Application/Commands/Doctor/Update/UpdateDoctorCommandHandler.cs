@@ -1,46 +1,38 @@
 ﻿using AutoMapper;
 using DoctorAPI.Application.Commands.Doctor.Create;
-using DoctorAPI.Application.Contracts;
-using DoctorAPI.Application.WebDto_s.Doctor.Update;
+using DoctorAPI.Application.Contracts.UnitOfWork;
 using DoctorAPI.Core.Entities;
-using FluentValidation;
 using MediatR;
-using System.Text;
 
 namespace DoctorAPI.Application.Commands.Doctor.Update;
 
-public class UpdateDoctorCommandHandler
-    : IRequestHandler<UpdateDoctorCommand, UpdateDoctorResponseDto>
+internal class UpdateDoctorCommandHandler : IRequestHandler<UpdateDoctorCommand>
 {
-    private readonly IDoctorRepository _doctorRepository;
-    private readonly IValidator<DoctorEntity> _validator;
     private readonly IMapper _mapper;
-    public UpdateDoctorCommandHandler
-        (IDoctorRepository doctorRepository,
-        IValidator<DoctorEntity> validator,
-        IMapper mapper)
+    private readonly IUnitOfWork _unitOfWork;
+
+    public UpdateDoctorCommandHandler(IMapper mapper, IUnitOfWork unitOfWork)
     {
-        _doctorRepository = doctorRepository;
-        _validator = validator;
         _mapper = mapper;
+        _unitOfWork = unitOfWork;
     }
-    public async Task<UpdateDoctorResponseDto> Handle(
-        UpdateDoctorCommand request,
-        CancellationToken ct)
+
+    public async Task Handle(UpdateDoctorCommand command, CancellationToken cancellationToken)
     {
-        var doctorEntity = _mapper.Map<DoctorEntity>(request.Dto);
-        var validationResult = await _validator.ValidateAsync(doctorEntity);
-        if (!validationResult.IsValid)
+        var doctorEntity = _mapper.Map<DoctorEntity>(command.Request);
+        using (var unitOfWork = _unitOfWork)
         {
-            var messages = new StringBuilder();
-            foreach(var error in validationResult.Errors)
+            await unitOfWork.BeginTransactionAsync();
+            try
             {
-                messages.AppendLine(error.ErrorMessage);
+                await _unitOfWork.DoctorRepository.UpdateAsync(doctorEntity, cancellationToken);
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
+                await _unitOfWork.CommitAsync(cancellationToken);
             }
-            throw new Exception(messages.ToString());
+            catch
+            {
+                await _unitOfWork.RollbackAsync(cancellationToken);
+            }
         }
-        var response = await _doctorRepository.UpdateAsync(doctorEntity, ct);
-        var result = _mapper.Map<UpdateDoctorResponseDto>(response);
-        return result;
     }
 }

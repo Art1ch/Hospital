@@ -1,8 +1,7 @@
-﻿using DoctorAPI.Application.WebDto_s.Doctor.GetById;
+﻿using DoctorAPI.Application.Requests.Doctor;
+using DoctorAPI.Application.Responses.Doctor;
 using MediatR;
 
 namespace DoctorAPI.Application.Queries.Doctor.GetById;
 
-public record GetByIdDoctorQuery(
-    GetByIdDoctorRequestDto Dto)
-    : IRequest<GetByIdDoctorResponseDto>;
+public record GetByIdDoctorQuery(Guid Id): IRequest<GetByIdDoctorResponse>;

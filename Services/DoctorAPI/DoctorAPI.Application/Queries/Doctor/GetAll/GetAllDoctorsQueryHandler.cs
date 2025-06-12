@@ -1,34 +1,27 @@
 ﻿using AutoMapper;
-using DoctorAPI.Application.Contracts;
-using DoctorAPI.Application.WebDto_s.Doctor.GetAll;
+using DoctorAPI.Application.Contracts.UnitOfWork;
+using DoctorAPI.Application.Responses.Doctor;
 using MediatR;
 
 namespace DoctorAPI.Application.Queries.Doctor.GetAll;
 
-public class GetAllDoctorsQueryHandler
-    : IRequestHandler<GetAllDoctorsQuery,
-        GetAllDoctorsResponseDto>
+internal class GetAllDoctorsQueryHandler : IRequestHandler<GetAllDoctorsQuery, GetAllDoctorsResponse>
 {
-    private readonly IDoctorRepository _doctorRepository;
     private readonly IMapper _mapper;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public GetAllDoctorsQueryHandler(
-        IDoctorRepository doctorRepository,
-        IMapper mapper)
+    public GetAllDoctorsQueryHandler(IMapper mapper, IUnitOfWork unitOfWork)
     {
-        _doctorRepository = doctorRepository;
         _mapper = mapper;
+        _unitOfWork = unitOfWork;
     }
-    public async Task<GetAllDoctorsResponseDto> Handle(
-        GetAllDoctorsQuery request,
-        CancellationToken ct)
+
+    public async Task<GetAllDoctorsResponse> Handle(GetAllDoctorsQuery query, CancellationToken cancellationToken)
     {
-        var doctorInfos = await _doctorRepository.GetAllAsync(
-            request.Dto.Page,
-            request.Dto.PageSize,
-            ct);
-        var response = _mapper.Map<GetAllDoctorsResponseDto>(
-            doctorInfos);
+        var page = query.Page;
+        var pageSize = query.PageSize;
+        var result = await _unitOfWork.DoctorRepository.GetAllAsync(page, pageSize, cancellationToken);
+        var response = _mapper.Map<GetAllDoctorsResponse>(result);
         return response;
     }
 }

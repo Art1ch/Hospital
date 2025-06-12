@@ -1,32 +1,26 @@
 ﻿using AutoMapper;
-using DoctorAPI.Application.Contracts;
-using DoctorAPI.Application.WebDto_s.Doctor.GetById;
+using DoctorAPI.Application.Contracts.UnitOfWork;
+using DoctorAPI.Application.Responses.Doctor;
 using MediatR;
 
 namespace DoctorAPI.Application.Queries.Doctor.GetById;
 
-public class GetByIdDoctorQueryHandler
-    : IRequestHandler<GetByIdDoctorQuery,
-        GetByIdDoctorResponseDto>
+internal class GetByIdDoctorQueryHandler : IRequestHandler<GetByIdDoctorQuery, GetByIdDoctorResponse>
 {
-    private readonly IDoctorRepository _doctorRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public GetByIdDoctorQueryHandler(
-        IDoctorRepository doctorRepository,
-        IMapper mapper)
+    public GetByIdDoctorQueryHandler(IMapper mapper, IUnitOfWork unitOfWork)
     {
-        _doctorRepository = doctorRepository;
         _mapper = mapper;
+        _unitOfWork = unitOfWork;
     }
 
-    public async Task<GetByIdDoctorResponseDto> Handle(
-        GetByIdDoctorQuery request,
-        CancellationToken ct)
+    public async Task<GetByIdDoctorResponse> Handle(GetByIdDoctorQuery query, CancellationToken cancellationToken)
     {
-        var doctorInfo = await _doctorRepository
-            .GetByIdAsync(request.Dto.Id, ct);
-        var response = _mapper.Map<GetByIdDoctorResponseDto>(doctorInfo);
+        var id = query.Id;
+        var result = await _unitOfWork.DoctorRepository.GetByIdAsync(id, cancellationToken);
+        var response = _mapper.Map<GetByIdDoctorResponse>(result);
         return response;
     }
 }

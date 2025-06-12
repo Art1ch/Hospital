@@ -1,31 +1,33 @@
-﻿using AutoMapper;
-using DoctorAPI.Application.Contracts;
-using DoctorAPI.Application.WebDto_s.Doctor.Delete;
+﻿using DoctorAPI.Application.Contracts.UnitOfWork;
 using MediatR;
 
 namespace DoctorAPI.Application.Commands.Doctor.Delete;
 
-public class DeleteDoctorCommandHandler
-    : IRequestHandler<DeleteDoctorCommand,
-        DeleteDoctorResponseDto>
+internal class DeleteDoctorCommandHandler : IRequestHandler<DeleteDoctorCommand>
 {
-    private readonly IDoctorRepository _doctorRepository;
-    private readonly IMapper _mapper;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public DeleteDoctorCommandHandler(
-        IDoctorRepository doctorRepository,
-        IMapper mapper)
+    public DeleteDoctorCommandHandler(IUnitOfWork unitOfWork)
     {
-        _doctorRepository = doctorRepository;
-        _mapper = mapper;
+        _unitOfWork = unitOfWork;
     }
 
-    public async Task<DeleteDoctorResponseDto> Handle(
-        DeleteDoctorCommand request,
-        CancellationToken ct)
+    public async Task Handle(DeleteDoctorCommand command, CancellationToken cancellationToken)
     {
-        var response = await _doctorRepository.DeleteAsync(request.Dto.Id, ct);
-        var result = _mapper.Map<DeleteDoctorResponseDto>(response);
-        return result;
+        using (var unitOfWork = _unitOfWork)
+        {
+            await unitOfWork.BeginTransactionAsync(cancellationToken);
+            try
+            {
+                await unitOfWork.DoctorRepository.DeleteAsync(command.Id, cancellationToken);
+                await unitOfWork.SaveChangesAsync(cancellationToken);
+                await unitOfWork.CommitAsync(cancellationToken);
+            }
+            catch
+            {
+                await unitOfWork.RollbackAsync(cancellationToken);
+                throw;
+            }
+        }
     }
 }

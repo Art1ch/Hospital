@@ -1,4 +1,8 @@
-using DoctorAPI.Extensions;
+using DoctorAPI.Application;
+using DoctorAPI.Application.Requests.Doctor;
+using DoctorAPI.Infrastructure;
+using DoctorAPI.Middlewares;
+using FluentValidation.AspNetCore;
 
 namespace DoctorAPI;
 
@@ -8,16 +12,12 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
-        builder.AddDbContext();
-        builder.AddRepositories();
-        builder.AddMapping();
-        builder.AddValidation();
-        builder.AddCommandsAndQueries();
+        builder.Services.AddApplicationLayer();
+        builder.Services.AddInfrastructureLayer(builder.Configuration.GetConnectionString("DoctorDbString")!);
 
         var app = builder.Build();
 
@@ -29,8 +29,9 @@ public class Program
 
         app.UseHttpsRedirection();
 
-        app.UseAuthorization();
+        app.UseMiddleware<ExceptionMiddleware>();
 
+        app.UseAuthorization();
 
         app.MapControllers();
 

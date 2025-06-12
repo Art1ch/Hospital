@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoctorAPI.Infrastructure", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoctorAPI.Application", "Services\DoctorAPI\DoctorAPI.Application\DoctorAPI.Application.csproj", "{95B1B969-AA44-4863-8CE2-560E0A34DA3E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoctorAPI", "Services\DoctorAPI\DoctorAPI\DoctorAPI.csproj", "{18B9FBB2-BDCE-4121-832E-E0D6DFC6ECC8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoctorAPI", "Services\DoctorAPI\DoctorAPI\DoctorAPI.csproj", "{18B9FBB2-BDCE-4121-832E-E0D6DFC6ECC8}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{7E7F0CFE-4D20-4617-ACD0-262D94A84673}"
 EndProject

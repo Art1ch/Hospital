@@ -2,10 +2,6 @@
 
 public static class SpecializationConstants
 {
-    public const int MinSpecializationNameLength = 4;
-    public const int MaxSpecializationNameLength = 20;
-
-    public static readonly string OnFailedSpecializationNameValidation =
-        $"Имя специализации должно содержать от {MinSpecializationNameLength} " +
-        $"до {MaxSpecializationNameLength} символов.";
+    public static readonly int MinSpecializationNameLength = 4;
+    public static readonly int MaxSpecializationNameLength = 20;
 }

@@ -1,33 +1,27 @@
 ﻿using AutoMapper;
 using DoctorAPI.Application.Contracts;
-using DoctorAPI.Application.WebDto_s.Doctor.GetByStatus;
+using DoctorAPI.Application.Contracts.UnitOfWork;
+using DoctorAPI.Application.Responses.Doctor;
 using MediatR;
 
 namespace DoctorAPI.Application.Queries.Doctor.GetByStatus;
 
-public class GetByStatusDoctorsQueryHandler
-    : IRequestHandler<GetByStatusDoctorsQuery,
-        GetByStatusDoctorsResponseDto>
+internal class GetByStatusDoctorsQueryHandler : IRequestHandler<GetByStatusDoctorsQuery, GetByStatusDoctorsResponse>
 {
-    private readonly IDoctorRepository _doctorRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public GetByStatusDoctorsQueryHandler(
-        IDoctorRepository doctorRepository,
-        IMapper mapper)
+    public GetByStatusDoctorsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
     {
-        _doctorRepository = doctorRepository;
+        _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
 
-    public async Task<GetByStatusDoctorsResponseDto> Handle(
-        GetByStatusDoctorsQuery request,
-        CancellationToken ct)
+    public async Task<GetByStatusDoctorsResponse> Handle(GetByStatusDoctorsQuery query, CancellationToken cancellationToken)
     {
-        var doctorInfos = await _doctorRepository.GetByStatusAsync(
-            request.Dto.Status, ct);
-        var response = _mapper.Map
-            <GetByStatusDoctorsResponseDto>(doctorInfos);
+        var doctorStatus = query.DoctorStatus;
+        var result = await _unitOfWork.DoctorRepository.GetByStatusAsync(doctorStatus, cancellationToken);
+        var response = _mapper.Map<GetByStatusDoctorsResponse>(result);
         return response;
     }
 }

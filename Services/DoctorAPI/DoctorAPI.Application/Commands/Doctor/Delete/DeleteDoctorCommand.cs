@@ -1,8 +1,7 @@
-﻿using DoctorAPI.Application.WebDto_s.Doctor.Delete;
+﻿using DoctorAPI.Application.Requests.Doctor;
 using MediatR;
 
 namespace DoctorAPI.Application.Commands.Doctor.Delete;
 
-public record DeleteDoctorCommand(
-    DeleteDoctorRequestDto Dto) : IRequest<DeleteDoctorResponseDto>;
+public record DeleteDoctorCommand(Guid Id) : IRequest;
 
