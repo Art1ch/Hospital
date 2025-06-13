@@ -1,6 +1,6 @@
 ﻿namespace DoctorAPI.Core.Constants.Doctor;
 
-public static class DoctorConstants
+internal static class DoctorConstants
 {
     public static readonly int MinFirstNameLength = 2;
     public static readonly int MaxFirstNameLength = 30;

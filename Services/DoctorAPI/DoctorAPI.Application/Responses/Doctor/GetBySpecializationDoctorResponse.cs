@@ -3,4 +3,4 @@
 namespace DoctorAPI.Application.Responses.Doctor;
 
 public record GetBySpecializationDoctorResponse(
-    GetBySpecializationResult Doctor);
+    GetDoctorBySpecializationResult Doctor);

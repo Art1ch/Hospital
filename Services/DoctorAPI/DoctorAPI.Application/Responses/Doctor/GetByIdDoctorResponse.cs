@@ -3,4 +3,4 @@
 namespace DoctorAPI.Application.Responses.Doctor;
 
 public record GetByIdDoctorResponse(
-    GetByIdDoctorResult Doctor);
+    GetDoctorInfoByIdResult Doctor);

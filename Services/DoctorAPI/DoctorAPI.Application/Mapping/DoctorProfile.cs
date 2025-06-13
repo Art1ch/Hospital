@@ -13,15 +13,7 @@ internal class DoctorProfile : Profile
 {
     public DoctorProfile()
     {
-        CreateMap<CreateDoctorRequest,
-            DoctorEntity>()
-            .ForMember(dest => dest.FirstName, opt => opt.MapFrom(d => d.FirstName))
-            .ForMember(dest => dest.LastName, opt => opt.MapFrom(d => d.LastName))
-            .ForMember(dest => dest.MiddleName, opt => opt.MapFrom(d => d.MiddleName))
-            .ForMember(dest => dest.Status, opt => opt.MapFrom(d => d.Status))
-            .ForMember(dest => dest.BirthDate, opt => opt.MapFrom(d => d.BirthDate))
-            .ForMember(dest => dest.CareerStartDay, opt => opt.MapFrom(d => d.CareerStartDay))
-            .ForMember(dest => dest.Specialization, opt => opt.Ignore())
+        CreateMap<CreateDoctorRequest, DoctorEntity>()
             .AfterMap((src, dest, context) =>
             {
                 dest.Specialization = new SpecializationEntity()
@@ -32,14 +24,6 @@ internal class DoctorProfile : Profile
 
 
         CreateMap<UpdateDoctorRequest, DoctorEntity>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(d => d.Id))
-            .ForMember(dest => dest.FirstName, opt => opt.MapFrom(d => d.FirstName))
-            .ForMember(dest => dest.LastName, opt => opt.MapFrom(d => d.LastName))
-            .ForMember(dest => dest.MiddleName, opt => opt.MapFrom(d => d.MiddleName))
-            .ForMember(dest => dest.Status, opt => opt.MapFrom(d => d.Status))
-            .ForMember(dest => dest.BirthDate, opt => opt.MapFrom(d => d.BirthDate))
-            .ForMember(dest => dest.CareerStartDay, opt => opt.MapFrom(d => d.CareerStartDay))
-            .ForMember(dest => dest.Specialization, opt => opt.Ignore())
             .AfterMap((src, dest, context) =>
             {
                 dest.Specialization = new SpecializationEntity()
@@ -49,15 +33,15 @@ internal class DoctorProfile : Profile
             });
 
         CreateMap<List<GetAllDoctorsResult>, GetAllDoctorsResponse>()
-            .ConstructUsing(src =>  new GetAllDoctorsResponse(src));
+            .ConstructUsing(src => new GetAllDoctorsResponse(src));
 
-        CreateMap<GetBySpecializationResult,GetBySpecializationDoctorResponse>()
+        CreateMap<GetDoctorBySpecializationResult,GetBySpecializationDoctorResponse>()
             .ConstructUsing(src => new GetBySpecializationDoctorResponse(src));
 
-        CreateMap<List<GetByStatusResult>, GetByStatusDoctorsResponse>()
+        CreateMap<List<GetDoctorsByStatusResult>, GetByStatusDoctorsResponse>()
             .ConstructUsing(src => new GetByStatusDoctorsResponse(src));
 
-        CreateMap<GetByIdDoctorResult, GetByIdDoctorResponse>()
+        CreateMap<GetDoctorInfoByIdResult, GetByIdDoctorResponse>()
             .ConstructUsing(src => new GetByIdDoctorResponse(src));
     }
 }

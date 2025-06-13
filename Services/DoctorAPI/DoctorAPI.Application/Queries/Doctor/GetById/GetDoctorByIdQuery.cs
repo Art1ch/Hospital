@@ -4,4 +4,4 @@ using MediatR;
 
 namespace DoctorAPI.Application.Queries.Doctor.GetById;
 
-public record GetByIdDoctorQuery(Guid Id): IRequest<GetByIdDoctorResponse>;
+public record GetDoctorByIdQuery(Guid Id): IRequest<GetByIdDoctorResponse>;

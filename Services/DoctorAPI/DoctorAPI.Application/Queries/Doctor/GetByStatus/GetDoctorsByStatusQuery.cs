@@ -4,5 +4,5 @@ using MediatR;
 
 namespace DoctorAPI.Application.Queries.Doctor.GetByStatus;
 
-public record GetByStatusDoctorsQuery(DoctorStatus DoctorStatus) : IRequest<GetByStatusDoctorsResponse>;
+public record GetDoctorsByStatusQuery(DoctorStatus DoctorStatus) : IRequest<GetByStatusDoctorsResponse>;
 

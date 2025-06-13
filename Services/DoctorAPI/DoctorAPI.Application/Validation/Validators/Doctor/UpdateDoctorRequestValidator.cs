@@ -3,7 +3,7 @@ using DoctorAPI.Application.Validation.BaseDoctorValidator;
 
 namespace DoctorAPI.Application.Validation.Validators.Doctor;
 
-internal class UpdateDoctorRequestValidator : BaseDoctorValidator<UpdateDoctorRequest>
+public class UpdateDoctorRequestValidator : BaseDoctorValidator<UpdateDoctorRequest>
 {
     public UpdateDoctorRequestValidator()
     {

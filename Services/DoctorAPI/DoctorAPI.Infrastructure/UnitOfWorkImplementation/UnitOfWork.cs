@@ -2,7 +2,7 @@
 using DoctorAPI.Application.Contracts.Repository.Specialization;
 using DoctorAPI.Application.Contracts.UnitOfWork;
 using DoctorAPI.Infrastructure.Context;
-using DoctorAPI.Infrastructure.Repositories;
+using DoctorAPI.Infrastructure.Repositories.Implementations;
 
 namespace DoctorAPI.Infrastructure.UnitOfWorkImplementation;
 
@@ -12,8 +12,7 @@ internal class UnitOfWork : IUnitOfWork
     public ISpecializationRepository SpecializationRepository { get ; set ; }
     private readonly DoctorDbContext _dbContext;
 
-    public UnitOfWork(
-        DoctorDbContext dbContext)
+    public UnitOfWork(DoctorDbContext dbContext)
     {
         DoctorRepository = new DoctorRepository(dbContext);
         SpecializationRepository = new SpecializationRepository(dbContext);

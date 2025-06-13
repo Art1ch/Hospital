@@ -64,4 +64,19 @@ public class BaseDoctorValidator<T> : AbstractValidator<T>
             .WithMessage(ValidationConstants.OnFailedSpecializationNameValidation)
             .Matches("^[a-zA-Zа-яА-Я- ]+$").WithMessage(ValidationConstants.OnFailedRegexValidation);
     }
+
+    protected void ValidatePageNumber(Expression<Func<T, int>> expression)
+    {
+        RuleFor(expression)
+            .NotEmpty().WithMessage(ValidationConstants.OnFailedNullValidation)
+            .GreaterThanOrEqualTo(PaginationConstants.MinPageNumber).WithMessage(ValidationConstants.OnFailedPageNumberValidation);
+    }
+
+    protected void ValidatePageSize(Expression<Func<T, int>> expression)
+    {
+        RuleFor(expression)
+            .NotEmpty().WithMessage(ValidationConstants.OnFailedNullValidation)
+            .InclusiveBetween(PaginationConstants.MinPageSize, PaginationConstants.MaxPageSize)
+            .WithMessage(ValidationConstants.OnFailedPageSizeValidation);
+    }
 }

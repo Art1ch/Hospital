@@ -3,7 +3,7 @@ using DoctorAPI.Core.Enums;
 
 namespace DoctorAPI.Application.RepositoryResults.Doctor.GetById;
 
-public record GetByIdDoctorResult(
+public record GetDoctorInfoByIdResult(
     Guid Id,
     string FirstName,
     string LastName,

@@ -1,6 +1,6 @@
 ﻿namespace DoctorAPI.Application.RepositoryResults.Doctor.GetBySpecialization;
 
-public record GetBySpecializationResult(
+public record GetDoctorBySpecializationResult(
     Guid Id,
     string FirstName,
     string LastName,

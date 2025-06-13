@@ -24,9 +24,9 @@ public class DoctorController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<GetAllDoctorsResponse>> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    public async Task<ActionResult<GetAllDoctorsResponse>> GetAll([FromQuery] GetAllDoctorsRequest request)
     {
-        var query = new GetAllDoctorsQuery(page, pageSize);
+        var query = new GetAllDoctorsQuery(request.Page, request.PageSize);
         var response = await _sender.Send(query);
         return Ok(response);
     }
@@ -34,7 +34,7 @@ public class DoctorController : ControllerBase
     [HttpGet("id")]
     public async Task<ActionResult<GetByIdDoctorResponse>> GetById([FromQuery] Guid id)
     {
-        var query = new GetByIdDoctorQuery(id);
+        var query = new GetDoctorByIdQuery(id);
         var response = await _sender.Send(query);
         return Ok(response);
     }
@@ -42,7 +42,7 @@ public class DoctorController : ControllerBase
     [HttpGet("status")]
     public async Task<ActionResult<GetByStatusDoctorsResponse>> GetByStatus([FromQuery] DoctorStatus status)
     {
-        var query = new GetByStatusDoctorsQuery(status);
+        var query = new GetDoctorsByStatusQuery(status);
         var response = await _sender.Send(query);
         return Ok(response);
     }
@@ -50,15 +50,15 @@ public class DoctorController : ControllerBase
     [HttpGet("specialization")]
     public async Task<ActionResult<GetBySpecializationDoctorResponse>> GetBySpec([FromQuery] int specializationId)
     {
-        var query = new GetBySpecializationDoctorQuery(specializationId);
+        var query = new GetDoctorBySpecializationQuery(specializationId);
         var response = await _sender.Send(query);
         return Ok(response);
     }
 
     [HttpPost]
-    public async Task<ActionResult<GetAllDoctorsResponse>> Create([FromBody] CreateDoctorRequest doctor)
+    public async Task<ActionResult<GetAllDoctorsResponse>> Create([FromBody] CreateDoctorRequest request)
     {
-        var command = new CreateDoctorCommand(doctor);
+        var command = new CreateDoctorCommand(request);
         await _sender.Send(command);
         return Ok();
     }

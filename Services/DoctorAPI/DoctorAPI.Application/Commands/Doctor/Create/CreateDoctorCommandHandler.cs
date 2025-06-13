@@ -19,19 +19,6 @@ internal class CreateDoctorCommandHandler : IRequestHandler<CreateDoctorCommand>
     public async Task Handle(CreateDoctorCommand command, CancellationToken cancellationToken)
     {
         var doctorEntity = _mapper.Map<DoctorEntity>(command.Request);
-        using (var unitOfWork = _unitOfWork)
-        {
-            await unitOfWork.BeginTransactionAsync();
-            try
-            {
-                await _unitOfWork.DoctorRepository.CreateAsync(doctorEntity, cancellationToken);
-                await _unitOfWork.SaveChangesAsync(cancellationToken);
-                await _unitOfWork.CommitAsync(cancellationToken);
-            }
-            catch
-            {
-                await _unitOfWork.RollbackAsync(cancellationToken);
-            }
-        }
+        await _unitOfWork.DoctorRepository.CreateAsync(doctorEntity, cancellationToken);   
     }
 }

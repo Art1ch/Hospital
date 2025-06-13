@@ -1,6 +1,6 @@
 ﻿namespace DoctorAPI.Core.Enums;
 
-public enum DoctorStatus
+public enum DoctorStatus : byte
 {
     Available = 1,
     Busy = 2,

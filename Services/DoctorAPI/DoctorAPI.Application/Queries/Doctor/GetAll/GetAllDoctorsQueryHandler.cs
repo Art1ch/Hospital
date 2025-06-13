@@ -20,7 +20,7 @@ internal class GetAllDoctorsQueryHandler : IRequestHandler<GetAllDoctorsQuery, G
     {
         var page = query.Page;
         var pageSize = query.PageSize;
-        var result = await _unitOfWork.DoctorRepository.GetAllAsync(page, pageSize, cancellationToken);
+        var result = await _unitOfWork.DoctorRepository.GetAllDoctorsAsync(page, pageSize, cancellationToken);
         var response = _mapper.Map<GetAllDoctorsResponse>(result);
         return response;
     }

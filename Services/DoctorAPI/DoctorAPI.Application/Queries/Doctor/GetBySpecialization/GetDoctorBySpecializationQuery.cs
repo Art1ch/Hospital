@@ -4,4 +4,4 @@ using MediatR;
 
 namespace DoctorAPI.Application.Queries.Doctor.GetBySpecialization;
 
-public record GetBySpecializationDoctorQuery(int SpecializationId) : IRequest<GetBySpecializationDoctorResponse>;
+public record GetDoctorBySpecializationQuery(int SpecializationId) : IRequest<GetBySpecializationDoctorResponse>;

@@ -9,8 +9,8 @@ namespace DoctorAPI.Application.Contracts.Repository.Doctor;
 
 public interface IDoctorRepository : IRepository<DoctorEntity, Guid>
 {
-    Task<List<GetAllDoctorsResult>> GetAllAsync(int page, int pageSize, CancellationToken ct);
-    Task<GetByIdDoctorResult> GetByIdAsync(Guid id, CancellationToken ct);
-    Task<GetBySpecializationResult> GetBySpecializationAsync(int specializationId, CancellationToken ct);
-    Task<List<GetByStatusResult>> GetByStatusAsync(DoctorStatus status, CancellationToken ct);
+    Task<List<GetAllDoctorsResult>> GetAllDoctorsAsync(int page, int pageSize, CancellationToken ct);
+    Task<GetDoctorInfoByIdResult> GetDoctorInfoById(Guid id, CancellationToken ct);
+    Task<GetDoctorBySpecializationResult> GetDoctorBySpecializationAsync(int specializationId, CancellationToken ct);
+    Task<List<GetDoctorsByStatusResult>> GetDoctorByStatusAsync(DoctorStatus status, CancellationToken ct);
 }

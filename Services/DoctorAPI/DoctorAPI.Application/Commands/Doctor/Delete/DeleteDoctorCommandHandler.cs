@@ -14,20 +14,6 @@ internal class DeleteDoctorCommandHandler : IRequestHandler<DeleteDoctorCommand>
 
     public async Task Handle(DeleteDoctorCommand command, CancellationToken cancellationToken)
     {
-        using (var unitOfWork = _unitOfWork)
-        {
-            await unitOfWork.BeginTransactionAsync(cancellationToken);
-            try
-            {
-                await unitOfWork.DoctorRepository.DeleteAsync(command.Id, cancellationToken);
-                await unitOfWork.SaveChangesAsync(cancellationToken);
-                await unitOfWork.CommitAsync(cancellationToken);
-            }
-            catch
-            {
-                await unitOfWork.RollbackAsync(cancellationToken);
-                throw;
-            }
-        }
+        await _unitOfWork.DoctorRepository.DeleteAsync(command.Id);
     }
 }

@@ -1,8 +1,6 @@
 using DoctorAPI.Application;
-using DoctorAPI.Application.Requests.Doctor;
 using DoctorAPI.Infrastructure;
 using DoctorAPI.Middlewares;
-using FluentValidation.AspNetCore;
 
 namespace DoctorAPI;
 

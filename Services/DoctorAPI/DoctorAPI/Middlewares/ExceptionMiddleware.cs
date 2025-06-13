@@ -40,10 +40,10 @@ internal class ExceptionMiddleware
                 errorTitle = "Validation Error";
                 detail = string.Join(";", validationException.Errors.Select(e => e.ErrorMessage));
                 break;
-            case KeyNotFoundException keyNotFoundException:
+            case InvalidOperationException invalidOperationException:
                 status = StatusCodes.Status404NotFound;
                 errorTitle = "Not Found";
-                detail = keyNotFoundException.Message;
+                detail = invalidOperationException.Message;
                 break;
             default:
                 status = StatusCodes.Status500InternalServerError;

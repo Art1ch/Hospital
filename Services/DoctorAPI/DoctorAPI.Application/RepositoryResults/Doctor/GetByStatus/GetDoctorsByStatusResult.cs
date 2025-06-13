@@ -1,6 +1,6 @@
 ﻿namespace DoctorAPI.Application.RepositoryResults.Doctor.GetByStatus;
 
-public record GetByStatusResult(
+public record GetDoctorsByStatusResult(
     Guid Id,
     string FirstName,
     string LastName,

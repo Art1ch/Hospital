@@ -3,4 +3,4 @@
 namespace DoctorAPI.Application.Responses.Doctor;
 
 public record GetByStatusDoctorsResponse(
-    List<GetByStatusResult> Doctors);
+    List<GetDoctorsByStatusResult> Doctors);

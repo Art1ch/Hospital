@@ -6,21 +6,21 @@ using MediatR;
 
 namespace DoctorAPI.Application.Queries.Doctor.GetByStatus;
 
-internal class GetByStatusDoctorsQueryHandler : IRequestHandler<GetByStatusDoctorsQuery, GetByStatusDoctorsResponse>
+internal class GetDoctorsByStatusQueryHandler : IRequestHandler<GetDoctorsByStatusQuery, GetByStatusDoctorsResponse>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public GetByStatusDoctorsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
+    public GetDoctorsByStatusQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
 
-    public async Task<GetByStatusDoctorsResponse> Handle(GetByStatusDoctorsQuery query, CancellationToken cancellationToken)
+    public async Task<GetByStatusDoctorsResponse> Handle(GetDoctorsByStatusQuery query, CancellationToken cancellationToken)
     {
         var doctorStatus = query.DoctorStatus;
-        var result = await _unitOfWork.DoctorRepository.GetByStatusAsync(doctorStatus, cancellationToken);
+        var result = await _unitOfWork.DoctorRepository.GetDoctorByStatusAsync(doctorStatus, cancellationToken);
         var response = _mapper.Map<GetByStatusDoctorsResponse>(result);
         return response;
     }
