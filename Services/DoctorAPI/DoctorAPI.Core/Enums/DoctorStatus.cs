@@ -1,4 +1,4 @@
-﻿namespace DoctorAPI.Core.Enums;
+﻿namespace DoctorAPI.Application.Enums;
 
 public enum DoctorStatus : byte
 {

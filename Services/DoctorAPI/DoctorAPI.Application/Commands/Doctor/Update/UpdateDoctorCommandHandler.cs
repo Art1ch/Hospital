@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using DoctorAPI.Application.Commands.Doctor.Create;
 using DoctorAPI.Application.Contracts.UnitOfWork;
-using DoctorAPI.Core.Entities;
+using DoctorAPI.Application.Entities;
 using MediatR;
 
 namespace DoctorAPI.Application.Commands.Doctor.Update;

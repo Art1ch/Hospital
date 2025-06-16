@@ -1,4 +1,5 @@
 using DoctorAPI.Application;
+using DoctorAPI.Configuration;
 using DoctorAPI.Infrastructure;
 using DoctorAPI.Middlewares;
 
@@ -14,8 +15,10 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
+        var dbConfig = new DoctorDbConfiguration(builder.Configuration);
+
         builder.Services.AddApplicationLayer();
-        builder.Services.AddInfrastructureLayer(builder.Configuration.GetConnectionString("DoctorDbString")!);
+        builder.Services.AddInfrastructureLayer(dbConfig.ConnectionString);
 
         var app = builder.Build();
 

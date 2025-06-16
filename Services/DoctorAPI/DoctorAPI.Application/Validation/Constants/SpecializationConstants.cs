@@ -1,4 +1,4 @@
-﻿namespace DoctorAPI.Core.Constants.Specialization;
+﻿namespace DoctorAPI.Application.Constants.Specialization;
 
 internal static class SpecializationConstants
 {

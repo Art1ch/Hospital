@@ -1,13 +1,14 @@
-﻿using DoctorAPI.Core.Constants.Doctor;
+﻿using DoctorAPI.Application.Constants.Doctor;
 using DoctorAPI.Application.Validation.Constants;
 using FluentValidation;
 using System.Linq.Expressions;
-using DoctorAPI.Core.Enums;
-using DoctorAPI.Core.Constants.Specialization;
+using DoctorAPI.Application.Enums;
+using DoctorAPI.Application.Constants.Specialization;
+using DoctorAPI.Application.Validation.BaseValidators;
 
 namespace DoctorAPI.Application.Validation.BaseDoctorValidator;
 
-public class BaseDoctorValidator<T> : AbstractValidator<T> 
+public class BaseDoctorValidator<T> : BasePaginationValidator<T>
 {
     protected void ValidateFirstName(Expression<Func<T, string>> expression)
     {
@@ -63,20 +64,5 @@ public class BaseDoctorValidator<T> : AbstractValidator<T>
             .Length(SpecializationConstants.MinSpecializationNameLength, SpecializationConstants.MaxSpecializationNameLength)
             .WithMessage(ValidationConstants.OnFailedSpecializationNameValidation)
             .Matches("^[a-zA-Zа-яА-Я- ]+$").WithMessage(ValidationConstants.OnFailedRegexValidation);
-    }
-
-    protected void ValidatePageNumber(Expression<Func<T, int>> expression)
-    {
-        RuleFor(expression)
-            .NotEmpty().WithMessage(ValidationConstants.OnFailedNullValidation)
-            .GreaterThanOrEqualTo(PaginationConstants.MinPageNumber).WithMessage(ValidationConstants.OnFailedPageNumberValidation);
-    }
-
-    protected void ValidatePageSize(Expression<Func<T, int>> expression)
-    {
-        RuleFor(expression)
-            .NotEmpty().WithMessage(ValidationConstants.OnFailedNullValidation)
-            .InclusiveBetween(PaginationConstants.MinPageSize, PaginationConstants.MaxPageSize)
-            .WithMessage(ValidationConstants.OnFailedPageSizeValidation);
     }
 }

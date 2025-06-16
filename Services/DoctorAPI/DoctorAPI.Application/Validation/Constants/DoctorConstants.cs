@@ -1,4 +1,4 @@
-﻿namespace DoctorAPI.Core.Constants.Doctor;
+﻿namespace DoctorAPI.Application.Constants.Doctor;
 
 internal static class DoctorConstants
 {

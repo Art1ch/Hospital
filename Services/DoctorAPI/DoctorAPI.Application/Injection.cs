@@ -22,8 +22,6 @@ public static class Injection
     {
         services.AddFluentValidationAutoValidation();
         services.AddValidatorsFromAssemblyContaining<CreateDoctorRequestValidator>();
-        services.AddValidatorsFromAssemblyContaining<UpdateDoctorRequestValidator>();
-        services.AddValidatorsFromAssemblyContaining<GetAllDoctorsRequestValidator>();
     }
 
     private static void AddCommandsAndQueries(IServiceCollection services)

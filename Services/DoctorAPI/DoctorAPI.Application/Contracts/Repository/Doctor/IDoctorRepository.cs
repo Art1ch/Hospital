@@ -2,8 +2,8 @@
 using DoctorAPI.Application.RepositoryResults.Doctor.GetById;
 using DoctorAPI.Application.RepositoryResults.Doctor.GetBySpecialization;
 using DoctorAPI.Application.RepositoryResults.Doctor.GetByStatus;
-using DoctorAPI.Core.Entities;
-using DoctorAPI.Core.Enums;
+using DoctorAPI.Application.Entities;
+using DoctorAPI.Application.Enums;
 
 namespace DoctorAPI.Application.Contracts.Repository.Doctor;
 

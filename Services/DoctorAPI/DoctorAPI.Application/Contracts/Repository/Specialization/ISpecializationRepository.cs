@@ -1,4 +1,4 @@
-﻿using DoctorAPI.Core.Entities;
+﻿using DoctorAPI.Application.Entities;
 
 namespace DoctorAPI.Application.Contracts.Repository.Specialization;
 

@@ -1,5 +1,5 @@
-﻿using DoctorAPI.Core.Entities;
-using DoctorAPI.Core.Enums;
+﻿using DoctorAPI.Application.Entities;
+using DoctorAPI.Application.Enums;
 
 namespace DoctorAPI.Application.RepositoryResults.Doctor.GetById;
 

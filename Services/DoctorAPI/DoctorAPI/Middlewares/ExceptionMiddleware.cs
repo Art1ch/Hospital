@@ -59,6 +59,8 @@ internal class ExceptionMiddleware
             Detail = detail
         };
 
+        _logger.LogInformation(exception.Message, detail);
+
         await context.Response.WriteAsJsonAsync(problemDetails);
     }
 }

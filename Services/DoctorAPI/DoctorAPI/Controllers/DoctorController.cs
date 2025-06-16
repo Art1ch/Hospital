@@ -6,7 +6,7 @@ using DoctorAPI.Application.Queries.Doctor.GetBySpecialization;
 using DoctorAPI.Application.Queries.Doctor.GetByStatus;
 using DoctorAPI.Application.Requests.Doctor;
 using DoctorAPI.Application.Responses.Doctor;
-using DoctorAPI.Core.Enums;
+using DoctorAPI.Application.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,8 +1,7 @@
 ﻿using DoctorAPI.Application.Contracts.Repository.Specialization;
-using DoctorAPI.Core.Entities;
+using DoctorAPI.Application.Entities;
 using DoctorAPI.Infrastructure.Context;
 using DoctorAPI.Infrastructure.Repositories.Abstract;
-using Microsoft.EntityFrameworkCore;
 
 namespace DoctorAPI.Infrastructure.Repositories.Implementations;
 

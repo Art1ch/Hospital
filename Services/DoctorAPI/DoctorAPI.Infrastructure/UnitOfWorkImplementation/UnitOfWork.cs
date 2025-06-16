@@ -2,7 +2,6 @@
 using DoctorAPI.Application.Contracts.Repository.Specialization;
 using DoctorAPI.Application.Contracts.UnitOfWork;
 using DoctorAPI.Infrastructure.Context;
-using DoctorAPI.Infrastructure.Repositories.Implementations;
 
 namespace DoctorAPI.Infrastructure.UnitOfWorkImplementation;
 
@@ -12,11 +11,15 @@ internal class UnitOfWork : IUnitOfWork
     public ISpecializationRepository SpecializationRepository { get ; set ; }
     private readonly DoctorDbContext _dbContext;
 
-    public UnitOfWork(DoctorDbContext dbContext)
+    public UnitOfWork(
+        DoctorDbContext dbContext,
+        IDoctorRepository doctorRepository,
+        ISpecializationRepository specializationRepository)
     {
-        DoctorRepository = new DoctorRepository(dbContext);
-        SpecializationRepository = new SpecializationRepository(dbContext);
+
         _dbContext = dbContext;
+        DoctorRepository = doctorRepository;
+        SpecializationRepository = specializationRepository;
     }
 
     public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
@@ -32,18 +35,8 @@ internal class UnitOfWork : IUnitOfWork
         await _dbContext.Database.CommitTransactionAsync(cancellationToken);
     }
 
-    public void Dispose()
-    {
-        _dbContext?.Dispose();
-    }
-
     public async Task RollbackAsync(CancellationToken cancellationToken = default)
     {
         await _dbContext.Database.RollbackTransactionAsync(cancellationToken);
-    }
-
-    public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-        await _dbContext.SaveChangesAsync();
     }
 }

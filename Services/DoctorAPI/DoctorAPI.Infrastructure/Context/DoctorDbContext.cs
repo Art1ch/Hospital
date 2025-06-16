@@ -1,4 +1,4 @@
-﻿using DoctorAPI.Core.Entities;
+﻿using DoctorAPI.Application.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace DoctorAPI.Infrastructure.Context;

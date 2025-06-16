@@ -1,5 +1,5 @@
-﻿using DoctorAPI.Core.Constants.Doctor;
-using DoctorAPI.Core.Constants.Specialization;
+﻿using DoctorAPI.Application.Constants.Doctor;
+using DoctorAPI.Application.Constants.Specialization;
 
 namespace DoctorAPI.Application.Validation.Constants;
 
@@ -21,7 +21,7 @@ internal static class ValidationConstants
         $"Минимальная страница должна быть {PaginationConstants.MinPageNumber}";
     public static readonly string OnFailedPageSizeValidation =
         $"Количество данных на странице должно варьироваться от {PaginationConstants.MinPageSize}" +
-        $"до {PaginationConstants.MaxPageSize} единиц";
+        $" до {PaginationConstants.MaxPageSize} единиц";
     public const string OnFailedRequiredValidation = "Поле обязательно для заполнения.";
     public const string OnFailedNullValidation = "Значение не может быть null.";
     public const string OnFailedRegexValidation ="Данное поле может содержать только буквы, дефисы и пробелы.";

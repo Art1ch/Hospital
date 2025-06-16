@@ -5,7 +5,7 @@ using DoctorAPI.Application.RepositoryResults.Doctor.GetBySpecialization;
 using DoctorAPI.Application.RepositoryResults.Doctor.GetByStatus;
 using DoctorAPI.Application.Requests.Doctor;
 using DoctorAPI.Application.Responses.Doctor;
-using DoctorAPI.Core.Entities;
+using DoctorAPI.Application.Entities;
 
 namespace DoctorAPI.Application.Mappings;
 

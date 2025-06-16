@@ -1,4 +1,4 @@
-﻿using DoctorAPI.Core.Enums;
+﻿using DoctorAPI.Application.Enums;
 
 namespace DoctorAPI.Application.Requests.Doctor;
 

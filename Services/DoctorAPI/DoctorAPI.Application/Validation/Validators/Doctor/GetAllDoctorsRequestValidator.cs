@@ -1,9 +1,9 @@
 ﻿using DoctorAPI.Application.Requests.Doctor;
-using DoctorAPI.Application.Validation.BaseDoctorValidator;
+using DoctorAPI.Application.Validation.BaseValidators;
 
 namespace DoctorAPI.Application.Validation.Validators.Doctor;
 
-public class GetAllDoctorsRequestValidator : BaseDoctorValidator<GetAllDoctorsRequest>
+public class GetAllDoctorsRequestValidator : BasePaginationValidator<GetAllDoctorsRequest>
 {
     public GetAllDoctorsRequestValidator()
     {

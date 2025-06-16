@@ -1,6 +1,6 @@
-﻿using DoctorAPI.Core.Enums;
+﻿using DoctorAPI.Application.Enums;
 
-namespace DoctorAPI.Core.Entities;
+namespace DoctorAPI.Application.Entities;
 
 public class DoctorEntity
 {
