@@ -22,7 +22,7 @@ internal static class ValidationConstants
     public static readonly string OnFailedPageSizeValidation =
         $"Количество данных на странице должно варьироваться от {PaginationConstants.MinPageSize}" +
         $" до {PaginationConstants.MaxPageSize} единиц";
-    public const string OnFailedRequiredValidation = "Поле обязательно для заполнения.";
-    public const string OnFailedNullValidation = "Значение не может быть null.";
-    public const string OnFailedRegexValidation ="Данное поле может содержать только буквы, дефисы и пробелы.";
+    public static readonly string OnFailedRequiredValidation = "Поле обязательно для заполнения.";
+    public static readonly string OnFailedNullValidation = "Значение не может быть null.";
+    public static readonly string OnFailedRegexValidation ="Данное поле может содержать только буквы, дефисы и пробелы.";
 }
