@@ -23,32 +23,32 @@ internal class TokenProvider : ITokenProvider
         _securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
     }
 
-    public string GenerateAccessToken(AccountEntity account)
-    {
-        var claims = new Claim[]
-        {
-            new Claim("token_type", "access"),
-            new Claim(JwtRegisteredClaimNames.Sub, account.Id.ToString()),
-            new Claim(JwtRegisteredClaimNames.Email, account.Email),
-            new Claim(JwtRegisteredClaimNames.PhoneNumber, account.PhoneNumber)
-        };
-
-        var expiry = DateTime.UtcNow.AddMinutes(_jwtSettings.AccessTokenExpiryMinutes);
-        var token = GenerateJwtToken(expiry, claims);
-
-        return token;
-    }
-
     public string GenerateIdToken(AccountEntity account)
     {
         var claims = new Claim[]
         {
             new Claim("token_type", "id"),
             new Claim(JwtRegisteredClaimNames.Sub, account.Id.ToString()),
-            new Claim("Role", nameof(account.Role)),
+            new Claim(JwtRegisteredClaimNames.Email, account.Email),
+            new Claim(JwtRegisteredClaimNames.PhoneNumber, account.PhoneNumber),
         };
 
         var expiry = DateTime.UtcNow.AddMinutes(_jwtSettings.IdTokenExpiryMinutes);
+        var token = GenerateJwtToken(expiry, claims);
+
+        return token;
+    }
+
+    public string GenerateAccessToken(AccountEntity account)
+    {
+        var claims = new Claim[]
+        {
+            new Claim("token_type", "access"),
+            new Claim(JwtRegisteredClaimNames.Sub, account.Id.ToString()),
+            new Claim("Role", nameof(account.Role)),
+        };
+
+        var expiry = DateTime.UtcNow.AddMinutes(_jwtSettings.AccessTokenExpiryMinutes);
         var token = GenerateJwtToken(expiry, claims);
 
         return token;
