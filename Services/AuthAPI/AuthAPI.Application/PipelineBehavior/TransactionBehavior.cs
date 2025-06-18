@@ -3,7 +3,7 @@ using MediatR;
 
 namespace AuthAPI.Application.PipelineBehavior;
 
-public class TransactionBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+public class TransactionBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : class
 {
     private readonly IUnitOfWork _unitOfWork;
 

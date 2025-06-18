@@ -4,7 +4,7 @@ namespace AuthAPI.Application.Contracts.UnitOfWork;
 
 public interface IUnitOfWork
 {
-    public IAccountRepository AccountRepository { get; set; }
+    public IAccountRepository AccountRepository { get; }
     public IRefreshTokenRepository RefreshTokenRepository { get; }
     public IReferenceTokenRepository ReferenceTokenRepository { get; }
     Task BeginTransactionAsync(CancellationToken cancellationToken = default);

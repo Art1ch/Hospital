@@ -1,5 +1,4 @@
 ﻿using AuthAPI.Core.Enums;
-using System.Security.Claims;
 
 namespace AuthAPI.Core.Entities;
 

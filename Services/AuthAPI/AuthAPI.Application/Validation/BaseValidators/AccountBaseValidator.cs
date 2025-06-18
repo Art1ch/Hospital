@@ -17,7 +17,13 @@ public class AccountBaseValidator<T> : AbstractValidator<T>
     {
         RuleFor(expression)
             .MinimumLength(AccountConstants.MinPhoneNumberLength).WithMessage(ValidationConstants.OnFailedPhoneNumberValidation)
-            .MaximumLength(AccountConstants.MaxPhoneNumberLength).WithMessage(ValidationConstants.OnFailedPhoneNumberValidation);
+            .MaximumLength(AccountConstants.MaxPhoneNumberLength).WithMessage(ValidationConstants.OnFailedPhoneNumberValidation)
+            .When(model =>
+            {
+             var func = expression.Compile();
+             var value = func(model);
+             return !string.IsNullOrWhiteSpace(value);
+            });
     }
 
     protected void ValidatePassword(Expression<Func<T, string>> expression)
@@ -31,5 +37,4 @@ public class AccountBaseValidator<T> : AbstractValidator<T>
             .Matches(@"\d").WithMessage(ValidationConstants.OnFailedPasswordValidation)
             .Matches(@"^\S+$").WithMessage(ValidationConstants.OnFailedPasswordValidation);
     }
-
 }

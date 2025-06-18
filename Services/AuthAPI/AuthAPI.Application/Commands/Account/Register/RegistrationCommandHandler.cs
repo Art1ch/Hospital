@@ -32,15 +32,19 @@ internal class RegistrationCommandHandler : IRequestHandler<RegistrationCommand,
     {
         var accountEntity = _mapper.Map<AccountEntity>(command.Request);
         var isExists = await _unitOfWork.AccountRepository.IsExistsAsync(accountEntity.Email);
+
         if (isExists)
         {
             throw new AccountAlreadyExistsException("Account already exists");
         }
+
         var hashPassword = _passwordHasher.GeneratePassword(command.Request.Password!);
         accountEntity.HashPassword = hashPassword;
+
         await _unitOfWork.AccountRepository.CreateAsync(accountEntity);
         var referenceToken = _tokenProvider.GenerateReferenceToken(accountEntity);
         await _unitOfWork.ReferenceTokenRepository.CreateAsync(referenceToken);
+
         return new RegistrationResponse(referenceToken.Token);
     }
 }

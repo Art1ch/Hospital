@@ -1,15 +1,12 @@
 ﻿using AuthAPI.Core.Entities;
-using System.Security.Claims;
 
 namespace AuthAPI.Application.Contracts.TokenProvider;
 
-internal interface ITokenProvider
+public interface ITokenProvider
 {
-    ClaimsIdentity? ValidateJwtToken(string jwtToken);
-    bool IsTokenExpired(DateTime expiresAT);
+    bool IsTokenExpired(DateTime expiresAt);
     string GenerateAccessToken(AccountEntity account);
     string GenerateIdToken(AccountEntity account);
     RefreshTokenEntity GenerateRefreshToken(AccountEntity account);
     ReferenceTokenEntity GenerateReferenceToken(AccountEntity account);
-
 }

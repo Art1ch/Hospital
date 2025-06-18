@@ -1,8 +1,12 @@
-﻿using AuthAPI.Application.Contracts.Repository.Account;
+﻿using AuthAPI.Application.Contracts.PasswordHasher;
+using AuthAPI.Application.Contracts.Repository.Account;
+using AuthAPI.Application.Contracts.TokenProvider;
 using AuthAPI.Application.Contracts.UnitOfWork;
 using AuthAPI.Infrastructure.Context;
+using AuthAPI.Infrastructure.Implemenations.PasswordHasherImplmentation;
+using AuthAPI.Infrastructure.Implemenations.TokenProviderImplementation;
+using AuthAPI.Infrastructure.Implemenations.UnitOfWorkImplementation;
 using AuthAPI.Infrastructure.Repositories.Implementations;
-using AuthAPI.Infrastructure.UnitOfWorkImplementation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,6 +18,8 @@ public static class Injection
     {
         AddDbContext(services, dbConnectionString);
         AddRepositories(services);
+        AddPasswordHasher(services);
+        AddTokenProvider(services);
         AddUnitOfWork(services);
     }
 
@@ -33,5 +39,15 @@ public static class Injection
     private static void AddUnitOfWork(IServiceCollection services)
     {
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+    }
+
+    private static void AddPasswordHasher(IServiceCollection services)
+    {
+        services.AddTransient<IPasswordHasher, PasswordHasher>();
+    } 
+
+    private static void AddTokenProvider(IServiceCollection services)
+    {
+        services.AddScoped<ITokenProvider, TokenProvider>();
     }
 }

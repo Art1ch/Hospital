@@ -1,5 +1,4 @@
-﻿using AuthAPI.Application.Contracts.PasswordHasher;
-using AuthAPI.Application.Contracts.TokenProvider;
+﻿using AuthAPI.Application.Contracts.TokenProvider;
 using AuthAPI.Application.Contracts.UnitOfWork;
 using AuthAPI.Application.Exceptions;
 using AuthAPI.Application.Responses.Token;
@@ -24,6 +23,7 @@ internal class ExchangeTokenCommandHandler : IRequestHandler<ExchangeTokenComman
     {
         var tokenValue = command.Request.ReferenceToken;
         var referenceToken = await _unitOfWork.ReferenceTokenRepository.GetTokenByValueAsync(tokenValue);
+
         var isExpired = _tokenProvider.IsTokenExpired(referenceToken.ExpiresAt);
         if (isExpired)
         {

@@ -1,18 +1,17 @@
 ﻿using AuthAPI.Application.Contracts.Repository.Account;
 using AuthAPI.Application.Contracts.UnitOfWork;
 using AuthAPI.Infrastructure.Context;
-using Microsoft.EntityFrameworkCore;
 
-namespace AuthAPI.Infrastructure.UnitOfWorkImplementation;
+namespace AuthAPI.Infrastructure.Implemenations.UnitOfWorkImplementation;
 
 internal class UnitOfWork : IUnitOfWork
 {
     private readonly AuthDbContext _dbContext;
-    public IAccountRepository AccountRepository { get; set; }
+    public IAccountRepository AccountRepository { get; }
 
-    public IRefreshTokenRepository RefreshTokenRepository { get; set; }
+    public IRefreshTokenRepository RefreshTokenRepository { get; }
 
-    public IReferenceTokenRepository ReferenceTokenRepository { get; set; }
+    public IReferenceTokenRepository ReferenceTokenRepository { get; }
 
     public UnitOfWork(
         AuthDbContext dbContext,
@@ -28,7 +27,7 @@ internal class UnitOfWork : IUnitOfWork
 
     public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
     {
-        if (_dbContext.Database.CurrentTransaction != null)
+        if (_dbContext.Database.CurrentTransaction == null)
         {
             await _dbContext.Database.BeginTransactionAsync(cancellationToken);
         }
