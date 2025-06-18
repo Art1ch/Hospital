@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthAPI.Core", "Services\Au
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthAPI.Application", "Services\AuthAPI\AuthAPI.Application\AuthAPI.Application.csproj", "{9678A67A-F91E-404D-9A00-FE3FFD43931C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthAPI.Infrastructure", "..\AuthAPI.Infrastructure\AuthAPI.Infrastructure.csproj", "{288C5FE3-D0B8-4FE8-B7A3-8226776ACB2C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthAPI.Infrastructure", "Services\AuthAPI\AuthAPI.Infrastructure\AuthAPI.Infrastructure.csproj", "{288C5FE3-D0B8-4FE8-B7A3-8226776ACB2C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
