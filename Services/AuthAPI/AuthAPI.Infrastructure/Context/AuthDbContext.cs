@@ -1,4 +1,5 @@
 ﻿using AuthAPI.Core.Entities;
+using AuthAPI.Core.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace AuthAPI.Infrastructure.Context;
@@ -7,7 +8,9 @@ internal class AuthDbContext : DbContext
 {
     public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options)
     {
+        Database.EnsureDeleted();
         Database.EnsureCreated();
+        SeedAdmin();
     }
 
     public DbSet<AccountEntity> Accounts { get; set; }
@@ -32,5 +35,32 @@ internal class AuthDbContext : DbContext
             .HasForeignKey<RefreshTokenEntity>(r => r.AccountId)
             .OnDelete(DeleteBehavior.Cascade);
         });
+    }
+
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        var entries = ChangeTracker.Entries<AccountEntity>()
+        .Where(e => e.State == EntityState.Modified);
+
+        var now = DateTime.UtcNow;
+
+        foreach (var entry in entries)
+        {
+            entry.Entity.UpdatedAtUtc = now;
+        }
+
+        return await base.SaveChangesAsync(cancellationToken);
+    }
+
+    private void SeedAdmin()
+    {
+        Accounts.Add(
+            new AccountEntity
+            {
+                Id = Guid.NewGuid(),
+                Email = "admin@gmail.com",
+                HashPassword = "$2y$12$Gx1zD6C6V3SAbMNtFpuRp.dJvPRAjJzplYrjXABhnsIezCrx7VgxS",
+                Role = Roles.Admin,
+            });
     }
 }
