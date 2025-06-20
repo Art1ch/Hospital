@@ -4,7 +4,8 @@
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
       "serviceActions": {
-        "doctorapi": "StartDebugging"
+        "doctorapi": "StartDebugging",
+        "authapi": "StartDebugging"
       }
     }
   }

@@ -1,17 +1,16 @@
-using DoctorAPI.Application;
-using DoctorAPI.Configuration;
-using DoctorAPI.Infrastructure;
-using DoctorAPI.Middlewares;
-using DoctorAPI.Configuration.JwtSettings;
-using DoctorAPI.Extensions;
+using AuthAPI.Application;
+using AuthAPI.Configuration.DbSettings;
+using AuthAPI.Configuration.JwtSettings;
+using AuthAPI.Infrastructure;
 
-namespace DoctorAPI;
+namespace AuthAPI;
 
 public class Program
 {
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+
 
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
@@ -20,19 +19,11 @@ public class Program
         builder.Services.Configure<JwtSettings>(
             builder.Configuration.GetSection(nameof(JwtSettings)));
 
-        var dbConfig = new DoctorDbConfiguration(
-            builder.Configuration["ConnectionStrings:DoctorDbString"]!);
-
-        var jwtSettings = builder.Configuration
-            .GetSection(nameof(JwtSettings))
-            .Get<JwtSettings>();
-
-        builder.Services.AddJwtAuthentication(jwtSettings!);
-        builder.Services.AddSwaggerWithJwt();
+        var dbConfig = new AuthDbConfiguration(
+            builder.Configuration["ConnectionStrings:AuthDbString"]!);
 
         builder.Services.AddApplicationLayer();
         builder.Services.AddInfrastructureLayer(dbConfig.DbConnectionString);
-
         var app = builder.Build();
 
         if (app.Environment.IsDevelopment())
@@ -43,10 +34,8 @@ public class Program
 
         app.UseHttpsRedirection();
 
-        app.UseMiddleware<ExceptionMiddleware>();
-
-        app.UseAuthentication();
         app.UseAuthorization();
+
 
         app.MapControllers();
 
