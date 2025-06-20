@@ -17,14 +17,18 @@ internal static class ServicesExtensions
         })
             .AddJwtBearer(options =>
             {
+                options.IncludeErrorDetails = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = jwtSettings.ValidateIssuer,
                     ValidateAudience = jwtSettings.ValidateAudience,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
+                    ValidAudience = jwtSettings.Audience,
                     ValidIssuer = jwtSettings.Issuer,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Issuer))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey)),
+                    ValidAlgorithms = new[] { SecurityAlgorithms.HmacSha384 },
+                    RequireSignedTokens = true,
                 };
             });
     }
@@ -51,7 +55,7 @@ internal static class ServicesExtensions
                         Reference = new OpenApiReference
                         {
                             Id = "Bearer",
-                            Type = ReferenceType.SecurityScheme
+                            Type = ReferenceType.SecurityScheme,
                         }
                     },
                     new string[]{}
