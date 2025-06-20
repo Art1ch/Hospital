@@ -8,12 +8,12 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace AuthAPI.Infrastructure.Implemenations.TokenProviderImplementation;
+namespace AuthAPI.Infrastructure.Services;
 
 internal class TokenProvider : ITokenProvider
 {
-    private readonly int _randomNumberForRefreshToken = 32;
-    private readonly int _randomNumberForReferenceToken = 16;
+    private const int _randomNumberForRefreshToken = 32;
+    private const int _randomNumberForReferenceToken = 16;
     private readonly JwtSettings _jwtSettings;
     private readonly SymmetricSecurityKey _securityKey;
 
@@ -45,7 +45,7 @@ internal class TokenProvider : ITokenProvider
         {
             new Claim("token_type", "access"),
             new Claim(JwtRegisteredClaimNames.Sub, account.Id.ToString()),
-            new Claim("Role", nameof(account.Role)),
+            new Claim("role", account.Role.ToString()),
         };
 
         var expiry = DateTime.UtcNow.AddMinutes(_jwtSettings.AccessTokenExpiryMinutes);
@@ -62,7 +62,6 @@ internal class TokenProvider : ITokenProvider
             Token = token,
             CreatedAt = DateTime.UtcNow,
             AccountId = account.Id,
-            Account = account,
             ExpiresAt = DateTime.UtcNow.AddMinutes(_jwtSettings.ReferenceTokenExpiryMinutes),
         };
     }
@@ -94,7 +93,7 @@ internal class TokenProvider : ITokenProvider
     }
 
     private string GenerateJwtToken(DateTime expiry, Claim[] claims)
-    { 
+    {
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),

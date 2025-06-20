@@ -1,4 +1,4 @@
 ﻿namespace AuthAPI.Application.Responses.Account;
 
-public record RegistrationResponse(
+public sealed record RegistrationResponse(
     string ReferenceToken);

@@ -9,6 +9,7 @@ public class TokenBaseValidator<T> : AbstractValidator<T>
     protected void ValidateTokenValue(Expression<Func<T, string>> expression)
     {
         RuleFor(expression)
-            .NotEmpty().WithMessage(ValidationConstants.OnFailedNullValidation);
+            .NotEmpty()
+            .WithMessage(ValidationConstants.OnFailedNullValidation);
     }
 }

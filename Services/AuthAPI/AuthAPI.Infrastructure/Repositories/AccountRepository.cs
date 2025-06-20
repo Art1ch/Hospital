@@ -4,7 +4,7 @@ using AuthAPI.Infrastructure.Context;
 using AuthAPI.Infrastructure.Repositories.Abstract;
 using Microsoft.EntityFrameworkCore;
 
-namespace AuthAPI.Infrastructure.Repositories.Implementations;
+namespace AuthAPI.Infrastructure.Repositories;
 
 internal class AccountRepository : Repository<AccountEntity, Guid>, IAccountRepository
 {

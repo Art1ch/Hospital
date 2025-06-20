@@ -1,8 +1,8 @@
-﻿using AuthAPI.Application.Requests.Account;
+﻿using AuthAPI.Application.Abstractions;
+using AuthAPI.Application.Requests.Account;
 using AuthAPI.Application.Responses.Account;
-using MediatR;
 
 namespace AuthAPI.Application.Commands.Account.Register;
 
-public record RegistrationCommand(
-    RegistrationRequest Request) : IRequest<RegistrationResponse>;
+public sealed record RegistrationCommand(
+    RegistrationRequest Request) : BaseRequest<RegistrationRequest, RegistrationResponse>(Request);

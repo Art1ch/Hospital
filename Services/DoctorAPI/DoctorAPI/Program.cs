@@ -2,6 +2,8 @@ using DoctorAPI.Application;
 using DoctorAPI.Configuration;
 using DoctorAPI.Infrastructure;
 using DoctorAPI.Middlewares;
+using DoctorAPI.Configuration.JwtSettings;
+using DoctorAPI.Extensions;
 
 namespace DoctorAPI;
 
@@ -15,10 +17,19 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
-        var dbConfig = new DoctorDbConfiguration(builder.Configuration);
+        builder.Services.Configure<JwtSettings>(
+            builder.Configuration.GetSection(nameof(JwtSettings)));
+
+        var dbConfig = new DoctorDbConfiguration(
+            builder.Configuration.GetConnectionString("DoctorDbString")!);
+
+        var jwtSettings = builder.Configuration.Get<JwtSettings>();
+
+        builder.Services.AddJwtAuthentication(jwtSettings!);
+        builder.Services.AddSwaggerWithJwt();
 
         builder.Services.AddApplicationLayer();
-        builder.Services.AddInfrastructureLayer(dbConfig.ConnectionString);
+        builder.Services.AddInfrastructureLayer(dbConfig.DbConnectionString);
 
         var app = builder.Build();
 
@@ -33,6 +44,7 @@ public class Program
         app.UseMiddleware<ExceptionMiddleware>();
 
         app.UseAuthorization();
+        app.UseAuthentication();
 
         app.MapControllers();
 

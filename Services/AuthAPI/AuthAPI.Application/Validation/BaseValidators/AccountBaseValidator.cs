@@ -9,32 +9,43 @@ public class AccountBaseValidator<T> : AbstractValidator<T>
     protected void ValidateEmail(Expression<Func<T, string>> expression)
     {
         RuleFor(expression)
-            .NotEmpty().WithMessage(ValidationConstants.OnFailedNullValidation)
-            .EmailAddress().WithMessage(ValidationConstants.OnFailedEmailValidation);
+            .NotEmpty()
+            .WithMessage(ValidationConstants.OnFailedNullValidation)
+            .EmailAddress()
+            .WithMessage(ValidationConstants.OnFailedEmailValidation);
     }
 
     protected void ValidatePhoneNumber(Expression<Func<T, string>> expression)
     {
         RuleFor(expression)
-            .MinimumLength(AccountConstants.MinPhoneNumberLength).WithMessage(ValidationConstants.OnFailedPhoneNumberValidation)
-            .MaximumLength(AccountConstants.MaxPhoneNumberLength).WithMessage(ValidationConstants.OnFailedPhoneNumberValidation)
+            .MinimumLength(AccountConstants.MinPhoneNumberLength)
+            .WithMessage(ValidationConstants.OnFailedPhoneNumberValidation)
+            .MaximumLength(AccountConstants.MaxPhoneNumberLength)
+            .WithMessage(ValidationConstants.OnFailedPhoneNumberValidation)
             .When(model =>
             {
-             var func = expression.Compile();
-             var value = func(model);
-             return !string.IsNullOrWhiteSpace(value);
+                var func = expression.Compile();
+                var value = func(model);
+                return !string.IsNullOrWhiteSpace(value);
             });
     }
 
     protected void ValidatePassword(Expression<Func<T, string>> expression)
     {
         RuleFor(expression)
-            .NotEmpty().WithMessage(ValidationConstants.OnFailedNullValidation)
-            .MinimumLength(AccountConstants.MinPasswordLength).WithMessage(ValidationConstants.OnFailedPasswordValidation)
-            .MaximumLength(AccountConstants.MaxPasswordLength).WithMessage(ValidationConstants.OnFailedPasswordValidation)
-            .Matches(@"[A-Z]").WithMessage(ValidationConstants.OnFailedPasswordValidation)
-            .Matches(@"[a-z]").WithMessage(ValidationConstants.OnFailedPasswordValidation)
-            .Matches(@"\d").WithMessage(ValidationConstants.OnFailedPasswordValidation)
-            .Matches(@"^\S+$").WithMessage(ValidationConstants.OnFailedPasswordValidation);
+            .NotEmpty()
+            .WithMessage(ValidationConstants.OnFailedNullValidation)
+            .MinimumLength(AccountConstants.MinPasswordLength)
+            .WithMessage(ValidationConstants.OnFailedPasswordValidation)
+            .MaximumLength(AccountConstants.MaxPasswordLength)
+            .WithMessage(ValidationConstants.OnFailedPasswordValidation)
+            .Matches(@"[A-Z]")
+            .WithMessage(ValidationConstants.OnFailedPasswordValidation)
+            .Matches(@"[a-z]")
+            .WithMessage(ValidationConstants.OnFailedPasswordValidation)
+            .Matches(@"\d")
+            .WithMessage(ValidationConstants.OnFailedPasswordValidation)
+            .Matches(@"^\S+$")
+            .WithMessage(ValidationConstants.OnFailedPasswordValidation);
     }
 }

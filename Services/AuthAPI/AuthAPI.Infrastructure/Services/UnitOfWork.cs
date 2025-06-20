@@ -1,28 +1,26 @@
-﻿using AuthAPI.Application.Contracts.Repository.Account;
-using AuthAPI.Application.Contracts.UnitOfWork;
+﻿using AuthAPI.Application.Contracts.UnitOfWork;
 using AuthAPI.Infrastructure.Context;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace AuthAPI.Infrastructure.Implemenations.UnitOfWorkImplementation;
+namespace AuthAPI.Infrastructure.Services;
 
 internal class UnitOfWork : IUnitOfWork
 {
     private readonly AuthDbContext _dbContext;
-    public IAccountRepository AccountRepository { get; }
-
-    public IRefreshTokenRepository RefreshTokenRepository { get; }
-
-    public IReferenceTokenRepository ReferenceTokenRepository { get; }
+    private readonly IServiceProvider _serviceProvider;
 
     public UnitOfWork(
         AuthDbContext dbContext,
-        IAccountRepository accountRepository,
-        IRefreshTokenRepository refreshTokenRepository,
-        IReferenceTokenRepository referenceTokenRepository)
+        IServiceProvider provider)
     {
         _dbContext = dbContext;
-        AccountRepository = accountRepository;
-        RefreshTokenRepository = refreshTokenRepository;
-        ReferenceTokenRepository = referenceTokenRepository;
+        _serviceProvider = provider;
+    }
+    
+    public TRepositoryInterface GetRepository<TRepositoryInterface>()
+    {
+        var repository = _serviceProvider.GetService<TRepositoryInterface>();
+        return repository!;
     }
 
     public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
@@ -37,6 +35,7 @@ internal class UnitOfWork : IUnitOfWork
     {
         await _dbContext.Database.CommitTransactionAsync(cancellationToken);
     }
+
 
     public async Task RollbackTransactionAsync(CancellationToken cancellationToken = default)
     {

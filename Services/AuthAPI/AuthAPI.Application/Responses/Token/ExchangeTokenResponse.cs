@@ -1,6 +1,6 @@
 ﻿namespace AuthAPI.Application.Responses.Token;
 
-public record ExchangeTokenResponse(
+public sealed record ExchangeTokenResponse(
     string IdToken,
     string AccessToken,
     string RefreshToken);

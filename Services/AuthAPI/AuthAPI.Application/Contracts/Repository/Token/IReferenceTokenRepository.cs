@@ -1,6 +1,6 @@
 ﻿using AuthAPI.Core.Entities;
 
-namespace AuthAPI.Application.Contracts.Repository.Account;
+namespace AuthAPI.Application.Contracts.Repository.Token;
 
 public interface IReferenceTokenRepository : IRepository<ReferenceTokenEntity, int>
 {

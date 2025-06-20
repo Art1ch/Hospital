@@ -1,14 +1,13 @@
 ﻿using AuthAPI.Application.Contracts.PasswordHasher;
-using AuthAPI.Application.Contracts.Repository.Account;
+using AuthAPI.Application.Contracts.Repository.Token;
 using AuthAPI.Application.Contracts.TokenProvider;
 using AuthAPI.Application.Contracts.UnitOfWork;
 using AuthAPI.Infrastructure.Context;
-using AuthAPI.Infrastructure.Implemenations.PasswordHasherImplmentation;
-using AuthAPI.Infrastructure.Implemenations.TokenProviderImplementation;
-using AuthAPI.Infrastructure.Implemenations.UnitOfWorkImplementation;
-using AuthAPI.Infrastructure.Repositories.Implementations;
+using AuthAPI.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using AuthAPI.Infrastructure.Services;
+using AuthAPI.Application.Contracts.Repository.Account;
 
 namespace AuthAPI.Infrastructure;
 

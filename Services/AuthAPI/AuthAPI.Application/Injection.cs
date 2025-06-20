@@ -1,11 +1,9 @@
-﻿using AuthAPI.Application.Commands.Account.Login;
-using AuthAPI.Application.Mapping;
-using AuthAPI.Application.PipelineBehavior;
-using AuthAPI.Application.Validation.Validators.Account;
+﻿using AuthAPI.Application.PipelineBehavior;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace AuthAPI.Application;
 
@@ -13,29 +11,32 @@ public static class Injection
 {
     public static void AddApplicationLayer(this IServiceCollection services)
     {
-        AddValidation(services);
-        AddCommands(services);
-        AddMapping(services);
+        var assembly = typeof(Injection).Assembly;
+
+        AddValidation(services, assembly);
+        AddCommands(services, assembly);
+        AddMapping(services, assembly);
         AddPipelineBehavior(services);
     }
 
-    private static void AddValidation(IServiceCollection services)
+    private static void AddValidation(IServiceCollection services, Assembly assembly)
     {
+
         services.AddFluentValidationAutoValidation();
-        services.AddValidatorsFromAssemblyContaining<RegistrationValidator>();
+        services.AddValidatorsFromAssembly(assembly);
     }
 
-    private static void AddCommands(IServiceCollection services)
+    private static void AddCommands(IServiceCollection services, Assembly assembly)
     {
         services.AddMediatR(opt =>
         {
-            opt.RegisterServicesFromAssemblyContaining<LoginCommandHandler>();
+            opt.RegisterServicesFromAssembly(assembly);
         });
     }
 
-    private static void AddMapping(IServiceCollection services)
+    private static void AddMapping(IServiceCollection services, Assembly assembly)
     {
-        services.AddAutoMapper(typeof(AccountProfile));
+        services.AddAutoMapper(assembly);
     }
 
     private static void AddPipelineBehavior(IServiceCollection services)

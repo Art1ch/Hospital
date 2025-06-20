@@ -20,11 +20,10 @@ public class Program
             builder.Configuration.GetSection(nameof(JwtSettings)));
 
         var dbConfig = new AuthDbConfiguration(
-            builder.Configuration.GetConnectionString("AuthDbString")!);
+            builder.Configuration["ConnectionStrings:AuthDbString"]!);
 
         builder.Services.AddApplicationLayer();
         builder.Services.AddInfrastructureLayer(dbConfig.DbConnectionString);
-
         var app = builder.Build();
 
         if (app.Environment.IsDevelopment())

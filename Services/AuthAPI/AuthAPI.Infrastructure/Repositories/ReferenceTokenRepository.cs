@@ -1,10 +1,10 @@
-﻿using AuthAPI.Application.Contracts.Repository.Account;
+﻿using AuthAPI.Application.Contracts.Repository.Token;
 using AuthAPI.Core.Entities;
 using AuthAPI.Infrastructure.Context;
 using AuthAPI.Infrastructure.Repositories.Abstract;
 using Microsoft.EntityFrameworkCore;
 
-namespace AuthAPI.Infrastructure.Repositories.Implementations;
+namespace AuthAPI.Infrastructure.Repositories;
 
 internal class ReferenceTokenRepository : Repository<ReferenceTokenEntity, int>, IReferenceTokenRepository
 {

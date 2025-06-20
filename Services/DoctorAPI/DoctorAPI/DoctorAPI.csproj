@@ -12,12 +12,14 @@
 
   <ItemGroup>
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.17" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DoctorAPI.Application\DoctorAPI.Application.csproj" />
+    <ProjectReference Include="..\DoctorAPI.Configuration\DoctorAPI.Configuration.csproj" />
     <ProjectReference Include="..\DoctorAPI.Infrastructure\DoctorAPI.Infrastructure.csproj" />
   </ItemGroup>
 

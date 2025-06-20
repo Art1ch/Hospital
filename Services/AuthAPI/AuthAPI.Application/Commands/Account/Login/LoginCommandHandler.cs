@@ -1,4 +1,6 @@
 ﻿using AuthAPI.Application.Contracts.PasswordHasher;
+using AuthAPI.Application.Contracts.Repository.Account;
+using AuthAPI.Application.Contracts.Repository.Token;
 using AuthAPI.Application.Contracts.TokenProvider;
 using AuthAPI.Application.Contracts.UnitOfWork;
 using AuthAPI.Application.Exceptions;
@@ -9,7 +11,7 @@ using MediatR;
 
 namespace AuthAPI.Application.Commands.Account.Login;
 
-internal class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
+internal sealed class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
@@ -30,15 +32,19 @@ internal class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse
 
     public async Task<LoginResponse> Handle(LoginCommand command, CancellationToken cancellationToken)
     {
+        var accountRepository = _unitOfWork.GetRepository<IAccountRepository>();
+        var referenceTokenRepository = _unitOfWork.GetRepository<IReferenceTokenRepository>();
+
         var accountEntity = _mapper.Map<AccountEntity>(command.Request);
-        var isExists = await _unitOfWork.AccountRepository.IsExistsAsync(accountEntity.Email);
+        var isExists = await accountRepository.IsExistsAsync(accountEntity.Email, cancellationToken);
 
         if (!isExists)
         {
+            return null!;
             throw new WrongCredentialsGivenException("Wrong credentials");
         }
 
-        var existingAccount = await _unitOfWork.AccountRepository.GetByEmailAsync(accountEntity.Email);
+        var existingAccount = await accountRepository.GetByEmailAsync(accountEntity.Email, cancellationToken);
         var isVerified = _passwordHasher.VerifyPassword(command.Request.Password, existingAccount.HashPassword);
 
         if (!isVerified)
@@ -46,8 +52,8 @@ internal class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse
             throw new WrongCredentialsGivenException("Wrong credentials");
         }
 
-        var referenceToken = _tokenProvider.GenerateReferenceToken(accountEntity);
-        await _unitOfWork.ReferenceTokenRepository.CreateAsync(referenceToken);
+        var referenceToken = _tokenProvider.GenerateReferenceToken(existingAccount);
+        await referenceTokenRepository.CreateAsync(referenceToken, cancellationToken);
         return new LoginResponse(referenceToken.Token);
     }
 }
