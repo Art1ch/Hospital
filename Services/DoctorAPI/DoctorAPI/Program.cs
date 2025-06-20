@@ -21,9 +21,11 @@ public class Program
             builder.Configuration.GetSection(nameof(JwtSettings)));
 
         var dbConfig = new DoctorDbConfiguration(
-            builder.Configuration.GetConnectionString("DoctorDbString")!);
+            builder.Configuration["ConnectionStrings:DoctorDbString"]!);
 
-        var jwtSettings = builder.Configuration.Get<JwtSettings>();
+        var jwtSettings = builder.Configuration
+            .GetSection(nameof(JwtSettings))
+            .Get<JwtSettings>();
 
         builder.Services.AddJwtAuthentication(jwtSettings!);
         builder.Services.AddSwaggerWithJwt();
@@ -43,8 +45,8 @@ public class Program
 
         app.UseMiddleware<ExceptionMiddleware>();
 
-        app.UseAuthorization();
         app.UseAuthentication();
+        app.UseAuthorization();
 
         app.MapControllers();
 

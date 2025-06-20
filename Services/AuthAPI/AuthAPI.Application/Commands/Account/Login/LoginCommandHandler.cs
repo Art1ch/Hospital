@@ -40,8 +40,7 @@ internal sealed class LoginCommandHandler : IRequestHandler<LoginCommand, LoginR
 
         if (!isExists)
         {
-            return null!;
-            throw new WrongCredentialsGivenException("Wrong credentials");
+            return new LoginResponse(false, null);
         }
 
         var existingAccount = await accountRepository.GetByEmailAsync(accountEntity.Email, cancellationToken);
@@ -49,11 +48,11 @@ internal sealed class LoginCommandHandler : IRequestHandler<LoginCommand, LoginR
 
         if (!isVerified)
         {
-            throw new WrongCredentialsGivenException("Wrong credentials");
+            return new LoginResponse(false, null);
         }
 
         var referenceToken = _tokenProvider.GenerateReferenceToken(existingAccount);
         await referenceTokenRepository.CreateAsync(referenceToken, cancellationToken);
-        return new LoginResponse(referenceToken.Token);
+        return new LoginResponse(true,referenceToken.Token);
     }
 }

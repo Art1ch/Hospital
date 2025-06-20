@@ -50,6 +50,6 @@ internal sealed class RegistrationCommandHandler : IRequestHandler<RegistrationC
         var referenceToken = _tokenProvider.GenerateReferenceToken(accountEntity);
         await referenceTokenRepository.CreateAsync(referenceToken, cancellationToken);
 
-        return new RegistrationResponse(referenceToken.Token);
+        return new RegistrationResponse(true, referenceToken.Token);
     }
 }
