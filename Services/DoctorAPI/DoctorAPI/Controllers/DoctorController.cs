@@ -9,6 +9,7 @@ using DoctorAPI.Application.Responses.Doctor;
 using DoctorAPI.Application.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DoctorAPI.Controllers;
 
@@ -55,6 +56,7 @@ public class DoctorController : ControllerBase
         return Ok(response);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<ActionResult<GetAllDoctorsResponse>> Create([FromBody] CreateDoctorRequest request)
     {
@@ -63,6 +65,7 @@ public class DoctorController : ControllerBase
         return Ok();
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPatch]
     public async Task<ActionResult> Update([FromBody] UpdateDoctorRequest request)
     {
@@ -71,6 +74,7 @@ public class DoctorController : ControllerBase
         return Ok();
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete]
     public async Task<ActionResult> Delete([FromQuery] Guid id)
     {
