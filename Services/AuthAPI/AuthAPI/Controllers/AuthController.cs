@@ -26,7 +26,7 @@ public class AuthController : ControllerBase
     {
         var command = new RegistrationCommand(request);
         var response = await _sender.Send(command);
-        if(!response.IsSuccess)
+        if (!response.IsSuccess)
             return Conflict();
         return Ok(response);
     }
@@ -36,7 +36,7 @@ public class AuthController : ControllerBase
     {
         var command = new LoginCommand(request);
         var response = await _sender.Send(command);
-        if(response.IsSuccess)
+        if (!response.IsSuccess)
             return Unauthorized();
         return Ok(response);
     }
