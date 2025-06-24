@@ -8,11 +8,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using AuthAPI.Infrastructure.Services;
 using AuthAPI.Application.Contracts.Repository.Account;
+using AuthAPI.Configuration.DbSettings;
+using Microsoft.Extensions.Options;
 
 namespace AuthAPI.Infrastructure;
 
-public static class Injection
+public static class InfrastructureLayerInjection
 {
+
     public static void AddInfrastructureLayer(this IServiceCollection services, string dbConnectionString)
     {
         AddDbContext(services, dbConnectionString);

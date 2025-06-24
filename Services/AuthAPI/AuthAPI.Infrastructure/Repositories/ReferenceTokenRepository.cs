@@ -25,6 +25,7 @@ internal class ReferenceTokenRepository : Repository<ReferenceTokenEntity, int>,
     public async Task<ReferenceTokenEntity> GetTokenByValueAsync(string tokenValue, CancellationToken cancellationToken = default)
     {
         var token = await _dbContext.ReferenceTokens
+            .AsNoTracking()
             .Where(x => x.Token == tokenValue)
             .FirstAsync(cancellationToken);
         return token;

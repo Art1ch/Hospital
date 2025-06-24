@@ -12,38 +12,43 @@ internal sealed class ExchangeTokenCommandHandler : IRequestHandler<ExchangeToke
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ITokenProvider _tokenProvider;
+    private readonly IReferenceTokenRepository _referenceTokenRepository;
+    private readonly IAccountRepository _accountRepository;
+    private readonly IRefreshTokenRepository _refreshTokenRepository;
 
     public ExchangeTokenCommandHandler(
         IUnitOfWork unitOfWork,
-        ITokenProvider tokenProvider)
+        ITokenProvider tokenProvider,
+        IReferenceTokenRepository referenceTokenRepository,
+        IAccountRepository accountRepository,
+        IRefreshTokenRepository refreshTokenRepository)
     {
         _unitOfWork = unitOfWork;
         _tokenProvider = tokenProvider;
+        _referenceTokenRepository = referenceTokenRepository;
+        _accountRepository = accountRepository;
+        _refreshTokenRepository = refreshTokenRepository;
     }
 
     public async Task<ExchangeTokenResponse> Handle(ExchangeTokenCommand command, CancellationToken cancellationToken)
     {
-        var referenceTokenRepository = _unitOfWork.GetRepository<IReferenceTokenRepository>();
-        var accountTokenRepository = _unitOfWork.GetRepository<IAccountRepository>();
-        var refreshTokenRepository = _unitOfWork.GetRepository<IRefreshTokenRepository>();
-
         var tokenValue = command.Request.ReferenceToken;
-        var referenceToken = await referenceTokenRepository.GetTokenByValueAsync(tokenValue);
+        var referenceToken = await _referenceTokenRepository.GetTokenByValueAsync(tokenValue);
 
         var isExpired = _tokenProvider.IsTokenExpired(referenceToken.ExpiresAt);
         if (isExpired)
         {
-            throw new TokenIsExpiredException("Token is expired");
+            return new ExchangeTokenResponse(false, null, null, null, "Token is expired");
         }
-        var account = await accountTokenRepository.GetAsync(referenceToken.AccountId);
+        var account = await _accountRepository.GetAsync(referenceToken.AccountId);
 
         var idToken = _tokenProvider.GenerateIdToken(account);
         var accessToken = _tokenProvider.GenerateAccessToken(account);
         var refreshToken = _tokenProvider.GenerateRefreshToken(account);
 
-        await refreshTokenRepository.CreateAsync(refreshToken, cancellationToken);
-        await referenceTokenRepository.DeleteAsync(referenceToken.Id, cancellationToken);
+        await _refreshTokenRepository.CreateAsync(refreshToken, cancellationToken);
+        await _referenceTokenRepository.DeleteAsync(referenceToken.Id, cancellationToken);
 
-        return new ExchangeTokenResponse(idToken, accessToken, refreshToken.Token);
+        return new ExchangeTokenResponse(true, idToken, accessToken, refreshToken.Token, null);
     }
 }

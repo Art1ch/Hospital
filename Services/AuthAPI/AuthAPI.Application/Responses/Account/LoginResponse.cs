@@ -2,4 +2,5 @@
 
 public sealed record LoginResponse(
     bool IsSuccess,
-    string? ReferenceToken);
+    string? ReferenceToken,
+    string? FailureMessage);

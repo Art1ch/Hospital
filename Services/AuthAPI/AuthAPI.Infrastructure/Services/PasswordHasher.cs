@@ -8,7 +8,7 @@ internal class PasswordHasher : IPasswordHasher
     private const int _workFactor = 12;
     private const HashType _hashType = HashType.SHA384;
 
-    public string GeneratePassword(string givenPassword)
+    public string GeneratePasswordHash(string givenPassword)
     {
         var password = BCrypt.Net.BCrypt.EnhancedHashPassword(givenPassword, _workFactor, _hashType);
         return password;

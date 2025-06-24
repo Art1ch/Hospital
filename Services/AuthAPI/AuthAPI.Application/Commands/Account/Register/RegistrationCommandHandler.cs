@@ -3,7 +3,6 @@ using AuthAPI.Application.Contracts.Repository.Account;
 using AuthAPI.Application.Contracts.Repository.Token;
 using AuthAPI.Application.Contracts.TokenProvider;
 using AuthAPI.Application.Contracts.UnitOfWork;
-using AuthAPI.Application.Exceptions;
 using AuthAPI.Application.Responses.Account;
 using AuthAPI.Core.Entities;
 using AutoMapper;
@@ -17,39 +16,42 @@ internal sealed class RegistrationCommandHandler : IRequestHandler<RegistrationC
     private readonly IPasswordHasher _passwordHasher;
     private readonly ITokenProvider _tokenProvider;
     private readonly IMapper _mapper;
+    private readonly IAccountRepository _accountRepository;
+    private readonly IReferenceTokenRepository _referenceTokenRepository;
 
     public RegistrationCommandHandler(
         IUnitOfWork unitOfWork,
         IPasswordHasher passwordHasher,
         ITokenProvider tokenProvider,
-        IMapper mapper)
+        IMapper mapper,
+        IAccountRepository accountRepository,
+        IReferenceTokenRepository referenceTokenRepository)
     {
         _unitOfWork = unitOfWork;
         _passwordHasher = passwordHasher;
         _tokenProvider = tokenProvider;
         _mapper = mapper;
+        _accountRepository = accountRepository;
+        _referenceTokenRepository = referenceTokenRepository;
     }
 
     public async Task<RegistrationResponse> Handle(RegistrationCommand command, CancellationToken cancellationToken)
     {
-        var accountRepository = _unitOfWork.GetRepository<IAccountRepository>();
-        var referenceTokenRepository = _unitOfWork.GetRepository<IReferenceTokenRepository>();
-
         var accountEntity = _mapper.Map<AccountEntity>(command.Request);
-        var isExists = await accountRepository.IsExistsAsync(accountEntity.Email, cancellationToken);
+        var isExists = await _accountRepository.IsExistsAsync(accountEntity.Email, cancellationToken);
 
         if (isExists)
         {
-            throw new AccountAlreadyExistsException("Account already exists");
+            return new RegistrationResponse(false, null, "Account already exists");
         }
 
-        var hashPassword = _passwordHasher.GeneratePassword(command.Request.Password!);
+        var hashPassword = _passwordHasher.GeneratePasswordHash(command.Request.Password!);
         accountEntity.HashPassword = hashPassword;
 
-        await accountRepository.CreateAsync(accountEntity, cancellationToken);
+        await _accountRepository.CreateAsync(accountEntity, cancellationToken);
         var referenceToken = _tokenProvider.GenerateReferenceToken(accountEntity);
-        await referenceTokenRepository.CreateAsync(referenceToken, cancellationToken);
+        await _referenceTokenRepository.CreateAsync(referenceToken, cancellationToken);
 
-        return new RegistrationResponse(true, referenceToken.Token);
+        return new RegistrationResponse(true, referenceToken.Token, null);
     }
 }

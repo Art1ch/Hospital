@@ -1,6 +1,7 @@
 using AuthAPI.Application;
 using AuthAPI.Configuration.DbSettings;
 using AuthAPI.Configuration.JwtSettings;
+using AuthAPI.Extensions;
 using AuthAPI.Infrastructure;
 
 namespace AuthAPI;
@@ -16,14 +17,12 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
-        builder.Services.Configure<JwtSettings>(
-            builder.Configuration.GetSection(nameof(JwtSettings)));
-
-        var dbConfig = new AuthDbConfiguration(
-            builder.Configuration["ConnectionStrings:AuthDbString"]!);
+        builder.ConfigureJwtSettings();
+        var connectionString = builder.ConfigureAuthDbSettings();
 
         builder.Services.AddApplicationLayer();
-        builder.Services.AddInfrastructureLayer(dbConfig.DbConnectionString);
+        builder.Services.AddInfrastructureLayer(connectionString);
+
         var app = builder.Build();
 
         if (app.Environment.IsDevelopment())

@@ -7,11 +7,11 @@ using System.Reflection;
 
 namespace AuthAPI.Application;
 
-public static class Injection
+public static class ApplicationLayerInjection
 {
     public static void AddApplicationLayer(this IServiceCollection services)
     {
-        var assembly = typeof(Injection).Assembly;
+        var assembly = typeof(ApplicationLayerInjection).Assembly;
 
         AddValidation(services, assembly);
         AddCommands(services, assembly);
@@ -21,7 +21,6 @@ public static class Injection
 
     private static void AddValidation(IServiceCollection services, Assembly assembly)
     {
-
         services.AddFluentValidationAutoValidation();
         services.AddValidatorsFromAssembly(assembly);
     }

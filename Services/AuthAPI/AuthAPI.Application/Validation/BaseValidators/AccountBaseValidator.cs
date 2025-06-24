@@ -15,19 +15,13 @@ public class AccountBaseValidator<T> : AbstractValidator<T>
             .WithMessage(ValidationConstants.OnFailedEmailValidation);
     }
 
-    protected void ValidatePhoneNumber(Expression<Func<T, string>> expression)
+    protected IRuleBuilderOptions<T, string> ValidatePhoneNumber(Expression<Func<T, string>> expression)
     {
-        RuleFor(expression)
+        return RuleFor(expression)
             .MinimumLength(AccountConstants.MinPhoneNumberLength)
             .WithMessage(ValidationConstants.OnFailedPhoneNumberValidation)
             .MaximumLength(AccountConstants.MaxPhoneNumberLength)
-            .WithMessage(ValidationConstants.OnFailedPhoneNumberValidation)
-            .When(model =>
-            {
-                var func = expression.Compile();
-                var value = func(model);
-                return !string.IsNullOrWhiteSpace(value);
-            });
+            .WithMessage(ValidationConstants.OnFailedPhoneNumberValidation);
     }
 
     protected void ValidatePassword(Expression<Func<T, string>> expression)

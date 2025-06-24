@@ -17,7 +17,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AuthAPI.Application\AuthAPI.Application.csproj" />
-    <ProjectReference Include="..\AuthAPI.Configuration\AuthAPI.Configuration.csproj" />
     <ProjectReference Include="..\AuthAPI.Infrastructure\AuthAPI.Infrastructure.csproj" />
   </ItemGroup>
 
