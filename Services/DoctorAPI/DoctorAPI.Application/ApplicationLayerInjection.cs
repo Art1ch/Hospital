@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DoctorAPI.Application;
 
-public static class Injection 
+public static class ApplicationLayerInjection 
 {
     public static void AddApplicationLayer(this IServiceCollection services)
     {
