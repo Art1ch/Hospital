@@ -1,4 +1,4 @@
-﻿using DoctorAPI.Configuration.JwtSettings;
+﻿using DoctorAPI.Infrastructure.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -6,7 +6,7 @@ using System.Text;
 
 namespace DoctorAPI.Extensions;
 
-public static class ServicesExtensions
+internal static class ServicesExtensions
 {
     public static void AddJwtAuthentication(this IServiceCollection services, JwtSettings jwtSettings)
     {

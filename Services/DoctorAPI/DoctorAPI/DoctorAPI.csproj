@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DoctorAPI.Application\DoctorAPI.Application.csproj" />
-    <ProjectReference Include="..\DoctorAPI.Configuration\DoctorAPI.Configuration.csproj" />
     <ProjectReference Include="..\DoctorAPI.Infrastructure\DoctorAPI.Infrastructure.csproj" />
   </ItemGroup>
 
