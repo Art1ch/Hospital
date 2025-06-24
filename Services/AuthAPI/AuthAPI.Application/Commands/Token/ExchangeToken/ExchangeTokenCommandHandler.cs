@@ -1,8 +1,6 @@
 ﻿using AuthAPI.Application.Contracts.Repository.Account;
 using AuthAPI.Application.Contracts.Repository.Token;
 using AuthAPI.Application.Contracts.TokenProvider;
-using AuthAPI.Application.Contracts.UnitOfWork;
-using AuthAPI.Application.Exceptions;
 using AuthAPI.Application.Responses.Token;
 using MediatR;
 
@@ -10,20 +8,17 @@ namespace AuthAPI.Application.Commands.Token.ExchangeToken;
 
 internal sealed class ExchangeTokenCommandHandler : IRequestHandler<ExchangeTokenCommand, ExchangeTokenResponse>
 {
-    private readonly IUnitOfWork _unitOfWork;
     private readonly ITokenProvider _tokenProvider;
     private readonly IReferenceTokenRepository _referenceTokenRepository;
     private readonly IAccountRepository _accountRepository;
     private readonly IRefreshTokenRepository _refreshTokenRepository;
 
     public ExchangeTokenCommandHandler(
-        IUnitOfWork unitOfWork,
         ITokenProvider tokenProvider,
         IReferenceTokenRepository referenceTokenRepository,
         IAccountRepository accountRepository,
         IRefreshTokenRepository refreshTokenRepository)
     {
-        _unitOfWork = unitOfWork;
         _tokenProvider = tokenProvider;
         _referenceTokenRepository = referenceTokenRepository;
         _accountRepository = accountRepository;

@@ -2,7 +2,6 @@
 using AuthAPI.Application.Contracts.Repository.Account;
 using AuthAPI.Application.Contracts.Repository.Token;
 using AuthAPI.Application.Contracts.TokenProvider;
-using AuthAPI.Application.Contracts.UnitOfWork;
 using AuthAPI.Application.Responses.Account;
 using AuthAPI.Core.Entities;
 using AutoMapper;
@@ -12,7 +11,6 @@ namespace AuthAPI.Application.Commands.Account.Login;
 
 internal sealed class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
 {
-    private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly ITokenProvider _tokenProvider;
     private readonly IPasswordHasher _passwordHasher;
@@ -20,14 +18,12 @@ internal sealed class LoginCommandHandler : IRequestHandler<LoginCommand, LoginR
     private readonly IReferenceTokenRepository _referenceTokenRepository;
 
     public LoginCommandHandler(
-        IUnitOfWork unitOfWork,
         IMapper mapper,
         ITokenProvider tokenProvider,
         IPasswordHasher passwordHasher,
         IAccountRepository accountRepository,
         IReferenceTokenRepository referenceTokenRepository)
     {
-        _unitOfWork = unitOfWork;
         _mapper = mapper;
         _tokenProvider = tokenProvider;
         _passwordHasher = passwordHasher;

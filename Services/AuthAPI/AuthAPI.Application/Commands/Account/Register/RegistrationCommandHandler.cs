@@ -12,7 +12,6 @@ namespace AuthAPI.Application.Commands.Account.Register;
 
 internal sealed class RegistrationCommandHandler : IRequestHandler<RegistrationCommand, RegistrationResponse>
 {
-    private readonly IUnitOfWork _unitOfWork;
     private readonly IPasswordHasher _passwordHasher;
     private readonly ITokenProvider _tokenProvider;
     private readonly IMapper _mapper;
@@ -20,14 +19,12 @@ internal sealed class RegistrationCommandHandler : IRequestHandler<RegistrationC
     private readonly IReferenceTokenRepository _referenceTokenRepository;
 
     public RegistrationCommandHandler(
-        IUnitOfWork unitOfWork,
         IPasswordHasher passwordHasher,
         ITokenProvider tokenProvider,
         IMapper mapper,
         IAccountRepository accountRepository,
         IReferenceTokenRepository referenceTokenRepository)
     {
-        _unitOfWork = unitOfWork;
         _passwordHasher = passwordHasher;
         _tokenProvider = tokenProvider;
         _mapper = mapper;

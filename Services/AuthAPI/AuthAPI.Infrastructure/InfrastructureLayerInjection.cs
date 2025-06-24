@@ -8,8 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using AuthAPI.Infrastructure.Services;
 using AuthAPI.Application.Contracts.Repository.Account;
-using AuthAPI.Configuration.DbSettings;
-using Microsoft.Extensions.Options;
 
 namespace AuthAPI.Infrastructure;
 

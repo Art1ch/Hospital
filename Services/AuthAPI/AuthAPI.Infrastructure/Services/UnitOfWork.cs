@@ -1,28 +1,17 @@
 ﻿using AuthAPI.Application.Contracts.UnitOfWork;
 using AuthAPI.Infrastructure.Context;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace AuthAPI.Infrastructure.Services;
 
 internal class UnitOfWork : IUnitOfWork
 {
     private readonly AuthDbContext _dbContext;
-    private readonly IServiceProvider _serviceProvider;
 
-    public UnitOfWork(
-        AuthDbContext dbContext,
-        IServiceProvider provider)
+    public UnitOfWork(AuthDbContext dbContext)
     {
         _dbContext = dbContext;
-        _serviceProvider = provider;
     }
     
-    public TRepositoryInterface GetRepository<TRepositoryInterface>()
-    {
-        var repository = _serviceProvider.GetService<TRepositoryInterface>();
-        return repository!;
-    }
-
     public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
     {
         if (_dbContext.Database.CurrentTransaction == null)
