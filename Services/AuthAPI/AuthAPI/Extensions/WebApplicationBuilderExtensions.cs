@@ -3,7 +3,7 @@ using AuthAPI.Configuration.JwtSettings;
 
 namespace AuthAPI.Extensions;
 
-public static class WebApplicationBuilderExtensions
+internal static class WebApplicationBuilderExtensions
 {
     public static void ConfigureJwtSettings(this WebApplicationBuilder builder)
     {

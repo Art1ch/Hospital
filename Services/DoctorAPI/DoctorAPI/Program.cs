@@ -1,9 +1,6 @@
 using DoctorAPI.Application;
-using DoctorAPI.Configuration;
 using DoctorAPI.Infrastructure;
 using DoctorAPI.Middlewares;
-using DoctorAPI.Configuration.JwtSettings;
-using DoctorAPI.Extensions;
 
 namespace DoctorAPI;
 
@@ -17,21 +14,21 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
-        builder.Services.Configure<JwtSettings>(
-            builder.Configuration.GetSection(nameof(JwtSettings)));
+        //builder.Services.Configure<JwtSettings>(
+        //    builder.Configuration.GetSection(nameof(JwtSettings)));
 
-        var dbConfig = new DoctorDbConfiguration(
-            builder.Configuration["ConnectionStrings:DoctorDbString"]!);
+        //var dbConfig = new DoctorDbConfiguration(
+        //    builder.Configuration["ConnectionStrings:DoctorDbString"]!);
 
-        var jwtSettings = builder.Configuration
-            .GetSection(nameof(JwtSettings))
-            .Get<JwtSettings>();
+        //var jwtSettings = builder.Configuration
+        //    .GetSection(nameof(JwtSettings))
+        //    .Get<JwtSettings>();
 
-        builder.Services.AddJwtAuthentication(jwtSettings!);
-        builder.Services.AddSwaggerWithJwt();
+        //builder.Services.AddJwtAuthentication(jwtSettings!);
+        //builder.Services.AddSwaggerWithJwt();
 
-        builder.Services.AddApplicationLayer();
-        builder.Services.AddInfrastructureLayer(dbConfig.DbConnectionString);
+        //builder.Services.AddApplicationLayer();
+        //builder.Services.AddInfrastructureLayer(dbConfig.DbConnectionString);
 
         var app = builder.Build();
 

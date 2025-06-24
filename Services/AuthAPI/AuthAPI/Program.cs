@@ -1,6 +1,4 @@
 using AuthAPI.Application;
-using AuthAPI.Configuration.DbSettings;
-using AuthAPI.Configuration.JwtSettings;
 using AuthAPI.Extensions;
 using AuthAPI.Infrastructure;
 
