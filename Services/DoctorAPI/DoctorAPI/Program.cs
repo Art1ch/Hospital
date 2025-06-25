@@ -1,5 +1,4 @@
 using DoctorAPI.Application;
-using DoctorAPI.Configuration;
 using DoctorAPI.Infrastructure;
 using DoctorAPI.Middlewares;
 using DoctorAPI.Extensions;
