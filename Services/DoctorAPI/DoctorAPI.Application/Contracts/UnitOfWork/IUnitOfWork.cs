@@ -1,7 +1,4 @@
-﻿using DoctorAPI.Application.Contracts.Repository.Doctor;
-using DoctorAPI.Application.Contracts.Repository.Specialization;
-
-namespace DoctorAPI.Application.Contracts.UnitOfWork;
+﻿namespace DoctorAPI.Application.Contracts.UnitOfWork;
 
 public interface IUnitOfWork
 {
