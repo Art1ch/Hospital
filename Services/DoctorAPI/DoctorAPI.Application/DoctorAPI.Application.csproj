@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-	<InternalsVisibleTo Include="DoctorAPI.Tests" />
+	<InternalsVisibleTo Include="DoctorAPI.UnitTests" />
     <ProjectReference Include="..\DoctorAPI.Core\DoctorAPI.Core.csproj" />
   </ItemGroup>
 

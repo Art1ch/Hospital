@@ -31,7 +31,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{47A935C8
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DoctorAPI", "DoctorAPI", "{2C6BAE00-C786-4022-804F-1C7DFB0D2BB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoctorAPI.UnitTests", "Tests\DoctorAPI\DoctorAPI.UnitTests\DoctorAPI.UnitTests.csproj", "{5A00F800-2BA5-4799-A458-289FA1601C9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoctorAPI.UnitTests", "Tests\DoctorAPI\DoctorAPI.UnitTests\DoctorAPI.UnitTests.csproj", "{5A00F800-2BA5-4799-A458-289FA1601C9D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoctorAPI.IntegrationTests", "..\DoctorAPI.IntegrationTests\DoctorAPI.IntegrationTests.csproj", "{92CBF4AF-51F8-45F2-B40E-3C0493DFC6CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,6 +81,10 @@ Global
 		{5A00F800-2BA5-4799-A458-289FA1601C9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A00F800-2BA5-4799-A458-289FA1601C9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A00F800-2BA5-4799-A458-289FA1601C9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92CBF4AF-51F8-45F2-B40E-3C0493DFC6CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92CBF4AF-51F8-45F2-B40E-3C0493DFC6CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92CBF4AF-51F8-45F2-B40E-3C0493DFC6CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92CBF4AF-51F8-45F2-B40E-3C0493DFC6CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -96,6 +102,7 @@ Global
 		{E8D37326-912F-4262-A6ED-DBE15A898C2C} = {2106EBE9-E999-4D23-A490-72B063740560}
 		{2C6BAE00-C786-4022-804F-1C7DFB0D2BB8} = {47A935C8-56E5-4CF9-8A9A-AC56E1ADFBF1}
 		{5A00F800-2BA5-4799-A458-289FA1601C9D} = {2C6BAE00-C786-4022-804F-1C7DFB0D2BB8}
+		{92CBF4AF-51F8-45F2-B40E-3C0493DFC6CC} = {2C6BAE00-C786-4022-804F-1C7DFB0D2BB8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {59028BF5-CB03-477C-8169-0ED85E6E44D9}
