@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DoctorAPI.Infrastructure;
 
-public static class Injection
+public static class InfrastructureLayerInjection
 {
     public static void AddInfrastructureLayer(this IServiceCollection services, string dbConnectionString)
     {
