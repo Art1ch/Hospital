@@ -19,14 +19,14 @@ public class GetAllDoctorsQueryHandlerTests
     }
 
     [Fact]
-    public async Task Handle_Should_Return_Doctors_From_Repository()
+    public async Task Handle_WhenValidDataProvided_ShouldReturnListOfDoctors()
     {
         // Arrange
         var page = 1;
         var pageSize = 10;
         var query = new GetAllDoctorsQuery(page, pageSize);
         var repositoryResults = new List<GetAllDoctorsResult>();
-        for (int i = 0; i < pageSize; i++)
+        for (var i = 0; i < pageSize; i++)
         {
             repositoryResults.Add(
                 new(Guid.NewGuid(), $"TestFirstName{i}", $"TestLastName{i}", $"TestMiddleName{i}"));
@@ -56,7 +56,7 @@ public class GetAllDoctorsQueryHandlerTests
     }
 
     [Fact]
-    public async Task Handle_Should_Return_Empty_List_When_No_Doctors()
+    public async Task Handle_WhenValidDataProvided_ShouldReturnEmptyListOfDoctors()
     {
         // Arrange
         var query = new GetAllDoctorsQuery(1, 10);

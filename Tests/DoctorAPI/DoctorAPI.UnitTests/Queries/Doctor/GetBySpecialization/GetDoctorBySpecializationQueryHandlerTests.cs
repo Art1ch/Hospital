@@ -21,7 +21,7 @@ public class GetDoctorBySpecializationQueryHandlerTests
     }
 
     [Fact]
-    public async Task Handle_Should_Return_Doctor()
+    public async Task Handle_WhenValidSpecializationIdProvided_ShouldReturnDoctor()
     {
         // Arrange
         var doctorId = Guid.NewGuid();

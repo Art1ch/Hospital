@@ -30,7 +30,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Hospital\Services\DoctorAPI\DoctorAPI.Infrastructure\DoctorAPI.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\Services\DoctorAPI\DoctorAPI.Infrastructure\DoctorAPI.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\Services\DoctorAPI\DoctorAPI.Infrastructure\DoctorAPI.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

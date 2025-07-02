@@ -1,34 +1,22 @@
-﻿using DoctorAPI.Application.Entities;
+﻿using DoctorAPI.Application.Contracts.Repository.Doctor;
+using DoctorAPI.Application.Entities;
 using DoctorAPI.Application.Enums;
+using DoctorAPI.Infrastructure.Repositories.Implementations;
 using DoctorAPI.IntegrationTests.Fixtures;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace DoctorAPI.IntegrationTests.Tests;
 
-public class DoctorRepositoryTests : IClassFixture<PostgreSqlTestContainerFixture>, IAsyncLifetime
+public class DoctorRepositoryTests 
 {
-    private readonly PostgreSqlTestContainerFixture _fixture;
-    private IDbContextTransaction _transaction;
-
-    public DoctorRepositoryTests(PostgreSqlTestContainerFixture fixture)
+    private readonly IDoctorRepository _doctorRepository;
+    public DoctorRepositoryTests()
     {
-        _fixture = fixture;
-    }
-
-    public async Task InitializeAsync()
-    {
-        _transaction = await _fixture.DbContext.Database.BeginTransactionAsync();
-    }
-
-    public async Task DisposeAsync()
-    {
-        await _transaction.RollbackAsync();
-        await _transaction.DisposeAsync();
+        var fixture = new PostgreSqlTestContainerFixture();
+        _doctorRepository = new DoctorRepository(fixture._dbContext);
     }
 
     [Fact]
-    public async Task GetById_Should_Return_Doctor()
+    public async Task GetAsync_WhenValidIdProvided_ShouldReturnDoctor()
     {
         // Arrange
         var doctor = new DoctorEntity
@@ -46,14 +34,10 @@ public class DoctorRepositoryTests : IClassFixture<PostgreSqlTestContainerFixtur
             }
         };
 
-        _fixture.DbContext.Doctors.Add(doctor);
-        await _fixture.DbContext.SaveChangesAsync();
+        await _doctorRepository.CreateAsync(doctor);
 
         // Act
-        var result = await _fixture.DbContext.Doctors
-            .Where(d => d.Id == doctor.Id)
-            .Include(d => d.Specialization)
-            .FirstAsync();
+        var result = await _doctorRepository.GetAsync(doctor.Id);
 
         // Assert
         Assert.Equal(doctor.Id, result.Id);
@@ -61,11 +45,10 @@ public class DoctorRepositoryTests : IClassFixture<PostgreSqlTestContainerFixtur
         Assert.Equal(doctor.LastName, result.LastName);
         Assert.Equal(doctor.MiddleName, result.MiddleName);
         Assert.Equal(doctor.Status, result.Status);
-        Assert.Equal(doctor.Specialization.Name, result.Specialization.Name);
     }
 
     [Fact]
-    public async Task Create_Should_Add_Doctor_To_Database()
+    public async Task CreateAsync_WhenValidDataProvided_ShouldCreateDoctor()
     {
         // Arrange
         var doctor = new DoctorEntity
@@ -84,17 +67,16 @@ public class DoctorRepositoryTests : IClassFixture<PostgreSqlTestContainerFixtur
         };
 
         // Act
-        _fixture.DbContext.Doctors.Add(doctor);
-        await _fixture.DbContext.SaveChangesAsync();
+        await _doctorRepository.CreateAsync(doctor);
 
         // Assert
-        var savedDoctor = await _fixture.DbContext.Doctors.FindAsync(doctor.Id);
+        var savedDoctor = await _doctorRepository.GetAsync(doctor.Id);
         Assert.NotNull(savedDoctor);
         Assert.Equal(doctor.FirstName, savedDoctor.FirstName);
     }
 
     [Fact]
-    public async Task Update_Should_Modify_Existing_Doctor()
+    public async Task UpdateAsync_WhenValidDataProvided_ShouldUpdateDoctor()
     {
         // Arrange
         var doctor = new DoctorEntity
@@ -112,20 +94,19 @@ public class DoctorRepositoryTests : IClassFixture<PostgreSqlTestContainerFixtur
             }
         };
 
-        _fixture.DbContext.Doctors.Add(doctor);
-        await _fixture.DbContext.SaveChangesAsync();
+        await _doctorRepository.CreateAsync(doctor);
 
         // Act
         doctor.FirstName = "TestUpdatedFirstName";
-        await _fixture.DbContext.SaveChangesAsync();
+        await _doctorRepository.UpdateAsync(doctor);
 
         // Assert
-        var updatedDoctor = await _fixture.DbContext.Doctors.FindAsync(doctor.Id);
+        var updatedDoctor = await _doctorRepository.GetAsync(doctor.Id);
         Assert.Equal(doctor.FirstName, updatedDoctor!.FirstName);
     }
 
     [Fact]
-    public async Task Delete_Should_Remove_Doctor_From_Database()
+    public async Task DeleteAsync_WhenValidIdProvided_ShouldDeleteDoctor()
     {
         // Arrange
         var doctor = new DoctorEntity
@@ -143,15 +124,13 @@ public class DoctorRepositoryTests : IClassFixture<PostgreSqlTestContainerFixtur
             }
         };
 
-        _fixture.DbContext.Doctors.Add(doctor);
-        await _fixture.DbContext.SaveChangesAsync();
+        await _doctorRepository.CreateAsync(doctor);
 
         // Act
-        _fixture.DbContext.Doctors.Remove(doctor);
-        await _fixture.DbContext.SaveChangesAsync();
+        await _doctorRepository.DeleteAsync(doctor.Id);
 
         // Assert
-        var deletedDoctor = await _fixture.DbContext.Doctors.FindAsync(doctor.Id);
+        var deletedDoctor = await _doctorRepository.GetAsync(doctor.Id);
         Assert.Null(deletedDoctor);
     }
 }

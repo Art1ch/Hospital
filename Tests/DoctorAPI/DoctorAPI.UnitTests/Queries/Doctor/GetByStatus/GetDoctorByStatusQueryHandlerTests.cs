@@ -20,7 +20,7 @@ public class GetDoctorsByStatusQueryHandlerTests
     }
 
     [Fact]
-    public async Task Handle_Should_Return_Doctors_By_Status()
+    public async Task Handle_WhenValidStatusProvided_ShouldReturnDoctor()
     {
         // Arrange
         var status = DoctorStatus.Available;
@@ -60,7 +60,7 @@ public class GetDoctorsByStatusQueryHandlerTests
     }
 
     [Fact]
-    public async Task Handle_Should_Return_Empty_List_When_No_Doctors_With_Status()
+    public async Task Handle_WhenValidStatusProvided_ShouldReturnEmptyListOfDoctors()
     {
         // Arrange
         var status = DoctorStatus.OnVacation;

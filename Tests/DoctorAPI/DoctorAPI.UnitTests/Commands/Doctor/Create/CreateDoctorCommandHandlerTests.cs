@@ -20,7 +20,7 @@ public class CreateDoctorCommandHandlerTests
     }
 
     [Fact]
-    public async Task Handle_Should_Create_Doctor_Successfully()
+    public async Task Handle_WhenValidDataProvided_ShouldCreateDoctor()
     {
         // Arrange
         var testBirthDate = new DateOnly(1990, 1, 1);
@@ -48,7 +48,7 @@ public class CreateDoctorCommandHandlerTests
         };
 
         _mapperMock.Setup(m => m.Map<DoctorEntity>(request))
-                 .Returns(expectedDoctor);
+            .Returns(expectedDoctor);
 
         // Act
         await _handler.Handle(command, CancellationToken.None);

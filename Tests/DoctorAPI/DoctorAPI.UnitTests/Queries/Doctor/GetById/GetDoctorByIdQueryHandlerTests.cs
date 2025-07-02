@@ -21,7 +21,7 @@ public class GetDoctorByIdQueryHandlerTests
     }
 
     [Fact]
-    public async Task Handle_Should_Return_Doctor_With_Correct_Data()
+    public async Task Handle_WhenValidIdProvided_ShouldReturnDoctor()
     {
         // Arrange
         var id = Guid.NewGuid();
@@ -65,6 +65,5 @@ public class GetDoctorByIdQueryHandlerTests
         Assert.Equal(expectedResponse.Doctor.Status, result.Doctor.Status);
         Assert.Equal(expectedResponse.Doctor.BirthDate, result.Doctor.BirthDate);
         Assert.Equal(expectedResponse.Doctor.CareerStartDay, result.Doctor.CareerStartDay);
-
     }
 }

@@ -22,7 +22,7 @@ public class UpdateDoctorCommandHandlerTests
     }
 
     [Fact]
-    public async Task Handle_Should_Update_Doctor_With_Correct_Data()
+    public async Task Handle_WhenValidDataProvided_ShouldUpdateDoctor()
     {
         // Arrange
         var testBirthDate = new DateOnly(1990, 1, 1);
@@ -38,7 +38,7 @@ public class UpdateDoctorCommandHandlerTests
             testBirthDate,
             testCareerStartDate,
             "TestSpecializationName"
-            );
+        );
 
         var command = new UpdateDoctorCommand(request);
         var expectedDoctor = new DoctorEntity
@@ -53,10 +53,10 @@ public class UpdateDoctorCommandHandlerTests
         };
 
         _mapperMock.Setup(m => m.Map<DoctorEntity>(request))
-                   .Returns(expectedDoctor);
+            .Returns(expectedDoctor);
 
         _doctorRepositoryMock.Setup(r => r.UpdateAsync(It.IsAny<DoctorEntity>(), It.IsAny<CancellationToken>()))
-                             .Returns(Task.CompletedTask);
+            .Returns(Task.CompletedTask);
 
         // Act
         await _handler.Handle(command, CancellationToken.None);
@@ -74,7 +74,8 @@ public class UpdateDoctorCommandHandlerTests
                 d.BirthDate == expectedDoctor.BirthDate &&
                 d.CareerStartDay == expectedDoctor.CareerStartDay),
             It.IsAny<CancellationToken>()),
-            Times.Once);
+            Times.Once
+        );
     }
 }
 

@@ -1,49 +1,44 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Testcontainers.PostgreSql;
-using Microsoft.Extensions.Configuration;
 using DoctorAPI.Infrastructure.Context;
 using DoctorAPI.IntegrationTests.Settings;
+using DoctorAPI.IntegrationTests.Abstractions;
+using DoctorAPI.Application.Contracts.UnitOfWork;
+using DoctorAPI.Infrastructure.UnitOfWorkImplementation;
+using DotNet.Testcontainers.Builders;
 
 namespace DoctorAPI.IntegrationTests.Fixtures;
 
-public sealed class PostgreSqlTestContainerFixture : IAsyncLifetime
+internal sealed class PostgreSqlTestContainerFixture : BaseFixture<PostgreSqlContainer, PostgreDbSettings, DoctorDbContext>
 {
-    private readonly PostgreSqlContainer _container;
-    internal DoctorDbContext DbContext { get; private set; }
-    private readonly IConfiguration _config;
-
-    public PostgreSqlTestContainerFixture()
+    public PostgreSqlTestContainerFixture() : base()
     {
-        var config = new ConfigurationBuilder()
-            .AddUserSecrets<PostgreSqlTestContainerFixture>()
-            .Build();
+    }
 
-        var settings = config.GetSection("DbSettings").Get<DbSettings>();
-
-        _container = new PostgreSqlBuilder()
-            .WithImage(settings.Image)
-            .WithDatabase(settings.Database)
-            .WithUsername(settings.Username)
-            .WithPassword(settings.Password)
+    protected override PostgreSqlContainer CreateContainer()
+    {
+        var container = new PostgreSqlBuilder()
+            .WithImage(base._settings.Image)
+            .WithDatabase(base._settings.Database)
+            .WithUsername(base._settings.Username)
+            .WithPassword(base._settings.Password)
             .WithCleanUp(true)
             .Build();
+        return container;
     }
 
-    public async Task InitializeAsync()
+    protected override DoctorDbContext CreateDbContext()
     {
-        await _container.StartAsync();
-
         var options = new DbContextOptionsBuilder<DoctorDbContext>()
-            .UseNpgsql(_container.GetConnectionString()).Options;
+            .UseNpgsql(base._settings.ConnectionString).Options;
 
-        DbContext = new DoctorDbContext(options); 
-        await DbContext.Database.MigrateAsync();
+        var dbContext = new DoctorDbContext(options);
+        return dbContext;
     }
 
-    public async Task DisposeAsync()
+    protected override IUnitOfWork CreateUnitOfWork()
     {
-        await DbContext.DisposeAsync();
-        await _container.StopAsync();
-        await _container.DisposeAsync();
+        var unitOfWork = new UnitOfWork(base._dbContext);
+        return unitOfWork;
     }
 }
