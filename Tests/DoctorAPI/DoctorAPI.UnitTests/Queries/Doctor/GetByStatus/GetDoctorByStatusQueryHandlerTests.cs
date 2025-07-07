@@ -10,12 +10,14 @@ namespace DoctorAPI.UnitTests.Queries.Doctor.GetByStatus;
 
 public class GetDoctorsByStatusQueryHandlerTests
 {
-    private readonly Mock<IMapper> _mapperMock = new();
-    private readonly Mock<IDoctorRepository> _doctorRepositoryMock = new();
+    private readonly Mock<IMapper> _mapperMock;
+    private readonly Mock<IDoctorRepository> _doctorRepositoryMock;
     private readonly GetDoctorsByStatusQueryHandler _handler;
 
     public GetDoctorsByStatusQueryHandlerTests()
     {
+        _mapperMock = new Mock<IMapper>();
+        _doctorRepositoryMock = new Mock<IDoctorRepository>();
         _handler = new GetDoctorsByStatusQueryHandler(_doctorRepositoryMock.Object, _mapperMock.Object);
     }
 
@@ -27,13 +29,7 @@ public class GetDoctorsByStatusQueryHandlerTests
         var query = new GetDoctorsByStatusQuery(status);
         var doctorsCount = 5;
 
-        var repositoryResults = new List<GetDoctorsByStatusResult>();
-
-        for (int i = 0; i < doctorsCount; i++)
-        {
-            repositoryResults.Add(
-                new(Guid.NewGuid(), $"TestFirstName{i}", $"TestLastName{i}", $"TestMiddleName{i}"));
-        }
+        var repositoryResults = GetRepositoryResults(doctorsCount);
 
         var expectedResponse = new GetByStatusDoctorsResponse(repositoryResults);
 
@@ -57,6 +53,19 @@ public class GetDoctorsByStatusQueryHandlerTests
         Assert.Equal(expectedResponse.Doctors[0].FirstName, result.Doctors[0].FirstName);
         Assert.Equal(expectedResponse.Doctors[0].LastName, result.Doctors[0].LastName);
         Assert.Equal(expectedResponse.Doctors[0].MiddleName, result.Doctors[0].MiddleName);
+    }
+
+    private List<GetDoctorsByStatusResult> GetRepositoryResults(int doctorsCount)
+    {
+        var repositoryResults = new List<GetDoctorsByStatusResult>();
+
+        for (int i = 0; i < doctorsCount; i++)
+        {
+            repositoryResults.Add(
+                new(Guid.NewGuid(), $"TestFirstName{i}", $"TestLastName{i}", $"TestMiddleName{i}"));
+        }
+
+        return repositoryResults;
     }
 
     [Fact]

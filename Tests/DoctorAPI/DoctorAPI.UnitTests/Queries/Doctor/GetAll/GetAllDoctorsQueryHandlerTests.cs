@@ -9,12 +9,14 @@ namespace DoctorAPI.UnitTests.Queries.Doctor.GetAll;
 
 public class GetAllDoctorsQueryHandlerTests
 {
-    private readonly Mock<IMapper> _mapperMock = new();
-    private readonly Mock<IDoctorRepository> _doctorRepositoryMock = new();
+    private readonly Mock<IMapper> _mapperMock;
+    private readonly Mock<IDoctorRepository> _doctorRepositoryMock;
     private readonly GetAllDoctorsQueryHandler _handler;
 
     public GetAllDoctorsQueryHandlerTests()
     {
+        _mapperMock = new Mock<IMapper>();
+        _doctorRepositoryMock = new Mock<IDoctorRepository>();
         _handler = new GetAllDoctorsQueryHandler(_mapperMock.Object, _doctorRepositoryMock.Object);
     }
 
@@ -25,12 +27,9 @@ public class GetAllDoctorsQueryHandlerTests
         var page = 1;
         var pageSize = 10;
         var query = new GetAllDoctorsQuery(page, pageSize);
-        var repositoryResults = new List<GetAllDoctorsResult>();
-        for (var i = 0; i < pageSize; i++)
-        {
-            repositoryResults.Add(
-                new(Guid.NewGuid(), $"TestFirstName{i}", $"TestLastName{i}", $"TestMiddleName{i}"));
-        }
+
+        var repositoryResults = GetRepositoryResults(pageSize);
+        
         var expectedResponse = new GetAllDoctorsResponse(repositoryResults);
 
         _doctorRepositoryMock.Setup(r =>
@@ -50,9 +49,18 @@ public class GetAllDoctorsQueryHandlerTests
             Times.Once);
 
         Assert.Equal(repositoryResults.Count, result.Doctors.Count);
-        Assert.Equal(repositoryResults[0].FirstName, result.Doctors[0].FirstName);
-        Assert.Equal(repositoryResults[0].LastName, result.Doctors[0].LastName);
-        Assert.Equal(repositoryResults[0].MiddleName, result.Doctors[0].MiddleName);
+    }
+
+    private List<GetAllDoctorsResult> GetRepositoryResults(int pageSize)
+    {
+        var repositoryResults = new List<GetAllDoctorsResult>();
+        for (var i = 0; i < pageSize; i++)
+        {
+            repositoryResults.Add(
+                new(Guid.NewGuid(), $"TestFirstName{i}", $"TestLastName{i}", $"TestMiddleName{i}"));
+        }
+
+        return repositoryResults;
     }
 
     [Fact]

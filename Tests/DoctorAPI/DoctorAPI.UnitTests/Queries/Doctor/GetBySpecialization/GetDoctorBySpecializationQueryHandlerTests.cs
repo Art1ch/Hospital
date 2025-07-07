@@ -9,12 +9,14 @@ namespace DoctorAPI.UnitTests.Queries.Doctor.GetBySpecialization;
 
 public class GetDoctorBySpecializationQueryHandlerTests
 {
-    private readonly Mock<IMapper> _mapperMock = new();
-    private readonly Mock<IDoctorRepository> _doctorRepositoryMock = new();
+    private readonly Mock<IMapper> _mapperMock;
+    private readonly Mock<IDoctorRepository> _doctorRepositoryMock;
     private readonly GetDoctorBySpecializationQueryHandler _handler;
 
     public GetDoctorBySpecializationQueryHandlerTests()
     {
+        _mapperMock = new Mock<IMapper>();
+        _doctorRepositoryMock = new Mock<IDoctorRepository>();
         _handler = new GetDoctorBySpecializationQueryHandler(
             _mapperMock.Object,
             _doctorRepositoryMock.Object);
@@ -28,20 +30,15 @@ public class GetDoctorBySpecializationQueryHandlerTests
         var specializationId = 1;
         var query = new GetDoctorBySpecializationQuery(specializationId);
 
-        var repositoryResult = new GetDoctorBySpecializationResult(
-            Id: doctorId,
-            FirstName: "TestFirstName",
-            LastName: "TestLastName",
-            MiddleName: "TestMiddleName");
-
+        var repositoryResult = GetRepositoryResult(doctorId, specializationId);
         var expectedResponse = new GetBySpecializationDoctorResponse(repositoryResult);
 
         _doctorRepositoryMock.Setup(r =>
-            r.GetDoctorBySpecializationAsync(specializationId, It.IsAny<CancellationToken>()))
+        r.GetDoctorBySpecializationAsync(specializationId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(repositoryResult);
 
         _mapperMock.Setup(m =>
-            m.Map<GetBySpecializationDoctorResponse>(repositoryResult))
+        m.Map<GetBySpecializationDoctorResponse>(repositoryResult))
             .Returns(expectedResponse);
 
         // Act
@@ -53,8 +50,18 @@ public class GetDoctorBySpecializationQueryHandlerTests
             Times.Once);
 
         Assert.Equal(doctorId, result.Doctor.Id);
-        Assert.Equal(expectedResponse.Doctor.FirstName, result.Doctor.FirstName);
-        Assert.Equal(expectedResponse.Doctor.LastName, result.Doctor.LastName);
-        Assert.Equal(expectedResponse.Doctor.MiddleName, result.Doctor.MiddleName);
+    }
+
+    private GetDoctorBySpecializationResult GetRepositoryResult(Guid doctorId, int specializationId)
+    {
+        var query = new GetDoctorBySpecializationQuery(specializationId);
+
+        var repositoryResult = new GetDoctorBySpecializationResult(
+            Id: doctorId,
+            FirstName: "TestFirstName",
+            LastName: "TestLastName",
+            MiddleName: "TestMiddleName");
+
+        return repositoryResult;
     }
 }

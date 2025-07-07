@@ -6,11 +6,12 @@ namespace DoctorAPI.UnitTests.Commands.Doctor.Delete;
 
 public class DeleteDoctorCommandHandlerTests
 {
-    private readonly Mock<IDoctorRepository> _doctorRepositoryMock = new();
+    private readonly Mock<IDoctorRepository> _doctorRepositoryMock;
     private readonly DeleteDoctorCommandHandler _handler;
 
     public DeleteDoctorCommandHandlerTests()
     {
+        _doctorRepositoryMock = new Mock<IDoctorRepository>();
         _handler = new DeleteDoctorCommandHandler(_doctorRepositoryMock.Object);        
     }
 

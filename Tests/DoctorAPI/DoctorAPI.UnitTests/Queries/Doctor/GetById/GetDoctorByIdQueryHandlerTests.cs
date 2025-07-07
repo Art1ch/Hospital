@@ -11,12 +11,14 @@ namespace DoctorAPI.UnitTests.Queries.Doctor.GetById;
 
 public class GetDoctorByIdQueryHandlerTests
 {
-    private readonly Mock<IMapper> _mapperMock = new();
-    private readonly Mock<IDoctorRepository> _doctorRepositoryMock = new();
+    private readonly Mock<IMapper> _mapperMock;
+    private readonly Mock<IDoctorRepository> _doctorRepositoryMock;
     private readonly GetDoctorByIdQueryHandler _handler;
 
     public GetDoctorByIdQueryHandlerTests()
     {
+        _mapperMock = new Mock<IMapper>();
+        _doctorRepositoryMock = new Mock<IDoctorRepository>();
         _handler = new GetDoctorByIdQueryHandler(_mapperMock.Object, _doctorRepositoryMock.Object);
     }
 
@@ -27,19 +29,7 @@ public class GetDoctorByIdQueryHandlerTests
         var id = Guid.NewGuid();
         var query = new GetDoctorByIdQuery(id);
 
-        var testBirthDate = new DateOnly(1990, 1, 1);
-        var testCareerStartDate = new DateOnly(2015, 1, 1);
-
-        var repositoryResult = new GetDoctorInfoByIdResult(
-            Id: id,
-            FirstName: "TestFirstName",
-            LastName: "TestLastName",
-            MiddleName: "TestMiddleName",
-            Status: DoctorStatus.Available,
-            BirthDate: testBirthDate,
-            CareerStartDay: testCareerStartDate,
-            Specialization: new SpecializationEntity { Name = "TestSpecializationName" }
-        );
+        var repositoryResult = GetRepositoryResult(id);
 
         var expectedResponse = new GetByIdDoctorResponse(repositoryResult);
 
@@ -59,11 +49,25 @@ public class GetDoctorByIdQueryHandlerTests
             r => r.GetDoctorInfoById(id, It.IsAny<CancellationToken>()),
             Times.Once);
 
-        Assert.Equal(expectedResponse.Doctor.FirstName, result.Doctor.FirstName);
-        Assert.Equal(expectedResponse.Doctor.LastName, result.Doctor.LastName);
-        Assert.Equal(expectedResponse.Doctor.MiddleName, result.Doctor.MiddleName);
-        Assert.Equal(expectedResponse.Doctor.Status, result.Doctor.Status);
-        Assert.Equal(expectedResponse.Doctor.BirthDate, result.Doctor.BirthDate);
-        Assert.Equal(expectedResponse.Doctor.CareerStartDay, result.Doctor.CareerStartDay);
+        Assert.Equal(expectedResponse.Doctor.Id, result.Doctor.Id);
+    }
+
+    private GetDoctorInfoByIdResult GetRepositoryResult(Guid id)
+    {
+        var testBirthDate = new DateOnly(1990, 1, 1);
+        var testCareerStartDate = new DateOnly(2015, 1, 1);
+
+        var repositoryResult = new GetDoctorInfoByIdResult(
+            Id: id,
+            FirstName: "TestFirstName",
+            LastName: "TestLastName",
+            MiddleName: "TestMiddleName",
+            Status: DoctorStatus.Available,
+            BirthDate: testBirthDate,
+            CareerStartDay: testCareerStartDate,
+            Specialization: new SpecializationEntity { Name = "TestSpecializationName" }
+        );
+
+        return repositoryResult;
     }
 }

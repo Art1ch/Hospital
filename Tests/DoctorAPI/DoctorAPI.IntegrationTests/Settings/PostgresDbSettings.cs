@@ -1,6 +1,6 @@
 ﻿namespace DoctorAPI.IntegrationTests.Settings;
 
-internal class PostgreDbSettings
+internal class PostgresDbSettings
 {
     public string ConnectionString { get; set; } = string.Empty;
     public string Username { get; set; } = string.Empty;

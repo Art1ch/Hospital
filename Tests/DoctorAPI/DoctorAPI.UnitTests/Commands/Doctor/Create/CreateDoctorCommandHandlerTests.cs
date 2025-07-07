@@ -10,12 +10,14 @@ namespace DoctorAPI.UnitTests.Commands.Doctor.Create;
 
 public class CreateDoctorCommandHandlerTests
 {
-    private readonly Mock<IMapper> _mapperMock = new();
-    private readonly Mock<IDoctorRepository> _doctorRepositoryMock = new();
+    private readonly Mock<IMapper> _mapperMock;
+    private readonly Mock<IDoctorRepository> _doctorRepositoryMock;
     private readonly CreateDoctorCommandHandler _handler;
 
     public CreateDoctorCommandHandlerTests()
     {
+        _mapperMock = new Mock<IMapper>();
+        _doctorRepositoryMock = new Mock<IDoctorRepository>();
         _handler = new CreateDoctorCommandHandler(_mapperMock.Object, _doctorRepositoryMock.Object);
     }
 
@@ -37,15 +39,8 @@ public class CreateDoctorCommandHandlerTests
             );   
 
         var command = new CreateDoctorCommand(request);
-        var expectedDoctor = new DoctorEntity
-        {
-            FirstName = request.FirstName,
-            MiddleName = request.LastName,
-            LastName = request.LastName,
-            BirthDate = request.BirthDate,
-            CareerStartDay = request.CareerStartDay,
-            Status = request.Status,
-        };
+
+        var expectedDoctor = GetEntity(request);
 
         _mapperMock.Setup(m => m.Map<DoctorEntity>(request))
             .Returns(expectedDoctor);
@@ -66,5 +61,20 @@ public class CreateDoctorCommandHandlerTests
                 d.CareerStartDay == expectedDoctor.CareerStartDay),                
             It.IsAny<CancellationToken>()),
             Times.Once);
+    }
+
+    private DoctorEntity GetEntity(CreateDoctorRequest request)
+    {
+        var expectedDoctor = new DoctorEntity
+        {
+            FirstName = request.FirstName,
+            MiddleName = request.LastName,
+            LastName = request.LastName,
+            BirthDate = request.BirthDate,
+            CareerStartDay = request.CareerStartDay,
+            Status = request.Status,
+        };
+
+        return expectedDoctor;
     }
 }
