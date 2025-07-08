@@ -41,8 +41,22 @@ services:
       - "5433:5432"
     volumes:
       - authdata:/var/lib/postgresql/data
+  
+  doctor.cache:
+    image: redis:7.0-alpine
+    command: redis-server --requirepass CachePassword --appendonly yes
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+    ports:
+      - "6379:6379"
+    volumes:
+      - doctor_cachedata:/data
 
 volumes:
     doctordata:
     authdata:
-
+    doctor_cachedata:

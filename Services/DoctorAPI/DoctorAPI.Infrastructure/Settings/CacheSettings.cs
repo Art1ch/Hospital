@@ -1,0 +1,7 @@
+﻿namespace DoctorAPI.Infrastructure.Settings;
+
+public class CacheSettings
+{
+    public string ConnectionString { get; set; }
+    public string InstanceName { get; set; }
+}

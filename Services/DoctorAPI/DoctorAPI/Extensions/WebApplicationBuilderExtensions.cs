@@ -17,6 +17,14 @@ internal static class WebApplicationBuilderExtensions
         builder.Services.Configure<DoctorDbSettings>(
             builder.Configuration.GetSection(nameof(DoctorDbSettings)));
 
-        return builder.Configuration["AuthDbSettings:ConnectionString"]!;
+        return builder.Configuration["DoctorDbSettings:ConnectionString"]!;
+    }
+
+    public static CacheSettings ConfigureCacheSettings(this WebApplicationBuilder builder)
+    {
+        builder.Services.Configure<CacheSettings>(
+            builder.Configuration.GetSection(nameof(CacheSettings)));
+
+        return builder.Configuration.Get<CacheSettings>()!;
     }
 }

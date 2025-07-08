@@ -1,8 +1,10 @@
-﻿using DoctorAPI.Application.Contracts.Repository.Doctor;
+﻿using DoctorAPI.Application.Contracts.Cache;
+using DoctorAPI.Application.Contracts.Repository.Doctor;
 using DoctorAPI.Application.Contracts.Repository.Specialization;
 using DoctorAPI.Application.Contracts.UnitOfWork;
 using DoctorAPI.Infrastructure.Context;
 using DoctorAPI.Infrastructure.Repositories.Implementations;
+using DoctorAPI.Infrastructure.Services;
 using DoctorAPI.Infrastructure.UnitOfWorkImplementation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +17,7 @@ public static class InfrastructureLayerInjection
     {
         AddDbContext(services, dbConnectionString);
         AddRepositories(services);
+        AddCaching(services);
         AddUnitOfWork(services);
     }
 
@@ -33,5 +36,10 @@ public static class InfrastructureLayerInjection
     private static void AddUnitOfWork(IServiceCollection services)
     {
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+    }
+
+    private static void AddCaching(IServiceCollection services)
+    {
+        services.AddScoped<ICacheService, CacheService>();
     }
 }

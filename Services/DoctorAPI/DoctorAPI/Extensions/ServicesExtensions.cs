@@ -63,4 +63,13 @@ internal static class ServicesExtensions
             });
         });
     }
+
+    public static void AddCaching(this IServiceCollection services, CacheSettings settings)
+    {
+        services.AddStackExchangeRedisCache(options =>
+        { 
+            options.Configuration = settings.ConnectionString;
+            options.InstanceName = settings.InstanceName;
+        });
+    }
 }
