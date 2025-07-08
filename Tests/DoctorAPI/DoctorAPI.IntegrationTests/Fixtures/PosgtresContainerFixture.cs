@@ -42,7 +42,9 @@ public sealed class PostgresContainerFixture : IAsyncLifetime
            .Build();
         var sectionName = typeof(PostgresDbSettings).Name;
 
-        Settings = config.GetSection(sectionName).Get<PostgresDbSettings>()!;
+        Settings = config
+            .GetSection(sectionName)
+            .Get<PostgresDbSettings>()!;
     }
 
     private void CreateContainer()

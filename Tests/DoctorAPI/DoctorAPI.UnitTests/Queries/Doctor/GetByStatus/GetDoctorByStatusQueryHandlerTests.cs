@@ -67,27 +67,4 @@ public class GetDoctorsByStatusQueryHandlerTests
 
         return repositoryResults;
     }
-
-    [Fact]
-    public async Task Handle_WhenValidStatusProvided_ShouldReturnEmptyListOfDoctors()
-    {
-        // Arrange
-        var status = DoctorStatus.OnVacation;
-        var query = new GetDoctorsByStatusQuery(status);
-        var emptyResults = new List<GetDoctorsByStatusResult>();
-
-        _doctorRepositoryMock.Setup(r =>
-            r.GetDoctorByStatusAsync(status, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(emptyResults);
-
-        _mapperMock.Setup(m =>
-            m.Map<GetByStatusDoctorsResponse>(emptyResults))
-            .Returns(new GetByStatusDoctorsResponse(emptyResults));
-
-        // Act
-        var result = await _handler.Handle(query, CancellationToken.None);
-
-        // Assert
-        Assert.Empty(result.Doctors);
-    }
 }

@@ -108,9 +108,9 @@ public class DoctorRepositoryTests : IClassFixture<PostgresContainerFixture>
 
         await _doctors.AddAsync(doctor);
         await _context.SaveChangesAsync();
+        doctor.FirstName = "TestUpdatedFirstName";
 
         // Act
-        doctor.FirstName = "TestUpdatedFirstName";
         await _doctorRepository.UpdateAsync(doctor);
 
         // Assert

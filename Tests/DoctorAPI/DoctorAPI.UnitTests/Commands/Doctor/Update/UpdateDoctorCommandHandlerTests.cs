@@ -13,7 +13,6 @@ public class UpdateDoctorCommandHandlerTests
 {
     private readonly Mock<IMapper> _mapperMock;
     private readonly Mock<IDoctorRepository> _doctorRepositoryMock;
-
     private readonly UpdateDoctorCommandHandler _handler;
 
     public UpdateDoctorCommandHandlerTests()

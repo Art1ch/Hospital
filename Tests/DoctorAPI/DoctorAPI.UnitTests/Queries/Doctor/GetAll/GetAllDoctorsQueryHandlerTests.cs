@@ -51,18 +51,6 @@ public class GetAllDoctorsQueryHandlerTests
         Assert.Equal(repositoryResults.Count, result.Doctors.Count);
     }
 
-    private List<GetAllDoctorsResult> GetRepositoryResults(int pageSize)
-    {
-        var repositoryResults = new List<GetAllDoctorsResult>();
-        for (var i = 0; i < pageSize; i++)
-        {
-            repositoryResults.Add(
-                new(Guid.NewGuid(), $"TestFirstName{i}", $"TestLastName{i}", $"TestMiddleName{i}"));
-        }
-
-        return repositoryResults;
-    }
-
     [Fact]
     public async Task Handle_WhenValidDataProvided_ShouldReturnEmptyListOfDoctors()
     {
@@ -84,5 +72,17 @@ public class GetAllDoctorsQueryHandlerTests
 
         // Assert
         Assert.Empty(result.Doctors);
+    }
+
+    private List<GetAllDoctorsResult> GetRepositoryResults(int pageSize)
+    {
+        var repositoryResults = new List<GetAllDoctorsResult>();
+        for (var i = 0; i < pageSize; i++)
+        {
+            repositoryResults.Add(
+                new(Guid.NewGuid(), $"TestFirstName{i}", $"TestLastName{i}", $"TestMiddleName{i}"));
+        }
+
+        return repositoryResults;
     }
 }
