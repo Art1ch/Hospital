@@ -36,8 +36,8 @@ public class Program
 
         app.UseMiddleware<ExceptionMiddleware>();
 
-        app.UseAuthorization();
         app.UseAuthentication();
+        app.UseAuthorization();
 
         app.MapControllers();
 
