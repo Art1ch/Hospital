@@ -11,8 +11,9 @@ namespace OfficesAPI.Infrastructure.Repositories;
 
 internal class OfficeRepository : Repository<OfficeEntity, Guid>, IOfficeRepository
 {
-    private const string _collectionName = "Offices";
-    public OfficeRepository(OfficeDbContext context) : base(context, _collectionName)
+    private const string CollectionName = "Offices";
+
+    public OfficeRepository(OfficeDbContext context) : base(context, CollectionName)
     {
     }
 

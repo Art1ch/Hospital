@@ -27,7 +27,7 @@ internal class ExceptionMiddleware
 
     }
 
-    public async Task HandleExceptionAsync(HttpContext context, Exception exception)
+    private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         int status;
         string errorTitle;
@@ -41,8 +41,8 @@ internal class ExceptionMiddleware
                 detail = string.Join(";", validationException.Errors.Select(e => e.ErrorMessage));
                 break;
             case InvalidOperationException invalidOperationException:
-                status = StatusCodes.Status404NotFound;
-                errorTitle = "Not Found";
+                status = StatusCodes.Status400BadRequest;
+                errorTitle = "Invalid operation";
                 detail = invalidOperationException.Message;
                 break;
             default:
