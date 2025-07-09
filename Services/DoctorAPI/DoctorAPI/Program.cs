@@ -25,6 +25,7 @@ public class Program
 
         builder.Services.AddApplicationLayer();
         builder.Services.AddInfrastructureLayer(connectionString);
+        builder.Services.AddCaching(cacheSettings);
 
         var app = builder.Build();
 

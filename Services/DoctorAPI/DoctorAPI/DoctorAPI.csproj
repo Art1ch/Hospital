@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DoctorAPI.Application\DoctorAPI.Application.csproj" />
+    <ProjectReference Include="..\DoctorAPI.Caching\DoctorAPI.Caching.csproj" />
     <ProjectReference Include="..\DoctorAPI.Infrastructure\DoctorAPI.Infrastructure.csproj" />
   </ItemGroup>
 

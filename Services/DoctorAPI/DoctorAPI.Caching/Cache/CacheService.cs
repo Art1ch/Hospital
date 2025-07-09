@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
 
-namespace DoctorAPI.Infrastructure.Services;
+namespace DoctorAPI.Caching.Cache;
 
 internal class CacheService : ICacheService
 {
@@ -10,7 +10,7 @@ internal class CacheService : ICacheService
 
     public CacheService(IDistributedCache distributedCache)
     {
-        _distributedCache = distributedCache;         
+        _distributedCache = distributedCache;
     }
 
     public async Task<TValue?> GetAsync<TValue>(string key, CancellationToken cancellationToken = default)
@@ -29,12 +29,7 @@ internal class CacheService : ICacheService
         var stringValue = JsonSerializer.Serialize<TValue>(value);
         await _distributedCache.SetStringAsync(key, stringValue, cancellationToken);
     }
-
-    public async Task RefreshAsync(string key, CancellationToken cancellationToken = default)
-    {
-        await _distributedCache.RefreshAsync(key, cancellationToken);
-    }
-
+   
     public async Task RemoveAsync(string key, CancellationToken cancellationToken = default)
     {
         await _distributedCache.RemoveAsync(key, cancellationToken);

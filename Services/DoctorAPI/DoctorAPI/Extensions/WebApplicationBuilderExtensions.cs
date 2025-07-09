@@ -1,4 +1,5 @@
-﻿using DoctorAPI.Infrastructure.Settings;
+﻿using DoctorAPI.Caching.Settings;
+using DoctorAPI.Infrastructure.Settings;
 
 namespace DoctorAPI.Extensions;
 
@@ -17,7 +18,7 @@ internal static class WebApplicationBuilderExtensions
         builder.Services.Configure<DoctorDbSettings>(
             builder.Configuration.GetSection(nameof(DoctorDbSettings)));
 
-        return builder.Configuration["DoctorDbSettings:ConnectionString"]!;
+        return builder.Configuration.Get<DoctorDbSettings>()!.ConnectionString;
     }
 
     public static CacheSettings ConfigureCacheSettings(this WebApplicationBuilder builder)

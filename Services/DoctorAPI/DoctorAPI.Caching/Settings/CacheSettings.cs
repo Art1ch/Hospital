@@ -1,4 +1,4 @@
-﻿namespace DoctorAPI.Infrastructure.Settings;
+﻿namespace DoctorAPI.Caching.Settings;
 
 public class CacheSettings
 {

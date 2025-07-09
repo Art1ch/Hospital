@@ -1,4 +1,5 @@
-﻿using DoctorAPI.Infrastructure.Settings;
+﻿using DoctorAPI.Caching.Settings;
+using DoctorAPI.Infrastructure.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
