@@ -15,7 +15,7 @@ namespace OfficeAPI.Controllers;
 public class OfficeController : ControllerBase
 {
     private readonly ISender _sender;
-
+    private const int CacheDurationSeconds = 300;
     public OfficeController(ISender sender)
     {
         _sender = sender;
@@ -29,6 +29,7 @@ public class OfficeController : ControllerBase
         return Ok(response);
     }
 
+    [ResponseCache(Duration = CacheDurationSeconds, Location = ResponseCacheLocation.Any)]
     [HttpGet("info")]
     public async Task<ActionResult<GetOfficeInfoResponse>> GetInfo([FromQuery] Guid id)
     {
