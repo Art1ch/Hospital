@@ -16,6 +16,7 @@ public class OfficeController : ControllerBase
 {
     private readonly ISender _sender;
     private const int CacheDurationSeconds = 300;
+
     public OfficeController(ISender sender)
     {
         _sender = sender;
