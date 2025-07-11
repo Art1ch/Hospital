@@ -6,17 +6,17 @@ internal static class WebApplicationBuilderExtensions
 {
     public static JwtSettings ConfigureJwtSettings(this WebApplicationBuilder builder)
     {
-        builder.Services.Configure<JwtSettings>(
-            builder.Configuration.GetSection(nameof(JwtSettings)));
-
-        return builder.Configuration.Get<JwtSettings>()!;
+        var sectionName = nameof(JwtSettings);
+        var settings = builder.Configuration.GetSection(sectionName).Get<JwtSettings>()!;
+        builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(sectionName));
+        return settings;
     }
 
     public static string ConfigureDoctorDbSettings(this WebApplicationBuilder builder)
     {
-        builder.Services.Configure<DoctorDbSettings>(
-            builder.Configuration.GetSection(nameof(DoctorDbSettings)));
-
-        return builder.Configuration["AuthDbSettings:ConnectionString"]!;
+        var sectionName = nameof(DoctorDbSettings);
+        var settings = builder.Configuration.GetSection(sectionName).Get<DoctorDbSettings>()!;
+        builder.Services.Configure<DoctorDbSettings>(builder.Configuration.GetSection(sectionName));
+        return settings.ConnectionString;
     }
 }

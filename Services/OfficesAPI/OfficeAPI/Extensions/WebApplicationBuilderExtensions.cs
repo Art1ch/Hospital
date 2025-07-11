@@ -6,7 +6,7 @@ internal static class WebApplicationBuilderExtensions
 {
     public static void ConfigureDbSettings(this WebApplicationBuilder builder)
     {
-        builder.Services.Configure<OfficeDbSettings>(
-            builder.Configuration.GetSection(nameof(OfficeDbSettings)));
+        var sectionName = nameof(OfficeDbSettings);
+        builder.Services.Configure<OfficeDbSettings>(builder.Configuration.GetSection(sectionName));
     } 
 }

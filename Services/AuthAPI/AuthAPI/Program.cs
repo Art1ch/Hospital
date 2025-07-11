@@ -14,6 +14,7 @@ public class Program
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        builder.Configuration.AddUserSecrets<Program>();
 
         builder.ConfigureJwtSettings();
         var connectionString = builder.ConfigureAuthDbSettings();
