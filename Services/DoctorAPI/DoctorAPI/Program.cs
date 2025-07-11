@@ -18,12 +18,15 @@ public class Program
 
         var jwtSettings = builder.ConfigureJwtSettings();
         var connectionString = builder.ConfigureDoctorDbSettings();
+        var cacheSettings = builder.ConfigureCacheSettings();
 
         builder.Services.AddJwtAuthentication(jwtSettings!);
         builder.Services.AddSwaggerWithJwt();
+        builder.Services.AddCaching(cacheSettings);
 
         builder.Services.AddApplicationLayer();
         builder.Services.AddInfrastructureLayer(connectionString);
+        builder.Services.AddCaching(cacheSettings);
 
         var app = builder.Build();
 
