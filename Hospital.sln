@@ -1,4 +1,3 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
@@ -6,6 +5,8 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{04AAA90B-3C64-4DB9-8D30-5708CFC44BD2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{47A935C8-56E5-4CF9-8A9A-AC56E1ADFBF1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiGateway", "Gateway\ApiGateway\ApiGateway.csproj", "{ABE66B30-BD47-A7B2-B17B-5BA67959B026}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DoctorAPI", "DoctorAPI", "{2C6BAE00-C786-4022-804F-1C7DFB0D2BB8}"
 EndProject
@@ -45,12 +46,18 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoctorAPI.UnitTests", "Test
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoctorAPI.IntegrationTests", "Tests\DoctorAPI\DoctorAPI.IntegrationTests\DoctorAPI.IntegrationTests.csproj", "{92CBF4AF-51F8-45F2-B40E-3C0493DFC6CC}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateway", "Gateway", "{D3B64DE7-71D3-4EB0-BF2E-2D7E65AC9196}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ABE66B30-BD47-A7B2-B17B-5BA67959B026}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABE66B30-BD47-A7B2-B17B-5BA67959B026}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABE66B30-BD47-A7B2-B17B-5BA67959B026}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABE66B30-BD47-A7B2-B17B-5BA67959B026}.Release|Any CPU.Build.0 = Release|Any CPU
 		{46A429BE-AAA4-459D-88FD-F436CD4ED049}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{46A429BE-AAA4-459D-88FD-F436CD4ED049}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46A429BE-AAA4-459D-88FD-F436CD4ED049}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -116,6 +123,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{ABE66B30-BD47-A7B2-B17B-5BA67959B026} = {D3B64DE7-71D3-4EB0-BF2E-2D7E65AC9196}
 		{2C6BAE00-C786-4022-804F-1C7DFB0D2BB8} = {47A935C8-56E5-4CF9-8A9A-AC56E1ADFBF1}
 		{37659377-91C6-4D5F-92F4-72746446E9BB} = {04AAA90B-3C64-4DB9-8D30-5708CFC44BD2}
 		{46A429BE-AAA4-459D-88FD-F436CD4ED049} = {37659377-91C6-4D5F-92F4-72746446E9BB}

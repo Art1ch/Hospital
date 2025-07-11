@@ -1,16 +1,39 @@
 version: '3.8'
-
 services:
-
+  apigateway:
+    image: ${DOCKER_REGISTRY-}apigateway
+    build:
+      context: ./Gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8000:80"
+    networks:
+      - backend
+    depends_on:
+      - doctorapi
+      - authapi
+      - officeapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    restart: unless-stopped
+    
   doctorapi:
     image: ${DOCKER_REGISTRY-}doctorapi
     build:
-      context: .
-      dockerfile: Services/DoctorAPI/DoctorAPI/Dockerfile
-    ports:
-      - "5000:5000"
-      - "5001:5001"
-
+      context: ./Services/DoctorAPI
+      dockerfile: Dockerfile
+    networks:
+      - backend
+    depends_on:
+      - doctor.db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    volumes:
+      - "${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets/:ro"
+    restart: unless-stopped
+    
   doctor.db:
     image: postgres:latest
     environment:
@@ -19,18 +42,28 @@ services:
       - POSTGRES_PASSWORD=pass
     ports:
       - "5432:5432"
+    networks:
+      - backend
     volumes:
       - doctordata:/var/lib/postgresql/data
-
+    restart: unless-stopped
+    
   authapi:
     image: ${DOCKER_REGISTRY-}authapi
     build:
-      context: .
-      dockerfile: Services/AuthAPI/AuthAPI/Dockerfile
-    ports:
-      - "5100:5100"
-      - "5101:5101"
-
+      context: ./Services/AuthAPI
+      dockerfile: Dockerfile
+    networks:
+      - backend
+    depends_on:
+      - auth.db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    volumes:
+      - "${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets/:ro"
+    restart: unless-stopped
+    
   auth.db:
     image: postgres:latest
     environment:
@@ -39,23 +72,35 @@ services:
       - POSTGRES_PASSWORD=pass
     ports:
       - "5433:5432"
+    networks:
+      - backend
     volumes:
       - authdata:/var/lib/postgresql/data
-
+    restart: unless-stopped
+    
   officeapi:
     image: ${DOCKER_REGISTRY-}officeapi
     build:
-      context: .
-      dockerfile: Services/OfficesAPI/OfficeAPI/Dockerfile
-    ports:
-      - "5200:5200"
-      - "5201:5201"
-
+      context: ./Services/OfficesAPI
+      dockerfile: Dockerfile
+    networks:
+      - backend
+    depends_on:
+      - office.db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    volumes:
+      - "${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets/:ro"
+    restart: unless-stopped
+    
   office.db:
     image: mongo:7.0
     command: ["--replSet", "rs0", "--bind_ip_all", "--port", "27017"]
     ports:
-      - 27017:27017
+      - "27017:27017"
+    networks:
+      - backend
     healthcheck:
       test: echo "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'host.docker.internal:27017'}]}) }" | mongosh --port 27017 --quiet
       interval: 5s
@@ -66,8 +111,13 @@ services:
     volumes:
       - "officedata:/data/db"
       - "officedata:/data/configdb"
-
+    restart: unless-stopped
+    
 volumes:
-    doctordata:
-    authdata:
-    officedata:
+  doctordata:
+  authdata:
+  officedata:
+  
+networks:
+  backend:
+    driver: bridge

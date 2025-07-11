@@ -1,0 +1,46 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/Auth/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "authapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/auth/{everything}",
+      "UpstreamHttpMethod": [ "POST" ],
+      "Priority": 1
+    },
+    {
+      "DownstreamPathTemplate": "/Doctor/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "doctorapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/doctor/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PATCH", "DELETE" ],
+      "Priority": 2
+    },
+    {
+      "DownstreamPathTemplate": "/Office/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "officeapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/office/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PATCH", "DELETE" ],
+      "Priority": 3
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://apigateway:80"
+  }
+}
