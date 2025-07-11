@@ -7,15 +7,15 @@ internal static class WebApplicationBuilderExtensions
 {
     public static void ConfigureJwtSettings(this WebApplicationBuilder builder)
     {
-        builder.Services.Configure<JwtSettings>(
-            builder.Configuration.GetSection(nameof(JwtSettings)));
+        var sectionName = nameof(JwtSettings);
+        builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(sectionName));
     }
 
     public static string ConfigureAuthDbSettings(this WebApplicationBuilder builder)
     {
-        builder.Services.Configure<AuthDbSettings>(
-           builder.Configuration.GetSection(nameof(AuthDbSettings)));
-
-        return builder.Configuration["AuthDbSettings:ConnectionString"]!;
+        var sectionName = nameof(AuthDbSettings);
+        var settings = builder.Configuration.GetSection(sectionName).Get<AuthDbSettings>()!;
+        builder.Services.Configure<AuthDbSettings>(builder.Configuration.GetSection(sectionName));
+        return settings.ConnectionString;
     }
 }

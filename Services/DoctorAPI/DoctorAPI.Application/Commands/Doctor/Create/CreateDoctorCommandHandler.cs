@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using DoctorAPI.Application.Contracts.Repository.Doctor;
-using DoctorAPI.Application.Contracts.UnitOfWork;
 using DoctorAPI.Application.Entities;
 using MediatR;
 
