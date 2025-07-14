@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DoctorAPI.Application.Commands.Doctor.Create;
 using DoctorAPI.Application.Commands.Doctor.Update;
+using DoctorAPI.Application.Contracts.Cache;
 using DoctorAPI.Application.Contracts.Repository.Doctor;
 using DoctorAPI.Application.Entities;
 using DoctorAPI.Application.Enums;
@@ -13,13 +14,15 @@ public class UpdateDoctorCommandHandlerTests
 {
     private readonly Mock<IMapper> _mapperMock;
     private readonly Mock<IDoctorRepository> _doctorRepositoryMock;
+    private readonly Mock<ICacheService> _cacheServiceMock;
     private readonly UpdateDoctorCommandHandler _handler;
 
     public UpdateDoctorCommandHandlerTests()
     {
         _mapperMock = new Mock<IMapper>();
         _doctorRepositoryMock = new Mock<IDoctorRepository>();
-        _handler = new UpdateDoctorCommandHandler(_mapperMock.Object, _doctorRepositoryMock.Object);
+        _cacheServiceMock = new Mock<ICacheService>();
+        _handler = new UpdateDoctorCommandHandler(_mapperMock.Object, _doctorRepositoryMock.Object, _cacheServiceMock.Object);
     }
 
     [Fact]

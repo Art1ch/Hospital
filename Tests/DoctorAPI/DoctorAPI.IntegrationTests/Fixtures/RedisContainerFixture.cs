@@ -1,6 +1,4 @@
-﻿using DoctorAPI.Application.Contracts.Cache;
-using DoctorAPI.Infrastructure.Services;
-using DoctorAPI.IntegrationTests.Settings;
+﻿using DoctorAPI.IntegrationTests.Settings;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
@@ -8,36 +6,32 @@ using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 using Testcontainers.Redis;
 
-
 namespace DoctorAPI.IntegrationTests.Fixtures;
 
 public sealed class RedisContainerFixture : IAsyncLifetime
 {
     public RedisContainer Container;
-    public ICacheService CacheService;
     public IDistributedCache CacheMemory;
-    private RedisSettings Settings;
-    private IDatabase Database;
-    private IConnectionMultiplexer Connection; 
+    internal RedisSettings _settings;
+    private IDatabase _database;
+    private IConnectionMultiplexer _connection; 
 
     public async Task InitializeAsync()
     {
         ConfigureRedisSettings();
+        CreateCacheMemory();
         CreateContainer();
         await Container.StartAsync();
         await CreateConnection();
         CreateDatabase();
-        CreateCacheMemory();
-        CreateCacheService();
-
     }
 
 
     public async Task DisposeAsync()
     {
         await ClearCacheStorage();
-        await Connection.CloseAsync();
-        await Connection.DisposeAsync();
+        await _connection.CloseAsync();
+        await _connection.DisposeAsync();
         await Container.StopAsync();
         await Container.DisposeAsync();
     }
@@ -49,48 +43,47 @@ public sealed class RedisContainerFixture : IAsyncLifetime
           .Build();
         var sectionName = typeof(RedisSettings).Name;
 
-        Settings = config
+        _settings = config
             .GetSection(sectionName)
             .Get<RedisSettings>()!;
+    }
+
+    private void CreateCacheMemory()
+    {
+        var cacheOptions = new RedisCacheOptions()
+        {
+            Configuration = _settings.ConnectionString,
+            InstanceName = _settings.InstanceName,
+        };
+        var optionAccessor = Options.Create(cacheOptions);
+        CacheMemory = new RedisCache(optionAccessor);
     }
 
     private void CreateContainer()
     {
         Container = new RedisBuilder()
-            .WithImage(Settings.Image)
+            .WithImage(_settings.Image)
             .Build();
     }
 
     private async Task CreateConnection()
     {
-        Connection = await ConnectionMultiplexer.ConnectAsync(Settings.ConnectionString);
+        _connection = await ConnectionMultiplexer.ConnectAsync(_settings.ConnectionString);
     }
 
     private void CreateDatabase()
     {
-        Database = Connection.GetDatabase();
-    }
-
-    private void CreateCacheMemory()
-    {
-        CacheMemory = new RedisCache(Options.Create(new RedisCacheOptions
-        {
-            Configuration = Settings.ConnectionString,
-            InstanceName = Settings.InstanceName,
-        }));
-    }
-
-    private void CreateCacheService()
-    {
-        CacheService = new CacheService(CacheMemory);
+        _database = _connection.GetDatabase();
     }
 
     private async Task ClearCacheStorage()
     {
-        if (Database != null)
+        if (_database != null)
         {
-            var server = Connection.GetServer(Connection.GetEndPoints().First());
-            await server.FlushDatabaseAsync(Database.Database);
+            var endpoints = _connection.GetEndPoints();
+            var firstEndpoint = endpoints.First();
+            var server = _connection.GetServer(firstEndpoint);
+            await server.FlushDatabaseAsync(_database.Database);
         }
     }
 }

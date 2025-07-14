@@ -10,10 +10,10 @@ namespace DoctorAPI.IntegrationTests.Fixtures;
 
 public sealed class PostgresContainerFixture : IAsyncLifetime
 {
-    internal DoctorDbContext DbContext;
-    public PostgreSqlContainer Container;
     public IUnitOfWork UnitOfWork;
-    private PostgresDbSettings Settings;
+    public PostgreSqlContainer Container;
+    internal DoctorDbContext _dbContext;
+    private PostgresDbSettings _settings;
 
     public async Task InitializeAsync()
     {
@@ -23,14 +23,14 @@ public sealed class PostgresContainerFixture : IAsyncLifetime
         CreateUnitOfWork();
 
         await Container.StartAsync();
-        await DbContext.Database.MigrateAsync();
+        await _dbContext.Database.MigrateAsync();
         await UnitOfWork.BeginTransactionAsync();
     }
 
     public async Task DisposeAsync()
     {
         await UnitOfWork.RollbackAsync();
-        await DbContext.DisposeAsync();
+        await _dbContext.DisposeAsync();
         await Container.StopAsync();
         await Container.DisposeAsync();
     }
@@ -42,7 +42,7 @@ public sealed class PostgresContainerFixture : IAsyncLifetime
            .Build();
         var sectionName = typeof(PostgresDbSettings).Name;
 
-        Settings = config
+        _settings = config
             .GetSection(sectionName)
             .Get<PostgresDbSettings>()!;
     }
@@ -50,10 +50,10 @@ public sealed class PostgresContainerFixture : IAsyncLifetime
     private void CreateContainer()
     {
         Container = new PostgreSqlBuilder()
-            .WithImage(Settings.Image)
-            .WithDatabase(Settings.Database)
-            .WithUsername(Settings.Username)
-            .WithPassword(Settings.Password)
+            .WithImage(_settings.Image)
+            .WithDatabase(_settings.Database)
+            .WithUsername(_settings.Username)
+            .WithPassword(_settings.Password)
             .WithCleanUp(true)
             .Build();
     }
@@ -61,12 +61,12 @@ public sealed class PostgresContainerFixture : IAsyncLifetime
     private void CreateDbContext()
     {
         var options = new DbContextOptionsBuilder<DoctorDbContext>()
-            .UseNpgsql(Settings.ConnectionString).Options;
-        DbContext = new DoctorDbContext(options);
+            .UseNpgsql(_settings.ConnectionString).Options;
+        _dbContext = new DoctorDbContext(options);
     }
 
     private void CreateUnitOfWork()
     {
-        UnitOfWork = new UnitOfWork(DbContext);
+        UnitOfWork = new UnitOfWork(_dbContext);
     }
 }

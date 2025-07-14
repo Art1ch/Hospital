@@ -4,20 +4,23 @@ using DoctorAPI.Application.Enums;
 using DoctorAPI.Application.RepositoryResults.Doctor.GetById;
 using DoctorAPI.Application.Responses.Doctor;
 using DoctorAPI.IntegrationTests.Fixtures;
+using DoctorAPI.Caching.Cache;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.StackExchangeRedis;
+using Microsoft.Extensions.Options;
 using System.Text.Json;
 
 namespace DoctorAPI.IntegrationTests.Tests;
 
 public class CacheServiceTests : IClassFixture<RedisContainerFixture>
 {
-    private readonly ICacheService _cacheService;
     private readonly IDistributedCache _cacheMemory;
+    private readonly ICacheService _cacheService;
 
     public CacheServiceTests(RedisContainerFixture fixture)
     {
-        _cacheService = fixture.CacheService;
-        _cacheMemory = fixture.CacheMemory;
+        
+        _cacheService = new CacheService(_cacheMemory);
     }
 
     [Fact]

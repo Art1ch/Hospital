@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Services\DoctorAPI\DoctorAPI.Infrastructure\DoctorAPI.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\Services\DoctorAPI\DoctorAPI.Caching\DoctorAPI.Caching.csproj" />
     <ProjectReference Include="..\..\..\Services\DoctorAPI\DoctorAPI.Infrastructure\DoctorAPI.Infrastructure.csproj" />
   </ItemGroup>
 
