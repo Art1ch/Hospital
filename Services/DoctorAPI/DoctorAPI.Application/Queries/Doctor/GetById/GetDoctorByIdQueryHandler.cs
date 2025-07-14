@@ -12,10 +12,11 @@ internal class GetDoctorByIdQueryHandler : IRequestHandler<GetDoctorByIdQuery, G
     private readonly IDoctorRepository _doctorRepository;
     private readonly ICacheService _cacheService;
 
-    public GetDoctorByIdQueryHandler(IMapper mapper, IDoctorRepository doctorRepository)
+    public GetDoctorByIdQueryHandler(IMapper mapper, IDoctorRepository doctorRepository, ICacheService cacheService)
     {
         _mapper = mapper;
         _doctorRepository = doctorRepository;
+        _cacheService = cacheService;
     }
 
     public async Task<GetByIdDoctorResponse> Handle(GetDoctorByIdQuery query, CancellationToken cancellationToken)

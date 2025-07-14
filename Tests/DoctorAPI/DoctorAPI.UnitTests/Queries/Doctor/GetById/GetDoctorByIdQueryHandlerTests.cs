@@ -6,6 +6,7 @@ using Moq;
 using DoctorAPI.Application.Enums;
 using DoctorAPI.Application.RepositoryResults.Doctor.GetById;
 using DoctorAPI.Application.Responses.Doctor;
+using DoctorAPI.Application.Contracts.Cache;
 
 namespace DoctorAPI.UnitTests.Queries.Doctor.GetById;
 
@@ -13,13 +14,18 @@ public class GetDoctorByIdQueryHandlerTests
 {
     private readonly Mock<IMapper> _mapperMock;
     private readonly Mock<IDoctorRepository> _doctorRepositoryMock;
+    private readonly Mock<ICacheService> _cacheServiceMock;
     private readonly GetDoctorByIdQueryHandler _handler;
 
     public GetDoctorByIdQueryHandlerTests()
     {
         _mapperMock = new Mock<IMapper>();
         _doctorRepositoryMock = new Mock<IDoctorRepository>();
-        _handler = new GetDoctorByIdQueryHandler(_mapperMock.Object, _doctorRepositoryMock.Object);
+        _cacheServiceMock = new Mock<ICacheService>();
+        _handler = new GetDoctorByIdQueryHandler(
+            _mapperMock.Object,
+            _doctorRepositoryMock.Object,
+            _cacheServiceMock.Object);
     }
 
     [Fact]

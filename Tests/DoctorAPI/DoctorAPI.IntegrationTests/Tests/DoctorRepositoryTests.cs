@@ -16,9 +16,9 @@ public class DoctorRepositoryTests : IClassFixture<PostgresContainerFixture>
 
     public DoctorRepositoryTests(PostgresContainerFixture container)
     {
-        _doctorRepository = new DoctorRepository(container.DbContext);
-        _doctors = container.DbContext.Doctors;
-        _context = container.DbContext;
+        _doctorRepository = new DoctorRepository(container._dbContext);
+        _doctors = container._dbContext.Doctors;
+        _context = container._dbContext;
     }
 
     [Fact]

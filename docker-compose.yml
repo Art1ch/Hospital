@@ -44,7 +44,7 @@ services:
   
   doctor.cache:
     image: redis:7.0-alpine
-    command: redis-server --requirepass CachePassword --appendonly yes
+    command: redis-server --requirepass CachePassword --appendonly yes --enable-debug-command yes
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]

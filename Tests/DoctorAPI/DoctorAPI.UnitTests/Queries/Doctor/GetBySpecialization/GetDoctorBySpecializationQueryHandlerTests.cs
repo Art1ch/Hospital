@@ -4,6 +4,7 @@ using DoctorAPI.Application.Contracts.Repository.Doctor;
 using Moq;
 using DoctorAPI.Application.RepositoryResults.Doctor.GetBySpecialization;
 using DoctorAPI.Application.Responses.Doctor;
+using DoctorAPI.Application.Contracts.Cache;
 
 namespace DoctorAPI.UnitTests.Queries.Doctor.GetBySpecialization;
 
@@ -11,15 +12,18 @@ public class GetDoctorBySpecializationQueryHandlerTests
 {
     private readonly Mock<IMapper> _mapperMock;
     private readonly Mock<IDoctorRepository> _doctorRepositoryMock;
+    private readonly Mock<ICacheService> _cacheServiceMock;
     private readonly GetDoctorBySpecializationQueryHandler _handler;
 
     public GetDoctorBySpecializationQueryHandlerTests()
     {
         _mapperMock = new Mock<IMapper>();
         _doctorRepositoryMock = new Mock<IDoctorRepository>();
+        _cacheServiceMock = new Mock<ICacheService>();
         _handler = new GetDoctorBySpecializationQueryHandler(
             _mapperMock.Object,
-            _doctorRepositoryMock.Object);
+            _doctorRepositoryMock.Object,
+            _cacheServiceMock.Object);
     }
 
     [Fact]
@@ -30,7 +34,7 @@ public class GetDoctorBySpecializationQueryHandlerTests
         var specializationId = 1;
         var query = new GetDoctorBySpecializationQuery(specializationId);
 
-        var repositoryResult = GetRepositoryResult(doctorId, specializationId);
+        var repositoryResult = CreateObjectOfGetDoctorBySpecializationResult(doctorId, specializationId);
         var expectedResponse = new GetBySpecializationDoctorResponse(repositoryResult);
 
         _doctorRepositoryMock.Setup(r =>
@@ -52,7 +56,7 @@ public class GetDoctorBySpecializationQueryHandlerTests
         Assert.Equal(doctorId, result.Doctor.Id);
     }
 
-    private GetDoctorBySpecializationResult GetRepositoryResult(Guid doctorId, int specializationId)
+    private GetDoctorBySpecializationResult CreateObjectOfGetDoctorBySpecializationResult(Guid doctorId, int specializationId)
     {
         var query = new GetDoctorBySpecializationQuery(specializationId);
 

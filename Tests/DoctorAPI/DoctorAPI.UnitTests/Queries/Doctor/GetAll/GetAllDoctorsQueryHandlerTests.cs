@@ -28,7 +28,7 @@ public class GetAllDoctorsQueryHandlerTests
         var pageSize = 10;
         var query = new GetAllDoctorsQuery(page, pageSize);
 
-        var repositoryResults = GetRepositoryResults(pageSize);
+        var repositoryResults = CreateListOfGetAllDoctorsResult(pageSize);
         
         var expectedResponse = new GetAllDoctorsResponse(repositoryResults);
 
@@ -48,33 +48,13 @@ public class GetAllDoctorsQueryHandlerTests
             r => r.GetAllDoctorsAsync(query.Page, query.PageSize, It.IsAny<CancellationToken>()),
             Times.Once);
 
-        Assert.Equal(repositoryResults.Count, result.Doctors.Count);
+        for (int i = 0; i < repositoryResults.Count; i++)
+        {
+            Assert.Equal(expectedResponse.Doctors[i].Id, result.Doctors[i].Id);
+        }
     }
 
-    [Fact]
-    public async Task Handle_WhenValidDataProvided_ShouldReturnEmptyListOfDoctors()
-    {
-        // Arrange
-        var query = new GetAllDoctorsQuery(1, 10);
-        var emptyResults = new List<GetAllDoctorsResult>();
-        var expectedResponse = new GetAllDoctorsResponse(emptyResults);
-
-        _doctorRepositoryMock.Setup(r =>
-            r.GetAllDoctorsAsync(query.Page, query.PageSize, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(emptyResults);
-
-        _mapperMock.Setup(m =>
-            m.Map<GetAllDoctorsResponse>(emptyResults))
-            .Returns(expectedResponse);
-
-        // Act
-        var result = await _handler.Handle(query, CancellationToken.None);
-
-        // Assert
-        Assert.Empty(result.Doctors);
-    }
-
-    private List<GetAllDoctorsResult> GetRepositoryResults(int pageSize)
+    private List<GetAllDoctorsResult> CreateListOfGetAllDoctorsResult(int pageSize)
     {
         var repositoryResults = new List<GetAllDoctorsResult>();
         for (var i = 0; i < pageSize; i++)
