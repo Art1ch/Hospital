@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AppointmentAPI.Core.Enums;
 
-namespace AppointmentAPI.Core.Entities
+namespace AppointmentAPI.Core.Entities;
+
+public class AppointmentEntity
 {
-    internal class AppointmentEntity
-    {
-    }
+    public Guid Id { get; set; }
+    public Guid DoctorId { get; set; }
+    public DateOnly Date { get; set; }
+    public TimeOnly StartAppointmentTime { get; set; }
+    public TimeOnly EndAppointmentTime { get; set; }
+    public AppointmentStatus Status { get; set; }
 }
