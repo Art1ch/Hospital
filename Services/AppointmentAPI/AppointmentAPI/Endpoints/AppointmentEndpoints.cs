@@ -1,12 +1,5 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using
-
-
-
-
-
-
 using AppointmentAPI.Application.Queries.Appointment.GetDoctorsSchedule;
 using AppointmentAPI.Application.Requests.Appointment;
 using AppointmentAPI.Application.Commands.Appointment.Create;
