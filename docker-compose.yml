@@ -127,12 +127,36 @@ services:
       - "officedata:/data/configdb"
     restart: unless-stopped
     
-volumes:
-  doctordata:
-  authdata:
-  officedata:
-  doctor_cachedata:
-  
 networks:
   backend:
     driver: bridge
+
+  appointmentapi:
+     image: ${DOCKER_REGISTRY-}officeapi
+     build:
+       context:  ./Services/AppointmentAPI
+       dockerfile: Dockerfile
+     environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+     volumes:
+      - "${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets/:ro"
+     restart: unless-stopped
+
+  appointment.db:
+    image: mcr.microsoft.com/mssql/server:2022-lts
+    container_name: sqlserver
+    ports:
+      - "1433:1433"
+    environment:
+      SA_PASSWORD: "YourStrong!Passw0rd"
+      ACCEPT_EULA: "Y"
+    volumes:
+      - appointmentdata:/var/opt/mssql
+
+  volumes:
+    doctordata:
+    authdata:
+    doctor_cachedata:
+    officedata:
+    appointmentdata:
