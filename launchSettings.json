@@ -5,7 +5,8 @@
       "commandVersion": "1.0",
       "serviceActions": {
         "doctorapi": "StartDebugging",
-        "authapi": "StartDebugging"
+        "authapi": "StartDebugging",
+        "apigateway": "StartDebugging"
       }
     }
   }
