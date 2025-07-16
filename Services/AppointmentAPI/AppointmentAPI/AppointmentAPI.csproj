@@ -14,7 +14,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AppointmentAPI.Application\AppointmentAPI.Application.csproj" />
+    <ProjectReference Include="..\AppointmentAPI.BackgroundWorkers\AppointmentAPI.BackgroundWorkers.csproj" />
+    <ProjectReference Include="..\AppointmentAPI.Email\AppointmentAPI.Email.csproj" />
     <ProjectReference Include="..\AppointmentAPI.Infrastructure\AppointmentAPI.Infrastructure.csproj" />
+    <ProjectReference Include="..\AppointmentAPI.Notifications\AppointmentAPI.Notifications.csproj" />
   </ItemGroup>
 
 </Project>

@@ -2,6 +2,9 @@ using AppointmentAPI.Application;
 using AppointmentAPI.Infrastructure;
 using AppointmentAPI.Endpoints;
 using AppointmentAPI.Extensions;
+using AppointmentAPI.Email;
+using AppointmentAPI.Notifications;
+using AppointmentAPI.BackgroundWorkers;
 
 namespace AppointmentAPI;
 
@@ -20,6 +23,9 @@ public class Program
         var connectionString = builder.ConfigureAppointmentDbSetting();
         builder.Services.AddApplicationLayer();
         builder.Services.AddInfrastructureLayer(connectionString);
+        builder.Services.AddEmailSenders();
+        builder.Services.AddNotifiers();
+        builder.Services.AddBackgroundWorkers();
 
         var app = builder.Build();
 
