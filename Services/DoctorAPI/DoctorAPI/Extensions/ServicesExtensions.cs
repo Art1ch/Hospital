@@ -1,4 +1,5 @@
-﻿using DoctorAPI.Infrastructure.Settings;
+﻿using DoctorAPI.Caching.Settings;
+using DoctorAPI.Infrastructure.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -61,6 +62,15 @@ internal static class ServicesExtensions
                     new string[]{}
                 }
             });
+        });
+    }
+
+    public static void AddCaching(this IServiceCollection services, CacheSettings settings)
+    {
+        services.AddStackExchangeRedisCache(options =>
+        { 
+            options.Configuration = settings.ConnectionString;
+            options.InstanceName = settings.InstanceName;
         });
     }
 }

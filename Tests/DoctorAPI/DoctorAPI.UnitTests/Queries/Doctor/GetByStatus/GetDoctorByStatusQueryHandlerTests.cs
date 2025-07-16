@@ -29,7 +29,7 @@ public class GetDoctorsByStatusQueryHandlerTests
         var query = new GetDoctorsByStatusQuery(status);
         var doctorsCount = 5;
 
-        var repositoryResults = GetRepositoryResults(doctorsCount);
+        var repositoryResults = CreateListOfGetDoctorsByStatusResult(doctorsCount);
 
         var expectedResponse = new GetByStatusDoctorsResponse(repositoryResults);
 
@@ -55,7 +55,7 @@ public class GetDoctorsByStatusQueryHandlerTests
         Assert.Equal(expectedResponse.Doctors[0].MiddleName, result.Doctors[0].MiddleName);
     }
 
-    private List<GetDoctorsByStatusResult> GetRepositoryResults(int doctorsCount)
+    private List<GetDoctorsByStatusResult> CreateListOfGetDoctorsByStatusResult(int doctorsCount)
     {
         var repositoryResults = new List<GetDoctorsByStatusResult>();
 

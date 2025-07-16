@@ -77,7 +77,21 @@ services:
     volumes:
       - authdata:/var/lib/postgresql/data
     restart: unless-stopped
-    
+ 
+  doctor.cache:
+    image: redis:7.0-alpine
+    command: redis-server --requirepass CachePassword --appendonly yes --enable-debug-command yes
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+    ports:
+      - "6379:6379"
+    volumes:
+      - doctor_cachedata:/data
+
   officeapi:
     image: ${DOCKER_REGISTRY-}officeapi
     build:
@@ -117,6 +131,7 @@ volumes:
   doctordata:
   authdata:
   officedata:
+  doctor_cachedata:
   
 networks:
   backend:
