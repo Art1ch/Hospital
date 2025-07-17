@@ -1,6 +1,6 @@
-﻿using AppointmentAPI.Email.Models;
+﻿using AppointmentAPI.Infrastructure.Models;
 
-namespace AppointmentAPI.Email.Interfaces;
+namespace AppointmentAPI.Infrastructure.Interfaces;
 
 public interface IEmailSender
 {

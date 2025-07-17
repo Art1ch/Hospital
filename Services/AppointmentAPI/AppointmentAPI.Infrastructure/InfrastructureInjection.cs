@@ -1,6 +1,9 @@
 ﻿using AppointmentAPI.Application.Contracts.Repository.Appointment;
 using AppointmentAPI.Application.Contracts.UnitOfWork;
+using AppointmentAPI.Infrastructure.BackgroundWorkers;
 using AppointmentAPI.Infrastructure.DataInitializers;
+using AppointmentAPI.Infrastructure.Implementations;
+using AppointmentAPI.Infrastructure.Interfaces;
 using AppointmentAPI.Infrastructure.Services.Repository;
 using AppointmentAPI.Infrastructure.Services.UnitOfWork;
 using Microsoft.AspNetCore.Hosting;
@@ -39,5 +42,20 @@ public static class InfrastructureInjection
     private static void AddUnitOfWork(IServiceCollection services)
     {
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+    }
+
+    private static void AddEmail(IServiceCollection services)
+    {
+        services.AddScoped<IEmailSender, EmailSender>();
+    }
+
+    private static void AddNotifications(IServiceCollection services)
+    {
+        services.AddScoped<IAppointmentNotificationService, AppointmentNotificationService>();
+    }
+
+    private static void AddBackgroundWorkers(IServiceCollection services)
+    {
+        services.AddHostedService<AppointmentReminderWorker>();
     }
 }

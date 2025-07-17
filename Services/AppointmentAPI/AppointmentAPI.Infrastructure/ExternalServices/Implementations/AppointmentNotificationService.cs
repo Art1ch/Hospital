@@ -1,16 +1,14 @@
 ﻿using AppointmentAPI.Application.Contracts.Repository.Appointment;
-using AppointmentAPI.Notifications.Interfaces;
-using AppointmentAPI.Email.Interfaces;
+using AppointmentAPI.Infrastructure.Interfaces;
 
-namespace AppointmentAPI.Notifications.Implementations;
+namespace AppointmentAPI.Infrastructure.Implementations;
 
-internal class AppointmentEmailNotificationService : IAppointmentNotificationService
+internal class AppointmentNotificationService : IAppointmentNotificationService
 {
     private readonly IAppointmentRepository _appointmentRepository;
     private readonly IEmailSender _emailSender;
-    //injection of EventBus?
 
-    public AppointmentEmailNotificationService(IAppointmentRepository appointmentRepository, IEmailSender emailSender)
+    public AppointmentNotificationService(IAppointmentRepository appointmentRepository, IEmailSender emailSender)
     {
         _appointmentRepository = appointmentRepository;
         _emailSender = emailSender;

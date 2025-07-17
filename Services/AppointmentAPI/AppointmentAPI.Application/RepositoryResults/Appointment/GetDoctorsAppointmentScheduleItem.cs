@@ -1,6 +1,7 @@
 ﻿namespace AppointmentAPI.Application.RepositoryResults.Appointment;
 
-public record GetDoctorsAppointmentScheduleItem(
+public sealed record GetDoctorsAppointmentScheduleItem(
     DateOnly Date,
     TimeOnly StartAppointmentTime,
-    TimeOnly EndAppointmentTime);
+    TimeOnly EndAppointmentTime
+);

@@ -1,7 +1,7 @@
-﻿using AppointmentAPI.Email.Interfaces;
-using AppointmentAPI.Email.Models;
+﻿using AppointmentAPI.Infrastructure.Interfaces;
+using AppointmentAPI.Infrastructure.Models;
 
-namespace AppointmentAPI.Email.Implementations;
+namespace AppointmentAPI.Infrastructure.Implementations;
 
 internal class EmailSender : IEmailSender
 {

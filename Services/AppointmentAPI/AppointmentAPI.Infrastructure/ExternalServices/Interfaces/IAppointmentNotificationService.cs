@@ -1,4 +1,4 @@
-﻿namespace AppointmentAPI.Notifications.Interfaces;
+﻿namespace AppointmentAPI.Infrastructure.Interfaces;
 
 public interface IAppointmentNotificationService
 {

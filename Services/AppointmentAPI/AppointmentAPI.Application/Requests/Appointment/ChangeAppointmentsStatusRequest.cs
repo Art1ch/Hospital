@@ -2,6 +2,7 @@
 
 namespace AppointmentAPI.Application.Requests.Appointment;
 
-public record ChangeAppointmentsStatusRequest(
+public sealed record ChangeAppointmentsStatusRequest(
     Guid Id,
-    AppointmentStatus Status);
+    AppointmentStatus Status
+);

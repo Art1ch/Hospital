@@ -3,4 +3,5 @@
 namespace AppointmentAPI.Application.Responses.Appointment;
 
 public record GetDoctorsAppointmentScheduleResponse(
-    GetDoctorsAppointmentScheduleResult Result);
+    GetDoctorsAppointmentScheduleResult Result
+);

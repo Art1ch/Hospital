@@ -4,4 +4,5 @@ public sealed record GetAppointmentScheduleResult(
     Guid DoctorId,
     DateOnly Date,
     TimeOnly StartAppointmentTime,
-    TimeOnly EndAppointmentTime);
+    TimeOnly EndAppointmentTime
+);

@@ -1,7 +1,8 @@
 ﻿namespace AppointmentAPI.Application.Requests.Appointment;
 
-public record UpdateAppointmentRequest(
+public sealed record UpdateAppointmentRequest(
     Guid Id,
     DateOnly Date,
     TimeOnly StartAppointmentTime,
-    TimeOnly EndAppointmentTime);
+    TimeOnly EndAppointmentTime
+);

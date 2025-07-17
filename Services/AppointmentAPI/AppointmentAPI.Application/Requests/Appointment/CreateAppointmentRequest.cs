@@ -1,8 +1,8 @@
-﻿using AppointmentAPI.Application.Abstractions;
-namespace AppointmentAPI.Application.Requests.Appointment;
+﻿namespace AppointmentAPI.Application.Requests.Appointment;
 
-public record CreateAppointmentRequest(
+public sealed record CreateAppointmentRequest(
     Guid DoctorId,
     DateOnly Date,
     TimeOnly StartAppointmentTime,
-    TimeOnly EndAppointmentTime);
+    TimeOnly EndAppointmentTime
+);

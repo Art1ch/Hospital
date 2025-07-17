@@ -5,4 +5,5 @@ using MediatR;
 namespace AppointmentAPI.Application.Commands.Appointment.Create;
 
 public sealed record CreateAppointmentCommand(
-    CreateAppointmentRequest Request) : BaseRequest<CreateAppointmentRequest, Unit>(Request);
+    CreateAppointmentRequest Request
+) : BaseRequest<CreateAppointmentRequest, Unit>(Request);

@@ -5,4 +5,5 @@ using MediatR;
 namespace AppointmentAPI.Application.Commands.Appointment.ChangeStatus;
 
 public sealed record ChangeAppointmentsStatusCommand(
-    ChangeAppointmentsStatusRequest Request) : BaseRequest<ChangeAppointmentsStatusRequest, Unit>(Request);
+    ChangeAppointmentsStatusRequest Request
+) : BaseRequest<ChangeAppointmentsStatusRequest, Unit>(Request);

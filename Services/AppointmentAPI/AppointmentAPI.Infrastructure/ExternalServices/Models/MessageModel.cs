@@ -1,4 +1,4 @@
-﻿namespace AppointmentAPI.Email.Models;
+﻿namespace AppointmentAPI.Infrastructure.Models;
 
 public class MessageModel
 {

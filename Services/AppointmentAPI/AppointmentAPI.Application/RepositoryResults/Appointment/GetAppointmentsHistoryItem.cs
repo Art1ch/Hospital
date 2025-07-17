@@ -4,4 +4,5 @@ public sealed record GetAppointmentsHistoryItem(
     Guid DoctorId,
     DateOnly Date,
     TimeOnly StartAppointmentTime,
-    TimeOnly EndAppointmentTime);
+    TimeOnly EndAppointmentTime
+);
