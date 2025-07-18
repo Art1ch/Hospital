@@ -1,9 +1,10 @@
-﻿using AppointmentAPI.Application.Contracts.Repository.Appointment;
+﻿using AppointmentAPI.Application.Contracts.Email;
+using AppointmentAPI.Application.Contracts.RemoteCaller;
+using AppointmentAPI.Application.Contracts.Repository.Appointment;
 using AppointmentAPI.Application.Contracts.UnitOfWork;
-using AppointmentAPI.Infrastructure.BackgroundWorkers;
 using AppointmentAPI.Infrastructure.DataInitializers;
-using AppointmentAPI.Infrastructure.Implementations;
-using AppointmentAPI.Infrastructure.Interfaces;
+using AppointmentAPI.Infrastructure.Services.Email;
+using AppointmentAPI.Infrastructure.Services.RemoteCaller;
 using AppointmentAPI.Infrastructure.Services.Repository;
 using AppointmentAPI.Infrastructure.Services.UnitOfWork;
 using Microsoft.AspNetCore.Hosting;
@@ -21,6 +22,8 @@ public static class InfrastructureInjection
         AddDatabaseInitializer(services);
         AddRepositories(services);
         AddUnitOfWork(services);
+        AddEmail(services);
+        AddRemoteCaller(services);
     }
 
     private static void AddDbConnection(IServiceCollection services, string connectionString)
@@ -46,16 +49,11 @@ public static class InfrastructureInjection
 
     private static void AddEmail(IServiceCollection services)
     {
-        services.AddScoped<IEmailSender, EmailSender>();
+        services.AddScoped<IEmailService, EmailService>();
     }
 
-    private static void AddNotifications(IServiceCollection services)
+    private static void AddRemoteCaller(IServiceCollection services)
     {
-        services.AddScoped<IAppointmentNotificationService, AppointmentNotificationService>();
-    }
-
-    private static void AddBackgroundWorkers(IServiceCollection services)
-    {
-        services.AddHostedService<AppointmentReminderWorker>();
+        services.AddScoped<IRemoteCaller, RemoteCaller>();
     }
 }

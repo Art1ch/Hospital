@@ -9,8 +9,8 @@ namespace AppointmentAPI.Infrastructure.Services.Repository;
 
 internal sealed class AppointmentRepository : IAppointmentRepository
 {
-    private readonly IDbConnection _connection;
     private const string TableName = "Appointments";
+    private readonly IDbConnection _connection;
 
     public AppointmentRepository(IDbConnection connection)
     {
@@ -66,7 +66,7 @@ internal sealed class AppointmentRepository : IAppointmentRepository
     public async Task UpdateAsync(AppointmentEntity entity, CancellationToken cancellationToken = default)
     {
         var sqlQuery = $@"
-            UPDATE Appointments SET
+            UPDATE {TableName} SET
                 DoctorId = @DoctorId,
                 Date = @Date,
                 StartAppointmentTime = @StartAppointmentTime,
@@ -74,5 +74,26 @@ internal sealed class AppointmentRepository : IAppointmentRepository
                 Status = @Status
             WHERE Id = @Id"; ;
         await _connection.ExecuteAsync(sqlQuery, entity);
+    }
+
+    public async Task<List<Guid>> GetUpcomingAppointmentsDoctorsIds(int appointmentMinutesBefore, CancellationToken cancellationToken = default)
+    {
+        var currentDateTime = DateTime.Now;
+        var currentDate = DateOnly.FromDateTime(currentDateTime);
+        var currentTime = TimeOnly.FromDateTime(currentDateTime);
+
+        var sqlQuery = $@"
+            SELECT DoctorId FROM {TableName}
+            WHERE Date > @CurrentDate
+                OR 
+                (Date = @CurrentDate AND CONVERT(TIME, @CurrentTime) <= 
+                    DATEADD(MINUTE, @AppointmentMinutesBefore, CONVERT(TIME, StartAppointmentTime)))";
+        var doctorsIds = await _connection.QueryAsync<Guid>(sqlQuery,
+            new {
+                CurrentDate = currentDate,
+                CurrentTime = currentTime,
+                AppointmentMinutesBefore = appointmentMinutesBefore,
+            });
+        return doctorsIds.ToList();
     }
 }

@@ -14,7 +14,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AppointmentAPI.Application\AppointmentAPI.Application.csproj" />
-    <ProjectReference Include="..\AppointmentAPI.Email\AppointmentAPI.Email.csproj" />
     <ProjectReference Include="..\AppointmentAPI.Infrastructure\AppointmentAPI.Infrastructure.csproj" />
   </ItemGroup>
 

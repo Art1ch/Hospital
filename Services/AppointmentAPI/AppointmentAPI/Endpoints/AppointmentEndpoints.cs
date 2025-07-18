@@ -15,32 +15,36 @@ public static class AppointmentEndpoints
     {
         var group = routes.MapGroup("/appointment");
 
-        group.MapGet("/doctors-schedule", async (ISender sender, [FromQuery] Guid id) =>
+        group.MapGet("/doctors-schedule", async ([FromServices] ISender sender, [FromQuery] Guid id) =>
         {
             var query = new GetDoctorsAppointmentScheduleQuery(id);
             var response = await sender.Send(query);
             return response;
         });
 
-        group.MapPost("/", async (ISender sender, [FromBody] CreateAppointmentRequest request) =>
+        group.MapPost("/", async ([FromServices] ISender sender, [FromBody] CreateAppointmentRequest request) =>
         {
             var command = new CreateAppointmentCommand(request);
             await sender.Send(command);
         });
 
-        group.MapPatch("/", async (ISender sender, [FromBody] UpdateAppointmentRequest request) =>
+        group.MapPatch("/", async ([FromServices] ISender sender, [FromBody] UpdateAppointmentRequest request) =>
         {
             var command = new UpdateAppointmentCommand(request);
             await sender.Send(command);
         });
 
-        group.MapPatch("/change-appointments-status", async (ISender sender, [FromBody] ChangeAppointmentsStatusRequest request) =>
+        group.MapPatch("/change-appointments-status",
+            async (
+            [FromServices] ISender sender,
+            [FromBody] ChangeAppointmentsStatusRequest request
+            ) =>
         {
-            var commnad = new ChangeAppointmentsStatusCommand(request);
-            await sender.Send(commnad);
+            var command = new ChangeAppointmentsStatusCommand(request);
+            await sender.Send(command);
         });
 
-        group.MapDelete("/", async (ISender sender, [FromQuery] Guid id) =>
+        group.MapDelete("/", async ([FromServices] ISender sender, [FromQuery] Guid id) =>
         {
             var command = new DeleteAppointmentCommand(id);
             await sender.Send(command);

@@ -1,9 +1,11 @@
 ﻿using AppointmentAPI.Application.PipelineBehavior;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using AppointmentAPI.Application.Contracts.AppointmentNotificationService;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using AppointmentAPI.Application.Implementations;
 
 namespace AppointmentAPI.Application;
 
@@ -17,6 +19,7 @@ public static class ApplicationLayerInjection
         AddCommandsAndQueries(services, assembly);
         AddMapping(services, assembly);
         AddPipelineBehavior(services);
+        AddNotificationService(services);
     }
     private static void AddValidation(IServiceCollection services, Assembly assembly)
     {
@@ -40,5 +43,10 @@ public static class ApplicationLayerInjection
     private static void AddPipelineBehavior(IServiceCollection services)
     {
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
+    }
+
+    private static void AddNotificationService(IServiceCollection services)
+    {
+        services.AddScoped<IAppointmentNotificationService, AppointmentNotificationService>();
     }
 }
