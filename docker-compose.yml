@@ -127,10 +127,6 @@ services:
       - "officedata:/data/configdb"
     restart: unless-stopped
     
-networks:
-  backend:
-    driver: bridge
-
   appointmentapi:
      image: ${DOCKER_REGISTRY-}officeapi
      build:
@@ -154,7 +150,12 @@ networks:
     volumes:
       - appointmentdata:/var/opt/mssql
 
-  volumes:
+networks:
+  backend:
+    driver: bridge
+
+
+volumes:
     doctordata:
     authdata:
     doctor_cachedata:

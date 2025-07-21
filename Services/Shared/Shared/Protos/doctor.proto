@@ -1,0 +1,17 @@
+﻿syntax = "proto3";
+
+package doctor;
+
+option csharp_namespace = "Shared.Protos.Doctor";
+
+service DoctorService {
+  rpc GetDoctorsAccountId (GetDoctorsAccountIdRequest) returns (GetDoctorsAccountIdResponse);
+}
+
+message GetDoctorsAccountIdRequest {
+  string doctor_id = 1;
+}
+
+message GetDoctorsAccountIdResponse {
+  string account_id = 1;
+}
