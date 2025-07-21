@@ -21,7 +21,7 @@ internal class AppointmentNotificationService(
         var doctorsIds = await repository.GetUpcomingAppointmentsDoctorsIds(NotificationMinutesBefore, cancellationToken);
         foreach (var id in doctorsIds)
         {
-            var doctorEmail = await remoteCaller.GetDoctorsEmail(id);
+            var doctorEmail = await remoteCaller.GetDoctorsEmailAsync(id);
             var message = new MessageModel()
             {
                 Subject = MessageSubject,
