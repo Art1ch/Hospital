@@ -13,6 +13,8 @@ internal class AppointmentNotificationService(
 ) : IAppointmentNotificationService
 {
     private const int NotificationMinutesBefore = 10;
+    private const string MessageSubject = "Appointment";
+    private const string MessageHtmlBody = "You have an appointment in 10 minutes";
 
     public async Task NotifyDoctorsAboutAppointment(CancellationToken cancellationToken = default)
     {
@@ -22,8 +24,8 @@ internal class AppointmentNotificationService(
             var doctorEmail = await remoteCaller.GetDoctorsEmail(id);
             var message = new MessageModel()
             {
-                Subject = "Appointment",
-                HtmlBody = "AppointmentBody"
+                Subject = MessageSubject,
+                HtmlBody = MessageHtmlBody,
             };
             await emailService.SendMessage(doctorEmail, message);
         }
