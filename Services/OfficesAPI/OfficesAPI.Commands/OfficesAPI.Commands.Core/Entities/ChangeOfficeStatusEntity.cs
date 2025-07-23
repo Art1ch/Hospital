@@ -1,5 +1,4 @@
 ﻿using OfficesAPI.Commands.Core.Entities.Base;
-using OfficesAPI.Commands.Core.Enums;
 using OfficesAPI.Shared.Enum;
 
 namespace OfficesAPI.Commands.Core.Entities;

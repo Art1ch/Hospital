@@ -16,8 +16,9 @@ public class Program
         builder.Configuration.AddUserSecrets<Program>();
 
         builder.ConfigureDbSettings();
+        var messageBrokerSettings = builder.ConfigureMessageBroker();
 
-        builder.Services.AddApplicationLayer();
+        builder.Services.AddApplicationLayer(messageBrokerSettings);
         builder.Services.AddInfrastructureLayer();
 
         var app = builder.Build();

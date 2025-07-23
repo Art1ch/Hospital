@@ -1,4 +1,4 @@
-﻿namespace OfficesAPI.Commands.Infrastructure.Settings;
+﻿namespace OfficesAPI.Shared.Settings;
 
 public class MessageBrokerSettings
 {

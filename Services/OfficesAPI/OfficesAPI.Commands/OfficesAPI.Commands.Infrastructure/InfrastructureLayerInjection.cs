@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using OfficesAPI.Commands.Application.Contracts;
 using OfficesAPI.Commands.Infrastructure.Services;
 using OfficesAPI.Commands.Infrastructure.Settings;
+using OfficesAPI.Shared.Settings;
 
 namespace OfficesAPI.Infrastructure;
 

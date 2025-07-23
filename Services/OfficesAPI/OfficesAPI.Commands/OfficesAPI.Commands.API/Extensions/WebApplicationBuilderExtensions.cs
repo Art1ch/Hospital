@@ -1,4 +1,5 @@
 ﻿using OfficesAPI.Commands.Infrastructure.Settings;
+using OfficesAPI.Shared.Settings;
 
 namespace OfficesAPI.Commands.API.Extensions;
 
