@@ -9,9 +9,14 @@ namespace OfficesAPI.Infrastructure;
 
 public static class InfrastructureLayerInjection
 {
-    public static void AddInfrastructureLayer(this IServiceCollection services, EventStoreSettings eventStoreSettings)
+    public static void AddInfrastructureLayer(
+        this IServiceCollection services,
+        EventStoreSettings eventStoreSettings,
+        MessageBrokerSettings messageBrokerSettings
+    )
     {
         AddEventStore(services, eventStoreSettings);
+        AddMessageBroker(services, messageBrokerSettings);
     }
 
     private static void AddEventStore(this IServiceCollection services, EventStoreSettings settings)

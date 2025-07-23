@@ -1,10 +1,9 @@
 ﻿using MediatR;
-using OfficesAPI.Commands.Application.Commands.Office.Delete;
 using OfficesAPI.Commands.Application.Contracts;
 using OfficesAPI.Commands.Core.Entities;
 using OfficesAPI.Shared.Events;
 
-namespace OfficesAPI.Application.Commands.Office.Delete;
+namespace OfficesAPI.Commands.Application.Office.Delete;
 
 internal sealed class DeleteOfficeCommandHandler(
     IEventStore<DeleteOfficeEntity> eventStore,

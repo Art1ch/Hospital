@@ -4,7 +4,7 @@ using OfficesAPI.Commands.Application.Contracts;
 using OfficesAPI.Commands.Core.Entities;
 using OfficesAPI.Shared.Events;
 
-namespace OfficesAPI.Application.Commands.Office.Create;
+namespace OfficesAPI.Commands.Application.Office.Create;
 
 internal sealed class CreateOfficeCommandHandler(
     IMapper mapper,

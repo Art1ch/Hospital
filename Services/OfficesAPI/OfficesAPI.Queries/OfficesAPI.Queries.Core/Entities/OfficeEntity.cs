@@ -1,9 +1,8 @@
-﻿using OfficesAPI.Commands.Core.Entities.Base;
-using OfficesAPI.Shared.Enum;
+﻿using OfficesAPI.Shared.Enum;
 
-namespace OfficesAPI.Commands.Core.Entities;
+namespace OfficesAPI.Queries.Core.Entities;
 
-public class CreateOfficeEntity : BaseEventEntity
+public class OfficeEntity
 {
     public Guid Id { get; set; }
     public string Address { get; set; }

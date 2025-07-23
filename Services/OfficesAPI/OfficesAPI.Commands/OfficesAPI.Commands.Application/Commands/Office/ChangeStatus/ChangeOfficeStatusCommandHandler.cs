@@ -4,7 +4,7 @@ using OfficesAPI.Commands.Application.Contracts;
 using OfficesAPI.Commands.Core.Entities;
 using OfficesAPI.Shared.Events;
 
-namespace OfficesAPI.Application.Commands.Office.ChangeStatus;
+namespace OfficesAPI.Commands.Application.Office.ChangeStatus;
 
 internal sealed class ChangeOfficeStatusCommandHandler(
     IMapper mapper,
