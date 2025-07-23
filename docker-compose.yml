@@ -12,7 +12,8 @@ services:
     depends_on:
       - doctorapi
       - authapi
-      - officeapi
+      - office.queries.api
+      - office.commands.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
@@ -91,16 +92,34 @@ services:
       - "6379:6379"
     volumes:
       - doctor_cachedata:/data
-
-  officeapi:
-    image: ${DOCKER_REGISTRY-}officeapi
+  
+  office.commands.api:
+    image: ${DOCKER_REGISTRY-}office.commands.api
     build:
       context: ./Services/OfficesAPI
-      dockerfile: Dockerfile
+      dockerfile: OfficesCommandsDockerfile
+    networks:
+      - backend
+    depends_on:
+      - eventstore
+      - rabbitmq
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    volumes:
+      - "${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets/:ro"
+    restart: unless-stopped
+
+  office.queries.api:
+    image: ${DOCKER_REGISTRY-}office.queries.api
+    build:
+      context: ./Services/OfficesAPI
+      dockerfile: OfficesQueriesDockerfile
     networks:
       - backend
     depends_on:
       - office.db
+      - rabbitmq
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
@@ -123,14 +142,27 @@ services:
       start_interval: 1s
       retries: 30
     volumes:
-      - "officedata:/data/db"
-      - "officedata:/data/configdb"
+      - "officedata.queries:/data/db"
+      - "officedata.queries:/data/configdb"
     restart: unless-stopped
+
+  eventstore:
+    image: eventstore/eventstore:21.10.0-buster-slim
+    environment:
+      EVENTSTORE_INSECURE: "true"
+      EVENTSTORE_RUN_PROJECTIONS: "All"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
     
 volumes:
   doctordata:
   authdata:
-  officedata:
+  officedata.commands:
+  officedata.queries:
   doctor_cachedata:
   
 networks:

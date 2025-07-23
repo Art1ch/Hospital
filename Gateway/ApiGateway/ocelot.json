@@ -1,17 +1,28 @@
 {
   "Routes": [
     {
-      "DownstreamPathTemplate": "/Auth/{everything}",
+      "DownstreamPathTemplate": "/Office/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "authapi",
+          "Host": "office.commands.api",
           "Port": 80
         }
       ],
-      "UpstreamPathTemplate": "/auth/{everything}",
-      "UpstreamHttpMethod": [ "POST" ],
-      "Priority": 1
+      "UpstreamPathTemplate": "/office/{everything}",
+      "UpstreamHttpMethod": [ "POST", "PATCH", "DELETE" ]
+    },
+    {
+      "DownstreamPathTemplate": "/Office/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "office.queries.api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/office/{everything}",
+      "UpstreamHttpMethod": [ "GET" ]
     },
     {
       "DownstreamPathTemplate": "/Doctor/{everything}",
@@ -23,21 +34,19 @@
         }
       ],
       "UpstreamPathTemplate": "/doctor/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PATCH", "DELETE" ],
-      "Priority": 2
+      "UpstreamHttpMethod": [ "GET", "POST", "PATCH", "DELETE" ]
     },
     {
-      "DownstreamPathTemplate": "/Office/{everything}",
+      "DownstreamPathTemplate": "/Auth/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "officeapi",
+          "Host": "authapi",
           "Port": 80
         }
       ],
-      "UpstreamPathTemplate": "/office/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PATCH", "DELETE" ],
-      "Priority": 3
+      "UpstreamPathTemplate": "/auth/{everything}",
+      "UpstreamHttpMethod": [ "POST" ]
     }
   ],
   "GlobalConfiguration": {

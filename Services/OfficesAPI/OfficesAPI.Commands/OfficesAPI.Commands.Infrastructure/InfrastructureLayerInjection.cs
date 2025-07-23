@@ -18,7 +18,9 @@ public static class InfrastructureLayerInjection
     {
         AddEventStore(services, eventStoreSettings);
         AddMessageBroker(services, messageBrokerSettings);
+        AddMessagePublisher(services);
     }
+
 
     private static void AddEventStore(this IServiceCollection services, EventStoreSettings settings)
     {
@@ -44,5 +46,9 @@ public static class InfrastructureLayerInjection
                 });
             });
         });
+    }
+    private static void AddMessagePublisher(IServiceCollection services)
+    {
+        services.AddScoped<IMessagePublisher, MessagePublisher>();
     }
 }
