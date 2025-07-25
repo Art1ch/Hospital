@@ -16,7 +16,7 @@ internal class EmailService : IEmailService
         _smtpSettings = smtpOptions.Value;
     }
 
-    public async Task SendMessage(string to, MessageModel messageModel)
+    public async Task SendMessage(string receiversEmail, MessageModel messageModel)
     {
         using var client = new SmtpClient(_smtpSettings.Server, _smtpSettings.Port)
         {
@@ -31,7 +31,7 @@ internal class EmailService : IEmailService
             IsBodyHtml = true,
         };
 
-        message.To.Add(to);
+        message.To.Add(receiversEmail);
 
         await client.SendMailAsync(message);
     }

@@ -1,26 +1,44 @@
 ﻿using AppointmentAPI.Application.Contracts.AppointmentNotificationService;
+using NCrontab;
 
 namespace AppointmentAPI.Workers.AppointmentReminderWorker;
 
-internal class AppointmentReminderWorker(
-    IAppointmentNotificationService notifier
-) : BackgroundService
+internal class AppointmentReminderWorker : BackgroundService
 {
-    private const int DelayMinutes = 5;
+    private const string CronExpression = "*/5 * * * *";
+    private readonly IAppointmentNotificationService _notifier;
+    private readonly CrontabSchedule _schedule;
+    private DateTime _nextRun;
+
+    public AppointmentReminderWorker(IAppointmentNotificationService notifier)
+    {
+        _notifier = notifier;
+        _schedule = CrontabSchedule.Parse(CronExpression);
+        _nextRun = _schedule.GetNextOccurrence(DateTime.Now);
+    }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        while (stoppingToken.IsCancellationRequested)
+        while (!stoppingToken.IsCancellationRequested)
         {
-            try
+            var now = DateTime.Now;
+            if (now > _nextRun)
             {
-                await notifier.NotifyDoctorsAboutAppointment(stoppingToken);
+                try
+                {
+                    await _notifier.NotifyDoctorsAboutAppointment(stoppingToken);
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+                _nextRun = _schedule.GetNextOccurrence(DateTime.Now);
             }
-            catch (Exception)
+            var delay = _nextRun - DateTime.Now;
+            if (delay > TimeSpan.Zero)
             {
-                throw;
+                await Task.Delay(delay, stoppingToken);
             }
-            await Task.Delay(TimeSpan.FromMinutes(DelayMinutes), stoppingToken);
         }
     }
 }

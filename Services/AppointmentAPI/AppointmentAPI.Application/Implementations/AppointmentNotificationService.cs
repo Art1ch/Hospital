@@ -19,15 +19,15 @@ internal class AppointmentNotificationService(
     public async Task NotifyDoctorsAboutAppointment(CancellationToken cancellationToken = default)
     {
         var doctorsIds = await repository.GetUpcomingAppointmentsDoctorsIds(NotificationMinutesBefore, cancellationToken);
-        foreach (var id in doctorsIds)
+        var emails = await remoteCaller.GetDoctorsEmailsAsync(doctorsIds);
+        foreach (var email in emails)
         {
-            var doctorEmail = await remoteCaller.GetDoctorsEmailAsync(id);
             var message = new MessageModel()
             {
                 Subject = MessageSubject,
                 HtmlBody = MessageHtmlBody,
             };
-            await emailService.SendMessage(doctorEmail, message);
+            await emailService.SendMessage(email, message);
         }
     }
 }

@@ -5,13 +5,13 @@ package doctor;
 option csharp_namespace = "Shared.Protos.Doctor";
 
 service DoctorService {
-  rpc GetDoctorsAccountId (GetDoctorsAccountIdRequest) returns (GetDoctorsAccountIdResponse);
+  rpc GetDoctorsAccountsIds (GetDoctorsAccountsIdsRequest) returns (GetDoctorsAccountsIdsResponse);
 }
 
-message GetDoctorsAccountIdRequest {
-  string doctor_id = 1;
+message GetDoctorsAccountsIdsRequest {
+  repeated string doctors_ids = 1;
 }
 
-message GetDoctorsAccountIdResponse {
-  string account_id = 1;
+message GetDoctorsAccountsIdsResponse {
+  repeated string accounts_ids = 1;
 }

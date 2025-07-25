@@ -4,5 +4,5 @@ namespace AppointmentAPI.Application.Contracts.Email;
 
 public interface IEmailService
 {
-    Task SendMessage(string to, MessageModel message);
+    Task SendMessage(string receiversEmail, MessageModel message);
 }

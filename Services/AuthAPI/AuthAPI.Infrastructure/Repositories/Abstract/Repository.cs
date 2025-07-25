@@ -32,6 +32,11 @@ internal abstract class Repository<TEntity, TId> : IRepository<TEntity, TId> whe
         return entity!;
     }
 
+    public IQueryable<TEntity> GetEntitiesQuery()
+    {
+        return _dbSet;
+    }
+
     public async Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         _dbSet.Update(entity);

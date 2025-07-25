@@ -1,15 +1,16 @@
 ﻿using AuthAPI.Application.Contracts.Repository.Account;
+using AuthAPI.Core.Entities;
 using MediatR;
 
 namespace AuthAPI.Application.Queries.Account;
 
 internal sealed class GetAccountsEmailQueryHandler(
     IAccountRepository accountRepository
-) : IRequestHandler<GetAccountsEmailQuery, string>
+) : IRequestHandler<GetAccountEntitiesQuery, IQueryable<AccountEntity>>
 {
-    public async Task<string> Handle(GetAccountsEmailQuery request, CancellationToken cancellationToken)
-    {
-        var account = await accountRepository.GetAsync(request.AccountId);
-        return account.Email;
+    public Task<IQueryable<AccountEntity>> Handle(GetAccountEntitiesQuery request, CancellationToken cancellationToken)
+    { 
+        return Task.FromResult(
+            accountRepository.GetEntitiesQuery());
     }
 }

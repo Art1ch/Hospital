@@ -5,13 +5,13 @@ package auth;
 option csharp_namespace = "Shared.Protos.Auth";
 
 service AuthService {
-  rpc GetAccountsEmail (GetAccountsEmailRequest) returns (GetAccountsEmailResponse);
+  rpc GetAccountsEmails (GetAccountsEmailsRequest) returns (GetAccountsEmailsResponse);
 }
 
-message GetAccountsEmailRequest {
-  string account_id = 1;
+message GetAccountsEmailsRequest {
+  repeated string accounts_ids = 1;
 }
 
-message GetAccountsEmailResponse {
-  string email = 1;
+message GetAccountsEmailsResponse {
+  repeated string emails = 1;
 }

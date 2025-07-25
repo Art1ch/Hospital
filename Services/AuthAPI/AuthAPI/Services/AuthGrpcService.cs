@@ -9,15 +9,15 @@ public class AuthGrpcService(
     ISender sender
 ) : AuthService.AuthServiceBase
 {
-    public async override Task<GetAccountsEmailResponse> GetAccountsEmail(GetAccountsEmailRequest request, ServerCallContext context)
+    public async override Task<GetAccountsEmailsResponse> GetAccountsEmails(GetAccountsEmailsRequest request, ServerCallContext context)
     {
-        var accountId = Guid.Parse(request.AccountId);
-        var query = new GetAccountsEmailQuery(accountId);
-        var email = await sender.Send(query);
-        var response = new GetAccountsEmailResponse()
-        {
-            Email = email
-        };
+        var accountIds = request.AccountsIds.Select(Guid.Parse);
+        var accountsQuery = await sender.Send(new GetAccountEntitiesQuery());
+        var accountsEmail = accountsQuery
+            .Where(a => accountIds.Contains(a.Id))
+            .Select(a => a.Email);
+        var response = new GetAccountsEmailsResponse();
+        response.Emails.AddRange(accountsEmail);
         return response;
     }
 }

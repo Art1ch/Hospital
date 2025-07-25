@@ -1,6 +1,4 @@
 ﻿using AppointmentAPI.Application.Contracts.RemoteCaller;
-using AppointmentAPI.Infrastructure.Settings;
-using Microsoft.Extensions.Options;
 using Shared.Protos.Auth;
 using Shared.Protos.Doctor;
 
@@ -11,18 +9,16 @@ internal class RemoteCaller(
     AuthService.AuthServiceClient authServiceClient
 ) : IRemoteCaller
 {
-    public async Task<string> GetDoctorsEmailAsync(Guid doctorId)
+    public async Task<List<string>> GetDoctorsEmailsAsync(List<Guid> doctorsIds)
     {
-        var getDoctorsAccountIdRequest = new GetDoctorsAccountIdRequest()
-        {
-            DoctorId = doctorId.ToString()
-        };
-        var getDoctorsAccountIdResponse = await doctorServiceClient.GetDoctorsAccountIdAsync(getDoctorsAccountIdRequest);
-        var getAccountsEmailRequest = new GetAccountsEmailRequest()
-        {
-            AccountId = getDoctorsAccountIdResponse.AccountId.ToString()
-        };
-        var getAccountsEmailResponse = await authServiceClient.GetAccountsEmailAsync(getAccountsEmailRequest);
-        return getAccountsEmailResponse.Email;
+        var stringDoctorsIds = doctorsIds.Select(x => x.ToString());
+        var getDoctorsAccountsIdsRequest = new GetDoctorsAccountsIdsRequest();
+        getDoctorsAccountsIdsRequest.DoctorsIds.AddRange(stringDoctorsIds);
+        var getDoctorsAccountsIdsResponse = await doctorServiceClient.GetDoctorsAccountsIdsAsync(getDoctorsAccountsIdsRequest);
+        var getAccountsEmailRequest = new GetAccountsEmailsRequest();
+        getAccountsEmailRequest.AccountsIds.AddRange(getDoctorsAccountsIdsResponse.AccountsIds);
+        var getAccountsEmailResponse = await authServiceClient.GetAccountsEmailsAsync(getAccountsEmailRequest);
+        var emails = getAccountsEmailResponse.Emails.ToList();
+        return emails;
     }
 }
