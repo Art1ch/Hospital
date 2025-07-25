@@ -4,7 +4,7 @@ using OfficesAPI.Shared.Events;
 
 namespace OfficesAPI.Queries.Application.Consumers;
 
-internal class OfficeStatusChangedEventHandler(
+public class OfficeStatusChangedEventHandler(
     IOfficeRepository officeRepository    
 ) : IConsumer<OfficeStatusChangedEvent>
 {

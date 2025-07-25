@@ -6,7 +6,7 @@ using OfficesAPI.Shared.Events;
 
 namespace OfficesAPI.Queries.Application.Consumers;
 
-internal class OfficeUpdatedEventHandler(
+public class OfficeUpdatedEventHandler(
     IMapper mapper,
     IOfficeRepository officeRepository    
 ) : IConsumer<OfficeUpdatedEvent>

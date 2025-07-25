@@ -11,8 +11,6 @@ namespace OfficesAPI.Queries.Application;
 
 public static class ApplicationLayerInjection
 {
-    private const string QueueName = "office-queue";
-
     public static void AddApplicationLayer(this IServiceCollection services, MessageBrokerSettings messageBrokerSettings)
     {
         var assembly = typeof(ApplicationLayerInjection).Assembly;
@@ -62,10 +60,7 @@ public static class ApplicationLayerInjection
                     h.Password(messageBrokerSettings.Password);
                 });
 
-                cfg.ReceiveEndpoint(QueueName, e =>
-                {
-                    e.ConfigureConsumers(context);
-                });
+                cfg.ConfigureEndpoints(context);
             });
 
         });

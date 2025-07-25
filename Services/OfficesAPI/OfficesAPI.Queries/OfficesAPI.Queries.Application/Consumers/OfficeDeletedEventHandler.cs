@@ -4,7 +4,7 @@ using OfficesAPI.Shared.Events;
 
 namespace OfficesAPI.Queries.Application.Consumers;
 
-internal class OfficeDeletedEventHandler(
+public class OfficeDeletedEventHandler(
     IOfficeRepository officeRepository    
 ) : IConsumer<OfficeDeletedEvent>
 {

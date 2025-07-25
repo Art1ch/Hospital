@@ -47,6 +47,7 @@ public static class InfrastructureLayerInjection
             });
         });
     }
+
     private static void AddMessagePublisher(IServiceCollection services)
     {
         services.AddScoped<IMessagePublisher, MessagePublisher>();

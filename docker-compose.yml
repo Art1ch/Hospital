@@ -101,8 +101,11 @@ services:
     networks:
       - backend
     depends_on:
-      - eventstore
-      - rabbitmq
+      eventstore:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+    
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
@@ -118,8 +121,10 @@ services:
     networks:
       - backend
     depends_on:
-      - office.db
-      - rabbitmq
+      office.db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
@@ -151,12 +156,21 @@ services:
     environment:
       EVENTSTORE_INSECURE: "true"
       EVENTSTORE_RUN_PROJECTIONS: "All"
+    networks:
+      - backend
 
   rabbitmq:
     image: rabbitmq:3-management
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     
 volumes:
   doctordata:
