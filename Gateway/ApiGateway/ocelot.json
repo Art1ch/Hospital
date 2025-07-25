@@ -1,7 +1,7 @@
 {
   "Routes": [
     {
-      "DownstreamPathTemplate": "/Auth/{everything}",
+      "DownstreamPathTemplate": "/api/auth/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -10,11 +10,23 @@
         }
       ],
       "UpstreamPathTemplate": "/auth/{everything}",
-      "UpstreamHttpMethod": [ "POST" ],
-      "Priority": 1
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
     },
     {
-      "DownstreamPathTemplate": "/Doctor/{everything}",
+      "DownstreamPathTemplate": "/{catchAll}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "authapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/auth.grpc.{catchAll}",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/doctor/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -23,21 +35,32 @@
         }
       ],
       "UpstreamPathTemplate": "/doctor/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PATCH", "DELETE" ],
-      "Priority": 2
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
     },
     {
-      "DownstreamPathTemplate": "/Office/{everything}",
+      "DownstreamPathTemplate": "/{catchAll}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "officeapi",
+          "Host": "doctorapi",
           "Port": 80
         }
       ],
-      "UpstreamPathTemplate": "/office/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PATCH", "DELETE" ],
-      "Priority": 3
+      "UpstreamPathTemplate": "/doctor.grpc.{catchAll}",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/appointment/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "appointmentapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/appointment/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
     }
   ],
   "GlobalConfiguration": {

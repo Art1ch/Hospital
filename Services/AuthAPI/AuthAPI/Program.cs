@@ -1,6 +1,7 @@
 using AuthAPI.Application;
 using AuthAPI.Extensions;
 using AuthAPI.Infrastructure;
+using AuthAPI.Services;
 
 namespace AuthAPI;
 
@@ -22,6 +23,8 @@ public class Program
         builder.Services.AddApplicationLayer();
         builder.Services.AddInfrastructureLayer(connectionString);
 
+        builder.Services.AddGrpc();
+
         var app = builder.Build();
 
         if (app.Environment.IsDevelopment())
@@ -34,8 +37,8 @@ public class Program
 
         app.UseAuthorization();
 
-
         app.MapControllers();
+        app.MapGrpcService<AuthGrpcService>();
 
         app.Run();
     }

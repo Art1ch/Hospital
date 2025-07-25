@@ -2,6 +2,7 @@ using DoctorAPI.Application;
 using DoctorAPI.Infrastructure;
 using DoctorAPI.Middlewares;
 using DoctorAPI.Extensions;
+using Doctor.API.Services;
 
 namespace DoctorAPI;
 
@@ -28,6 +29,8 @@ public class Program
         builder.Services.AddInfrastructureLayer(connectionString);
         builder.Services.AddCaching(cacheSettings);
 
+        builder.Services.AddGrpc();
+
         var app = builder.Build();
 
         if (app.Environment.IsDevelopment())
@@ -44,6 +47,7 @@ public class Program
         app.UseAuthorization();
 
         app.MapControllers();
+        app.MapGrpcService<DoctorGrpcService>();
 
         app.Run();
     }

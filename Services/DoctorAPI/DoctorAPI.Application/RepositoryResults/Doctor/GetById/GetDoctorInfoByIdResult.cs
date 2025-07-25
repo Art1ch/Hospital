@@ -5,6 +5,7 @@ namespace DoctorAPI.Application.RepositoryResults.Doctor.GetById;
 
 public record GetDoctorInfoByIdResult(
     Guid Id,
+    Guid AccountId,
     string FirstName,
     string LastName,
     string MiddleName,

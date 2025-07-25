@@ -11,4 +11,12 @@ public static class WebApplicationBuilderExtension
         builder.Services.Configure<AppointmentDbSettings>(builder.Configuration.GetSection(sectionName));
         return settings.ConnectionString;
     }
+
+    public static GrpcSettings ConfigureGrpcSettings(this WebApplicationBuilder builder)
+    {
+        var sectionName = nameof(GrpcSettings);
+        var settings = builder.Configuration.GetSection(sectionName).Get<GrpcSettings>()!;
+        builder.Services.Configure<GrpcSettings>(builder.Configuration.GetSection(sectionName));
+        return settings;
+    }
 }

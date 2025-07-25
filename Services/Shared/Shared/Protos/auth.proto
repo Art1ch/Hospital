@@ -1,0 +1,17 @@
+﻿syntax = "proto3";
+
+package auth;
+
+option csharp_namespace = "Shared.Protos.Auth";
+
+service AuthService {
+  rpc GetAccountsEmail (GetAccountsEmailRequest) returns (GetAccountsEmailResponse);
+}
+
+message GetAccountsEmailRequest {
+  string account_id = 1;
+}
+
+message GetAccountsEmailResponse {
+  string email = 1;
+}

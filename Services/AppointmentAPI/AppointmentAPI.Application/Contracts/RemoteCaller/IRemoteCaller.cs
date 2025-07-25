@@ -2,5 +2,5 @@
 
 public interface IRemoteCaller
 {
-    Task<string> GetDoctorsEmail(Guid DoctorId);
+    Task<string> GetDoctorsEmailAsync(Guid doctorId);
 }

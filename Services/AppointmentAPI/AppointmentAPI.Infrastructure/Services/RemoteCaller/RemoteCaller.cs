@@ -1,11 +1,28 @@
 ﻿using AppointmentAPI.Application.Contracts.RemoteCaller;
+using AppointmentAPI.Infrastructure.Settings;
+using Microsoft.Extensions.Options;
+using Shared.Protos.Auth;
+using Shared.Protos.Doctor;
 
 namespace AppointmentAPI.Infrastructure.Services.RemoteCaller;
 
-internal class RemoteCaller : IRemoteCaller
+internal class RemoteCaller(
+    DoctorService.DoctorServiceClient doctorServiceClient,
+    AuthService.AuthServiceClient authServiceClient
+) : IRemoteCaller
 {
-    public Task<string> GetDoctorsEmail(Guid DoctorId)
+    public async Task<string> GetDoctorsEmailAsync(Guid doctorId)
     {
-        throw new NotImplementedException();
+        var getDoctorsAccountIdRequest = new GetDoctorsAccountIdRequest()
+        {
+            DoctorId = doctorId.ToString()
+        };
+        var getDoctorsAccountIdResponse = await doctorServiceClient.GetDoctorsAccountIdAsync(getDoctorsAccountIdRequest);
+        var getAccountsEmailRequest = new GetAccountsEmailRequest()
+        {
+            AccountId = getDoctorsAccountIdResponse.AccountId.ToString()
+        };
+        var getAccountsEmailResponse = await authServiceClient.GetAccountsEmailAsync(getAccountsEmailRequest);
+        return getAccountsEmailResponse.Email;
     }
 }
