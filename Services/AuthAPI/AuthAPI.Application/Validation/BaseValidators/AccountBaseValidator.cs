@@ -10,36 +10,36 @@ public class AccountBaseValidator<T> : AbstractValidator<T>
     {
         RuleFor(expression)
             .NotEmpty()
-            .WithMessage(ValidationConstants.OnFailedNullValidation)
+            .WithErrorCode(ErrorCodeConstants.EmailRequired)
             .EmailAddress()
-            .WithMessage(ValidationConstants.OnFailedEmailValidation);
+            .WithErrorCode(ErrorCodeConstants.EmailInvalid);
     }
 
     protected IRuleBuilderOptions<T, string> ValidatePhoneNumber(Expression<Func<T, string>> expression)
     {
         return RuleFor(expression)
             .MinimumLength(AccountConstants.MinPhoneNumberLength)
-            .WithMessage(ValidationConstants.OnFailedPhoneNumberValidation)
+            .WithErrorCode(ErrorCodeConstants.PhoneTooShort)
             .MaximumLength(AccountConstants.MaxPhoneNumberLength)
-            .WithMessage(ValidationConstants.OnFailedPhoneNumberValidation);
+            .WithErrorCode(ErrorCodeConstants.PhoneTooLong);
     }
 
     protected void ValidatePassword(Expression<Func<T, string>> expression)
     {
         RuleFor(expression)
             .NotEmpty()
-            .WithMessage(ValidationConstants.OnFailedNullValidation)
+            .WithErrorCode(ErrorCodeConstants.PasswordRequired)
             .MinimumLength(AccountConstants.MinPasswordLength)
-            .WithMessage(ValidationConstants.OnFailedPasswordValidation)
+            .WithErrorCode(ErrorCodeConstants.PasswordTooShort)
             .MaximumLength(AccountConstants.MaxPasswordLength)
-            .WithMessage(ValidationConstants.OnFailedPasswordValidation)
+            .WithErrorCode(ErrorCodeConstants.PasswordTooLong)
             .Matches(@"[A-Z]")
-            .WithMessage(ValidationConstants.OnFailedPasswordValidation)
+            .WithErrorCode(ErrorCodeConstants.PasswordUppercaseRequired)
             .Matches(@"[a-z]")
-            .WithMessage(ValidationConstants.OnFailedPasswordValidation)
+            .WithErrorCode(ErrorCodeConstants.PasswordLowercaseRequired)
             .Matches(@"\d")
-            .WithMessage(ValidationConstants.OnFailedPasswordValidation)
+            .WithErrorCode(ErrorCodeConstants.PasswordNumberRequired)
             .Matches(@"^\S+$")
-            .WithMessage(ValidationConstants.OnFailedPasswordValidation);
+            .WithErrorCode(ErrorCodeConstants.PasswordNoWhitespace);
     }
 }
