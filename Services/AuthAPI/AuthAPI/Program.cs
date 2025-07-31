@@ -20,16 +20,12 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Configuration.AddUserSecrets<Program>();
-    
-        builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
-
+        builder.AddResourcePathForLocalization();
         builder.ConfigureJwtSettings();
         var connectionString = builder.ConfigureAuthDbSettings();
 
         builder.Services.AddApplicationLayer();
         builder.Services.AddInfrastructureLayer(connectionString);
-
-
 
         var app = builder.Build();
 
@@ -39,21 +35,11 @@ public class Program
             app.UseSwaggerUI();
         }
 
-        app.UseRequestLocalization(options =>
-        {
-            var supportedCultures = new[] { new CultureInfo("en"), new CultureInfo("ru") };
-            options.DefaultRequestCulture = new RequestCulture("en");
-            options.SupportedCultures = supportedCultures;
-            options.SupportedUICultures = supportedCultures;
-        });
-
+        app.UseLocalization();
         app.UseMiddleware<ExceptionMiddleware>();
         app.UseHttpsRedirection();
         app.UseAuthorization();
-
-
         app.MapControllers();
-
         app.Run();
     }
 }

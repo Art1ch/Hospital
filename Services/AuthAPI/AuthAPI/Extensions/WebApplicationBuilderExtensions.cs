@@ -18,4 +18,9 @@ internal static class WebApplicationBuilderExtensions
         builder.Services.Configure<AuthDbSettings>(builder.Configuration.GetSection(sectionName));
         return settings.ConnectionString;
     }
+
+    public static void AddResourcePathForLocalization(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+    }
 }
