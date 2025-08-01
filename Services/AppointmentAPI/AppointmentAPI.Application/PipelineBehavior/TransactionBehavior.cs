@@ -3,7 +3,7 @@ using MediatR;
 
 namespace AppointmentAPI.Application.PipelineBehavior;
 
-public class TransactionBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+public sealed class TransactionBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
 {
     private readonly IUnitOfWork _unitOfWork;
 

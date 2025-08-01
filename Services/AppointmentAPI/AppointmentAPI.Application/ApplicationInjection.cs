@@ -11,42 +11,49 @@ namespace AppointmentAPI.Application;
 
 public static class ApplicationLayerInjection
 {
-    public static void AddApplicationLayer(this IServiceCollection services)
+    public static IServiceCollection AddApplicationLayer(this IServiceCollection services)
     {
         var assembly = typeof(ApplicationLayerInjection).Assembly;
 
-        AddValidation(services, assembly);
-        AddCommandsAndQueries(services, assembly);
-        AddMapping(services, assembly);
-        AddPipelineBehavior(services);
-        AddNotificationService(services);
+        services.AddValidation(assembly);
+        services.AddCommandsAndQueries(assembly);
+        services.AddMapping(assembly);
+        services.AddPipelineBehavior();
+        services.AddNotificationService();
+
+        return services;
     }
-    private static void AddValidation(IServiceCollection services, Assembly assembly)
+    private static IServiceCollection AddValidation(this IServiceCollection services, Assembly assembly)
     {
         services.AddFluentValidationAutoValidation();
         services.AddValidatorsFromAssembly(assembly);
+        return services;
     }
 
-    private static void AddCommandsAndQueries(IServiceCollection services, Assembly assembly)
+    private static IServiceCollection AddCommandsAndQueries(this IServiceCollection services, Assembly assembly)
     {
         services.AddMediatR(options =>
         {
             options.RegisterServicesFromAssembly(assembly);
         });
+        return services;
     }
 
-    private static void AddMapping(IServiceCollection services, Assembly assembly)
+    private static IServiceCollection AddMapping(this IServiceCollection services, Assembly assembly)
     {
         services.AddAutoMapper(assembly);
+        return services;
     }
 
-    private static void AddPipelineBehavior(IServiceCollection services)
+    private static IServiceCollection AddPipelineBehavior(this IServiceCollection services)
     {
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
+        return services;
     }
 
-    private static void AddNotificationService(IServiceCollection services)
+    private static IServiceCollection AddNotificationService(this IServiceCollection services)
     {
         services.AddScoped<IAppointmentNotificationService, AppointmentNotificationService>();
+        return services;
     }
 }

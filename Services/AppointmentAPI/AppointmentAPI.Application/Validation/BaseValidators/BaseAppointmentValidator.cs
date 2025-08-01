@@ -11,7 +11,9 @@ public class BaseAppointmentValidator<T> : AbstractValidator<T>
     {
         RuleFor(expression)
             .NotEmpty()
-            .WithMessage(ValidationConstants.OnFailedRequiredValidation)
+            .WithMessage(ValidationConstants.OnFailedRequiredValidation);
+
+        RuleFor(expression)
             .GreaterThanOrEqualTo(DateOnly.FromDateTime(DateTime.Today))
             .WithMessage(ValidationConstants.OnFailedDateValidation);
     }
@@ -20,7 +22,9 @@ public class BaseAppointmentValidator<T> : AbstractValidator<T>
     {
         RuleFor(expression)
             .NotEmpty()
-            .WithMessage(ValidationConstants.OnFailedRequiredValidation)
+            .WithMessage(ValidationConstants.OnFailedRequiredValidation);
+
+        RuleFor(expression)
             .InclusiveBetween(AppointmentConstants.StartAppointmentTime, AppointmentConstants.EndAppointmentTime)
             .WithMessage(ValidationConstants.OnFailedTimeValidation);
     }

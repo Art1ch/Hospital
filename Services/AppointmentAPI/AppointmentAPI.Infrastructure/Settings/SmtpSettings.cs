@@ -1,6 +1,6 @@
 ﻿namespace AppointmentAPI.Infrastructure.Settings;
 
-public class SmtpSettings
+public sealed class SmtpSettings
 {
     public string Server { get; set; }
     public int Port { get; set; }

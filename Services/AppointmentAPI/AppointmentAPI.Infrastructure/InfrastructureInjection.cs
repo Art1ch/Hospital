@@ -19,44 +19,56 @@ namespace AppointmentAPI.Infrastructure;
 
 public static class InfrastructureInjection
 {
-    public static void AddInfrastructureLayer(this IServiceCollection services, string connectionString, GrpcSettings grpcSettings)
+    public static IServiceCollection AddInfrastructureLayer(
+        this IServiceCollection services,
+        string connectionString,
+        GrpcSettings grpcSettings
+    )
     {
-        AddDbConnection(services, connectionString);
-        AddDatabaseInitializer(services);
-        AddRepositories(services);
-        AddUnitOfWork(services);
-        AddEmail(services);
-        AddGrpcServices(services, grpcSettings);
-        AddRemoteCaller(services);
+        services.AddDbConnection(connectionString);
+        services.AddDatabaseInitializer();
+        services.AddRepositories();
+        services.AddUnitOfWork();
+        services.AddEmail();
+        services.AddGrpcServices(grpcSettings);
+        services.AddRemoteCaller();
+
+        return services;
     }
 
-    private static void AddDbConnection(IServiceCollection services, string connectionString)
+    private static IServiceCollection AddDbConnection(this IServiceCollection services, string connectionString)
     {
         services.AddScoped<DbConnection>(_ =>
             new SqlConnection(connectionString));
+        return services;
     }
 
-    private static void AddDatabaseInitializer(IServiceCollection services)
+    private static IServiceCollection AddDatabaseInitializer(this IServiceCollection services)
     {
         services.AddTransient<IStartupFilter, DatabaseInitializer>();
+        return services;
     }
 
-    private static void AddRepositories(IServiceCollection services)
+    private static IServiceCollection AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+        return services;
+
     }
 
-    private static void AddUnitOfWork(IServiceCollection services)
+    private static IServiceCollection AddUnitOfWork(this IServiceCollection services)
     {
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        return services;
     }
 
-    private static void AddEmail(IServiceCollection services)
+    private static IServiceCollection AddEmail(this IServiceCollection services)
     {
         services.AddScoped<IEmailService, EmailService>();
+        return services;
     }
 
-    private static void AddGrpcServices(IServiceCollection services, GrpcSettings grpcSettings)
+    private static IServiceCollection AddGrpcServices(this IServiceCollection services, GrpcSettings grpcSettings)
     {
         services.AddGrpcClient<DoctorService.DoctorServiceClient>(options =>
         {
@@ -67,10 +79,13 @@ public static class InfrastructureInjection
         {
             options.Address = new Uri(grpcSettings.AuthServiceAddress);
         });
+
+        return services;
     }
 
-    private static void AddRemoteCaller(IServiceCollection services)
+    private static IServiceCollection AddRemoteCaller(this IServiceCollection services)
     {
         services.AddScoped<IRemoteCaller, RemoteCaller>();
+        return services;
     }
 }

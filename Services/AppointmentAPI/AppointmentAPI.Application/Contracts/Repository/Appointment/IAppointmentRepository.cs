@@ -8,5 +8,5 @@ public interface IAppointmentRepository : IRepository<AppointmentEntity, Guid>
 {
     Task<GetDoctorsAppointmentScheduleResult> GetDoctorsAppointmentScheduleAsync(Guid id, CancellationToken cancellationToken = default);
     Task ChangeAppointmentStatusAsync(Guid id, AppointmentStatus status, CancellationToken cancellationToken = default);
-    Task<List<Guid>> GetUpcomingAppointmentsDoctorsIds(int appointmentMinutesBefore, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Guid>> GetUpcomingAppointmentsDoctorsIds(int appointmentMinutesBefore, CancellationToken cancellationToken = default);
 }

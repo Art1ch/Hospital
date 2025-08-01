@@ -6,7 +6,7 @@ using AutoMapper;
 
 namespace AppointmentAPI.Application.Mapping;
 
-public class AppointmentProfile : Profile
+public sealed class AppointmentProfile : Profile
 {
     public AppointmentProfile()
     {

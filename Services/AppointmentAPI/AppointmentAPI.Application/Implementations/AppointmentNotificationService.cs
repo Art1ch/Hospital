@@ -6,7 +6,7 @@ using AppointmentAPI.Application.Contracts.AppointmentNotificationService;
 
 namespace AppointmentAPI.Application.Implementations;
 
-internal class AppointmentNotificationService(
+internal sealed class AppointmentNotificationService(
     IEmailService emailService,
     IRemoteCaller remoteCaller,
     IAppointmentRepository repository

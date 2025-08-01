@@ -20,9 +20,11 @@ public class Program
 
         var connectionString = builder.ConfigureAppointmentDbSetting();
         var grpcSettings = builder.ConfigureGrpcSettings();
-        builder.Services.AddApplicationLayer();
-        builder.Services.AddInfrastructureLayer(connectionString, grpcSettings);
-        builder.Services.AddHostedService<AppointmentReminderWorker>();
+
+        builder.Services
+            .AddApplicationLayer()
+            .AddInfrastructureLayer(connectionString, grpcSettings)
+            .AddHostedService<AppointmentReminderWorker>();
 
         var app = builder.Build();
 

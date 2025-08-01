@@ -76,7 +76,10 @@ internal sealed class AppointmentRepository : IAppointmentRepository
         await _connection.ExecuteAsync(sqlQuery, entity);
     }
 
-    public async Task<List<Guid>> GetUpcomingAppointmentsDoctorsIds(int appointmentMinutesBefore, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Guid>> GetUpcomingAppointmentsDoctorsIds(
+        int appointmentMinutesBefore,
+        CancellationToken cancellationToken = default
+    )
     {
         var currentDateTime = DateTime.Now;
         var currentDate = DateOnly.FromDateTime(currentDateTime);

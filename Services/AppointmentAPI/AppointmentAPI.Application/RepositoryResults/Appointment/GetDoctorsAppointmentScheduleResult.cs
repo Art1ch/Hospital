@@ -1,6 +1,6 @@
 ﻿namespace AppointmentAPI.Application.RepositoryResults.Appointment;
 
 public sealed record GetDoctorsAppointmentScheduleResult(
-    List<GetDoctorsAppointmentScheduleItem> Items
+    IEnumerable<GetDoctorsAppointmentScheduleItem> Items
 );
 

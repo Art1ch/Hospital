@@ -7,7 +7,7 @@ using System.Net;
 
 namespace AppointmentAPI.Infrastructure.Services.Email;
 
-internal class EmailService : IEmailService
+internal sealed class EmailService : IEmailService
 {
     private readonly SmtpSettings _smtpSettings;
 
