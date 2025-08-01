@@ -7,15 +7,16 @@ namespace AppointmentAPI.Workers.AppointmentReminderWorker;
 
 internal class AppointmentReminderWorker : BackgroundService
 {
-    private readonly string _cronExpression = "*/5 * * * *";
-    private readonly IAppointmentNotificationService _notifier;
+    private readonly string _cronExpression;
+    private readonly IServiceScopeFactory _scopeFactory;
     private readonly CrontabSchedule _schedule;
     private DateTime _nextRun;
 
-    public AppointmentReminderWorker(IAppointmentNotificationService notifier, IOptions<NotificationSettings> settings)
+    public AppointmentReminderWorker(IServiceScopeFactory scopeFactory, IOptions<NotificationSettings> settings)
     {
-        _notifier = notifier;
-        _cronExpression = $"*/{settings.Value.CheckIntervalMinutes} * * * *";
+        _scopeFactory = scopeFactory;
+        _cronExpression = "*/1 * * * *"; ;
+        //_cronExpression = $"*/{settings.Value.CheckIntervalMinutes} * * * *";
         _schedule = CrontabSchedule.Parse(_cronExpression);
         _nextRun = _schedule.GetNextOccurrence(DateTime.Now);
     }
@@ -27,14 +28,16 @@ internal class AppointmentReminderWorker : BackgroundService
             var now = DateTime.Now;
             if (now > _nextRun)
             {
-                try
+                using (var scope = _scopeFactory.CreateScope())
                 {
-                    await _notifier.NotifyDoctorsAboutAppointment(stoppingToken);
+                    var notifier = scope.ServiceProvider
+                        .GetRequiredService<IAppointmentNotificationService>();
+                    Console.WriteLine("Notifying doctors!!!");
+
+                    await notifier.NotifyDoctorsAboutAppointment(stoppingToken);
+                    Console.WriteLine("Notified!!!");
                 }
-                catch (Exception ex)
-                {
-                    throw;
-                }
+                _nextRun = _schedule.GetNextOccurrence(now);
                 _nextRun = _schedule.GetNextOccurrence(DateTime.Now);
             }
             var delay = _nextRun - DateTime.Now;

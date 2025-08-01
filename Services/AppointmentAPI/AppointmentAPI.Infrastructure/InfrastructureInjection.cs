@@ -13,7 +13,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
 using Shared.Protos.Auth;
 using Shared.Protos.Doctor;
-using System.Data.Common;
+using System.Data;
 
 namespace AppointmentAPI.Infrastructure;
 
@@ -38,7 +38,7 @@ public static class InfrastructureInjection
 
     private static IServiceCollection AddDbConnection(this IServiceCollection services, string connectionString)
     {
-        services.AddScoped<DbConnection>(_ =>
+        services.AddTransient<IDbConnection>(_ =>
             new SqlConnection(connectionString));
         return services;
     }
@@ -64,7 +64,7 @@ public static class InfrastructureInjection
 
     private static IServiceCollection AddEmail(this IServiceCollection services)
     {
-        services.AddScoped<IEmailService, EmailService>();
+        services.AddTransient<IEmailService, EmailService>();
         return services;
     }
 
@@ -85,7 +85,7 @@ public static class InfrastructureInjection
 
     private static IServiceCollection AddRemoteCaller(this IServiceCollection services)
     {
-        services.AddScoped<IRemoteCaller, RemoteCaller>();
+        services.AddTransient<IRemoteCaller, RemoteCaller>();
         return services;
     }
 }

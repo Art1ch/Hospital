@@ -10,21 +10,8 @@
         }
       ],
       "UpstreamPathTemplate": "/auth/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
-    },
-    {
-      "DownstreamPathTemplate": "/{catchAll}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "authapi",
-          "Port": 80
-        }
-      ],
-      "UpstreamPathTemplate": "/auth.grpc.{catchAll}",
       "UpstreamHttpMethod": [ "POST" ]
     },
-
     {
       "DownstreamPathTemplate": "/api/doctor/{everything}",
       "DownstreamScheme": "http",
@@ -35,21 +22,21 @@
         }
       ],
       "UpstreamPathTemplate": "/doctor/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+      "UpstreamHttpMethod": [ "GET", "POST", "PATCH", "DELETE" ]
     },
+
     {
-      "DownstreamPathTemplate": "/{catchAll}",
+      "DownstreamPathTemplate": "/api/office/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "doctorapi",
+          "Host": "officeapi",
           "Port": 80
         }
       ],
-      "UpstreamPathTemplate": "/doctor.grpc.{catchAll}",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamPathTemplate": "/office/{everything}",
+      "UpstreamHttpMethod": ["GET", "POST", "PATCH", "DELETE"]
     },
-
     {
       "DownstreamPathTemplate": "/api/appointment/{everything}",
       "DownstreamScheme": "http",
@@ -60,7 +47,7 @@
         }
       ],
       "UpstreamPathTemplate": "/appointment/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+      "UpstreamHttpMethod": [ "GET", "POST", "PATCH", "DELETE" ]
     }
   ],
   "GlobalConfiguration": {

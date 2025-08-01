@@ -21,8 +21,8 @@ services:
   doctorapi:
     image: ${DOCKER_REGISTRY-}doctorapi
     build:
-      context: ./Services/DoctorAPI
-      dockerfile: Dockerfile
+      context: ./Services
+      dockerfile: DoctorDockerfile
     networks:
       - backend
     depends_on:
@@ -47,12 +47,26 @@ services:
     volumes:
       - doctordata:/var/lib/postgresql/data
     restart: unless-stopped
+
+  doctor.cache:
+    image: redis:7.0-alpine
+    command: redis-server --requirepass CachePassword --appendonly yes --enable-debug-command yes
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+    ports:
+      - "6379:6379"
+    volumes:
+      - doctor_cachedata:/data
     
   authapi:
     image: ${DOCKER_REGISTRY-}authapi
     build:
-      context: ./Services/AuthAPI
-      dockerfile: Dockerfile
+      context: ./Services
+      dockerfile: AuthDockerfile
     networks:
       - backend
     depends_on:
@@ -77,20 +91,6 @@ services:
     volumes:
       - authdata:/var/lib/postgresql/data
     restart: unless-stopped
- 
-  doctor.cache:
-    image: redis:7.0-alpine
-    command: redis-server --requirepass CachePassword --appendonly yes --enable-debug-command yes
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 3s
-      retries: 3
-    ports:
-      - "6379:6379"
-    volumes:
-      - doctor_cachedata:/data
 
   officeapi:
     image: ${DOCKER_REGISTRY-}officeapi
@@ -128,32 +128,36 @@ services:
     restart: unless-stopped
     
   appointmentapi:
-     image: ${DOCKER_REGISTRY-}officeapi
+     image: ${DOCKER_REGISTRY-}appointmentapi
      build:
-       context:  ./Services/AppointmentAPI
-       dockerfile: Dockerfile
+       context:  ./Services
+       dockerfile: AppointmentDockerfile
      environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:80
+       - ASPNETCORE_ENVIRONMENT=Development
+       - ASPNETCORE_URLS=http://+:80
+     depends_on:
+        - appointment.db
      volumes:
-      - "${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets/:ro"
+       - "${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets/:ro"
      restart: unless-stopped
+     networks:
+       - backend 
 
   appointment.db:
-    image: mcr.microsoft.com/mssql/server:2022-lts
-    container_name: sqlserver
+    image: mcr.microsoft.com/mssql/server:2022-latest
     ports:
-      - "1433:1433"
+     - "1433:1433"
     environment:
       SA_PASSWORD: "YourStrong!Passw0rd"
       ACCEPT_EULA: "Y"
     volumes:
-      - appointmentdata:/var/opt/mssql
+     - appointmentdata:/var/opt/mssql
+    networks: 
+     - backend
 
 networks:
   backend:
     driver: bridge
-
 
 volumes:
     doctordata:

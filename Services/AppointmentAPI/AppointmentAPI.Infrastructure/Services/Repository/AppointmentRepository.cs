@@ -59,7 +59,7 @@ internal sealed class AppointmentRepository : IAppointmentRepository
                 SELECT Date, StartAppointmentTime, EndAppointmentTime
                 FROM {TableName}
                 WHERE Id = @Id";
-        var items = await _connection.QueryAsync<GetDoctorsAppointmentScheduleItem>(sqlQuery, cancellationToken);
+        var items = await _connection.QueryAsync<GetDoctorsAppointmentScheduleItem>(sqlQuery, new { Id = id });
         return new GetDoctorsAppointmentScheduleResult(items.ToList());
     }
 
@@ -87,11 +87,10 @@ internal sealed class AppointmentRepository : IAppointmentRepository
         var maxTime = targetTime.AddMinutes(toleranceMinutes);
 
         const string sqlQuery = @"
-        SELECT 
-            DoctorId, 
+        SELECT DoctorId
         FROM Appointments
         WHERE Status = 3
-          AND CAST(Date AS datetime) + CAST(StartAppointmentTime AS datetime) 
+          AND DATEADD(SECOND, DATEDIFF(SECOND, 0, StartAppointmentTime), CAST(Date AS datetime))
               BETWEEN @MinTime AND @MaxTime";
 
         var doctorIds = await _connection.QueryAsync<Guid>(
