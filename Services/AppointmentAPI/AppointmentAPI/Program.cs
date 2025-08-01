@@ -20,6 +20,7 @@ public class Program
 
         var connectionString = builder.ConfigureAppointmentDbSetting();
         var grpcSettings = builder.ConfigureGrpcSettings();
+        builder.ConfigureNotificationSettings();
 
         builder.Services
             .AddApplicationLayer()

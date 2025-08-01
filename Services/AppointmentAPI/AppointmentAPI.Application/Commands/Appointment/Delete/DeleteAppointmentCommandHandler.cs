@@ -9,7 +9,8 @@ internal sealed class DeleteAppointmentCommandHandler(
 {
     public async Task<Unit> Handle(DeleteAppointmentCommand command, CancellationToken cancellationToken)
     {
-        await appointmentRepository.DeleteAsync(command.Id, cancellationToken);
+        var id = command.Request.Id;
+        await appointmentRepository.DeleteAsync(id, cancellationToken);
         return Unit.Value;
     }
 }

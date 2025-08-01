@@ -3,30 +3,41 @@ using AppointmentAPI.Application.Contracts.RemoteCaller;
 using AppointmentAPI.Application.Contracts.Repository.Appointment;
 using AppointmentAPI.Application.Models;
 using AppointmentAPI.Application.Contracts.AppointmentNotificationService;
+using Microsoft.Extensions.Options;
+using AppointmentAPI.Application.Settings;
 
 namespace AppointmentAPI.Application.Implementations;
 
 internal sealed class AppointmentNotificationService(
     IEmailService emailService,
     IRemoteCaller remoteCaller,
-    IAppointmentRepository repository
+    IAppointmentRepository repository,
+    IOptions<NotificationSettings> options
 ) : IAppointmentNotificationService
 {
-    private const int NotificationMinutesBefore = 10;
-    private const string MessageSubject = "Appointment";
-    private const string MessageHtmlBody = "You have an appointment in 10 minutes";
-
     public async Task NotifyDoctorsAboutAppointment(CancellationToken cancellationToken = default)
     {
-        var doctorsIds = await repository.GetUpcomingAppointmentsDoctorsIds(NotificationMinutesBefore, cancellationToken);
-        var emails = await remoteCaller.GetDoctorsEmailsAsync(doctorsIds);
+        var toleranceMinutes = options.Value.ToleranceMinutes;
+        var configs = options.Value.NotificationConfigs;
+
+        foreach (var config in configs)
+        {
+            var doctorsIds = await repository.GetUpcomingAppointmentsDoctorsIds(config.MinutesBefore, toleranceMinutes, cancellationToken);
+            var emails = await remoteCaller.GetDoctorsEmailsAsync(doctorsIds);
+            await SendNotifications(emails, config);
+        }
+    }
+
+    private async Task SendNotifications(IEnumerable<string> emails, NotificationConfig config)
+    {
         foreach (var email in emails)
         {
             var message = new MessageModel()
             {
-                Subject = MessageSubject,
-                HtmlBody = MessageHtmlBody,
+                Subject = config.Subject,
+                HtmlBody = config.Body,
             };
+
             await emailService.SendMessage(email, message);
         }
     }

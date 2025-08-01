@@ -38,7 +38,7 @@ public static class AppointmentEndpoints
             async (
             [FromServices] ISender sender,
             [FromBody] ChangeAppointmentsStatusRequest request
-            ) =>
+        ) =>
         {
             var command = new ChangeAppointmentsStatusCommand(request);
             await sender.Send(command);
@@ -46,7 +46,8 @@ public static class AppointmentEndpoints
 
         group.MapDelete("/", async ([FromServices] ISender sender, [FromQuery] Guid id) =>
         {
-            var command = new DeleteAppointmentCommand(id);
+            var request = new DeleteAppointmentRequest(id);
+            var command = new DeleteAppointmentCommand(request);
             await sender.Send(command);
         });
 

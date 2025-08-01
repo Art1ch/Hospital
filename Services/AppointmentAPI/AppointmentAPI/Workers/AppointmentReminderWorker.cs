@@ -1,19 +1,22 @@
 ﻿using AppointmentAPI.Application.Contracts.AppointmentNotificationService;
+using AppointmentAPI.Application.Settings;
+using Microsoft.Extensions.Options;
 using NCrontab;
 
 namespace AppointmentAPI.Workers.AppointmentReminderWorker;
 
 internal class AppointmentReminderWorker : BackgroundService
 {
-    private const string CronExpression = "*/5 * * * *";
+    private readonly string _cronExpression = "*/5 * * * *";
     private readonly IAppointmentNotificationService _notifier;
     private readonly CrontabSchedule _schedule;
     private DateTime _nextRun;
 
-    public AppointmentReminderWorker(IAppointmentNotificationService notifier)
+    public AppointmentReminderWorker(IAppointmentNotificationService notifier, IOptions<NotificationSettings> settings)
     {
         _notifier = notifier;
-        _schedule = CrontabSchedule.Parse(CronExpression);
+        _cronExpression = $"*/{settings.Value.CheckIntervalMinutes} * * * *";
+        _schedule = CrontabSchedule.Parse(_cronExpression);
         _nextRun = _schedule.GetNextOccurrence(DateTime.Now);
     }
 

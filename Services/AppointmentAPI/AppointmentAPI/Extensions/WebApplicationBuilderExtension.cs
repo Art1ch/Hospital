@@ -1,4 +1,5 @@
-﻿using AppointmentAPI.Infrastructure.Settings;
+﻿using AppointmentAPI.Application.Settings;
+using AppointmentAPI.Infrastructure.Settings;
 
 namespace AppointmentAPI.Extensions;
 
@@ -18,5 +19,11 @@ public static class WebApplicationBuilderExtension
         var settings = builder.Configuration.GetSection(sectionName).Get<GrpcSettings>()!;
         builder.Services.Configure<GrpcSettings>(builder.Configuration.GetSection(sectionName));
         return settings;
+    }
+
+    public static void ConfigureNotificationSettings(this WebApplicationBuilder builder)
+    {
+        var sectionName = nameof(NotificationSettings);
+        builder.Services.Configure<NotificationSettings>(builder.Configuration.GetSection(sectionName));
     }
 }

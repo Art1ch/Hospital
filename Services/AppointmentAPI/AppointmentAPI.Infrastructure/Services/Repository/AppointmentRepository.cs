@@ -77,26 +77,27 @@ internal sealed class AppointmentRepository : IAppointmentRepository
     }
 
     public async Task<IEnumerable<Guid>> GetUpcomingAppointmentsDoctorsIds(
-        int appointmentMinutesBefore,
+        int minutesBefore,
+        int toleranceMinutes,
         CancellationToken cancellationToken = default
     )
     {
-        var currentDateTime = DateTime.Now;
-        var currentDate = DateOnly.FromDateTime(currentDateTime);
-        var currentTime = TimeOnly.FromDateTime(currentDateTime);
+        var targetTime = DateTime.Now.AddMinutes(minutesBefore);
+        var minTime = targetTime.AddMinutes(-toleranceMinutes);
+        var maxTime = targetTime.AddMinutes(toleranceMinutes);
 
-        var sqlQuery = $@"
-            SELECT DoctorId FROM {TableName}
-            WHERE Date > @CurrentDate
-                OR 
-                (Date = @CurrentDate AND CONVERT(TIME, @CurrentTime) <= 
-                    DATEADD(MINUTE, @AppointmentMinutesBefore, CONVERT(TIME, StartAppointmentTime)))";
-        var doctorsIds = await _connection.QueryAsync<Guid>(sqlQuery,
-            new {
-                CurrentDate = currentDate,
-                CurrentTime = currentTime,
-                AppointmentMinutesBefore = appointmentMinutesBefore,
-            });
-        return doctorsIds.ToList();
+        const string sqlQuery = @"
+        SELECT 
+            DoctorId, 
+        FROM Appointments
+        WHERE Status = 3
+          AND CAST(Date AS datetime) + CAST(StartAppointmentTime AS datetime) 
+              BETWEEN @MinTime AND @MaxTime";
+
+        var doctorIds = await _connection.QueryAsync<Guid>(
+            sqlQuery,
+            new { MinTime = minTime, MaxTime = maxTime });
+
+        return doctorIds;
     }
 }
