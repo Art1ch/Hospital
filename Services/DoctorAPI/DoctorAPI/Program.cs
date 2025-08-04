@@ -3,6 +3,8 @@ using DoctorAPI.Infrastructure;
 using DoctorAPI.Middlewares;
 using DoctorAPI.Extensions;
 using DoctorAPI.Caching;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Doctor.API.Services;
 
 namespace DoctorAPI;
 
@@ -17,6 +19,7 @@ public class Program
         builder.Services.AddSwaggerGen();
         builder.Configuration.AddUserSecrets<Program>();
 
+        builder.ConfigureWebHostKestrel();
         var jwtSettings = builder.ConfigureJwtSettings();
         var connectionString = builder.ConfigureDoctorDbSettings();
         var cacheSettings = builder.ConfigureCacheSettings();

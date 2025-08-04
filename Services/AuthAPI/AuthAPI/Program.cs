@@ -16,6 +16,7 @@ public class Program
         builder.Services.AddSwaggerGen();
         builder.Configuration.AddUserSecrets<Program>();
 
+        builder.ConfigureWebHostKestrel();
         builder.ConfigureJwtSettings();
         var connectionString = builder.ConfigureAuthDbSettings();
 
@@ -29,8 +30,6 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-
-        app.UseHttpsRedirection();
 
         app.UseAuthorization();
 

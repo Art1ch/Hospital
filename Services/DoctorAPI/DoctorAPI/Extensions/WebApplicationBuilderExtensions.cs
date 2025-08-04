@@ -1,5 +1,6 @@
 ﻿using DoctorAPI.Caching.Settings;
 using DoctorAPI.Infrastructure.Settings;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 namespace DoctorAPI.Extensions;
 
@@ -27,5 +28,21 @@ internal static class WebApplicationBuilderExtensions
             builder.Configuration.GetSection(nameof(CacheSettings)));
 
         return builder.Configuration.Get<CacheSettings>()!;
+    }
+    
+    public static void ConfigureWebHostKestrel(this WebApplicationBuilder builder)
+    {
+        builder.WebHost.ConfigureKestrel(options =>
+        {
+            options.ListenAnyIP(80, listenOptions =>
+            {
+                listenOptions.Protocols = HttpProtocols.Http1;
+            });
+
+            options.ListenAnyIP(5000, listenOptions =>
+            {
+                listenOptions.Protocols = HttpProtocols.Http2;
+            });
+        });
     }
 }
