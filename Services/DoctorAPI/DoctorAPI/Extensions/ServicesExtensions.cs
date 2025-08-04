@@ -65,7 +65,7 @@ internal static class ServicesExtensions
         });
     }
 
-    public static void AddCaching(this IServiceCollection services, CacheSettings settings)
+    public static void AddDistributedCache(this IServiceCollection services, CacheSettings settings)
     {
         services.AddStackExchangeRedisCache(options =>
         { 

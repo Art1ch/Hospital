@@ -2,7 +2,7 @@ using DoctorAPI.Application;
 using DoctorAPI.Infrastructure;
 using DoctorAPI.Middlewares;
 using DoctorAPI.Extensions;
-using Doctor.API.Services;
+using DoctorAPI.Caching;
 
 namespace DoctorAPI;
 
@@ -23,11 +23,11 @@ public class Program
 
         builder.Services.AddJwtAuthentication(jwtSettings!);
         builder.Services.AddSwaggerWithJwt();
-        builder.Services.AddCaching(cacheSettings);
+        builder.Services.AddDistributedCache(cacheSettings);
 
         builder.Services.AddApplicationLayer();
         builder.Services.AddInfrastructureLayer(connectionString);
-        builder.Services.AddCaching(cacheSettings);
+        builder.Services.AddCaching();
 
         builder.Services.AddGrpc();
 
