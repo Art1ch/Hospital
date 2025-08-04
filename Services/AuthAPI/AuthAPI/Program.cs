@@ -18,15 +18,7 @@ public class Program
         builder.Services.AddSwaggerGen();
         builder.Configuration.AddUserSecrets<Program>();
 
-        builder.WebHost.ConfigureKestrel(options =>
-        {
-            options.ListenAnyIP(5000, listenOptions =>
-            {
-                listenOptions.Protocols = HttpProtocols.Http2;
-            });
-        });
-
-
+        builder.ConfigureWebHostKestrel();
         builder.ConfigureJwtSettings();
         var connectionString = builder.ConfigureAuthDbSettings();
 
@@ -42,8 +34,6 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-
-        app.UseHttpsRedirection();
 
         app.UseAuthorization();
 

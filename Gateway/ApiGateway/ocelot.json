@@ -1,7 +1,7 @@
 {
   "Routes": [
     {
-      "DownstreamPathTemplate": "/api/auth/{everything}",
+      "DownstreamPathTemplate": "/auth/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -13,7 +13,7 @@
       "UpstreamHttpMethod": [ "POST" ]
     },
     {
-      "DownstreamPathTemplate": "/api/doctor/{everything}",
+      "DownstreamPathTemplate": "/doctor/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -24,9 +24,8 @@
       "UpstreamPathTemplate": "/doctor/{everything}",
       "UpstreamHttpMethod": [ "GET", "POST", "PATCH", "DELETE" ]
     },
-
     {
-      "DownstreamPathTemplate": "/api/office/{everything}",
+      "DownstreamPathTemplate": "/office/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -35,10 +34,10 @@
         }
       ],
       "UpstreamPathTemplate": "/office/{everything}",
-      "UpstreamHttpMethod": ["GET", "POST", "PATCH", "DELETE"]
+      "UpstreamHttpMethod": [ "GET", "POST", "PATCH", "DELETE" ]
     },
     {
-      "DownstreamPathTemplate": "/api/appointment/{everything}",
+      "DownstreamPathTemplate": "/appointment/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
