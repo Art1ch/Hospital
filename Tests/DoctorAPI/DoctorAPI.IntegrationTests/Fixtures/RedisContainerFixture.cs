@@ -13,24 +13,26 @@ public sealed class RedisContainerFixture : IAsyncLifetime
     public RedisContainer Container;
     public IDistributedCache CacheMemory;
     internal RedisSettings _settings;
+    private const string EnvFilePath = "../../../../../../.env";
     private IDatabase _database;
     private IConnectionMultiplexer _connection; 
 
     public async Task InitializeAsync()
     {
         ConfigureRedisSettings();
-        CreateCacheMemory();
         CreateContainer();
         await Container.StartAsync();
         await CreateConnection();
+
         CreateDatabase();
+        CreateCacheMemory();
     }
 
 
     public async Task DisposeAsync()
     {
         await ClearCacheStorage();
-        await _connection.CloseAsync();
+        //await _connection.CloseAsync();
         await _connection.DisposeAsync();
         await Container.StopAsync();
         await Container.DisposeAsync();
@@ -38,14 +40,14 @@ public sealed class RedisContainerFixture : IAsyncLifetime
 
     private void ConfigureRedisSettings()
     {
-        var config = new ConfigurationBuilder()
-          .AddUserSecrets<RedisSettings>()
-          .Build();
-        var sectionName = typeof(RedisSettings).Name;
+        DotNetEnv.Env.Load(EnvFilePath);
 
-        _settings = config
-            .GetSection(sectionName)
-            .Get<RedisSettings>()!;
+        var config = new ConfigurationBuilder()
+            .AddEnvironmentVariables()
+            .Build();
+
+        var configRoot = config.GetSection(nameof(RedisSettings));
+        _settings = configRoot.Get<RedisSettings>()!;
     }
 
     private void CreateCacheMemory()

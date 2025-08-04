@@ -6,8 +6,6 @@ using DoctorAPI.Application.Responses.Doctor;
 using DoctorAPI.IntegrationTests.Fixtures;
 using DoctorAPI.Caching.Cache;
 using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Caching.StackExchangeRedis;
-using Microsoft.Extensions.Options;
 using System.Text.Json;
 
 namespace DoctorAPI.IntegrationTests.Tests;
@@ -19,7 +17,7 @@ public class CacheServiceTests : IClassFixture<RedisContainerFixture>
 
     public CacheServiceTests(RedisContainerFixture fixture)
     {
-        
+        _cacheMemory = fixture.CacheMemory;
         _cacheService = new CacheService(_cacheMemory);
     }
 
@@ -29,6 +27,7 @@ public class CacheServiceTests : IClassFixture<RedisContainerFixture>
         //Arrange
         var doctorInfo = new GetDoctorInfoByIdResult
         (
+            Guid.NewGuid(),
             Guid.NewGuid(),
             "TestFirstName",
             "TestLastName",
@@ -67,6 +66,7 @@ public class CacheServiceTests : IClassFixture<RedisContainerFixture>
         var doctorInfo = new GetDoctorInfoByIdResult
         (
             Guid.NewGuid(),
+            Guid.NewGuid(),
             "TestFirstName",
             "TestLastName",
             "TestMiddleName",
@@ -103,6 +103,7 @@ public class CacheServiceTests : IClassFixture<RedisContainerFixture>
         //Arrange
         var doctorInfo = new GetDoctorInfoByIdResult
         (
+            Guid.NewGuid(),
             Guid.NewGuid(),
             "TestFirstName",
             "TestLastName",
