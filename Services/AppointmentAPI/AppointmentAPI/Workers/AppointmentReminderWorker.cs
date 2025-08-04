@@ -32,10 +32,8 @@ internal class AppointmentReminderWorker : BackgroundService
                 {
                     var notifier = scope.ServiceProvider
                         .GetRequiredService<IAppointmentNotificationService>();
-                    Console.WriteLine("Notifying doctors!!!");
 
                     await notifier.NotifyDoctorsAboutAppointment(stoppingToken);
-                    Console.WriteLine("Notified!!!");
                 }
                 _nextRun = _schedule.GetNextOccurrence(now);
                 _nextRun = _schedule.GetNextOccurrence(DateTime.Now);
