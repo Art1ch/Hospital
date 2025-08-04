@@ -1,6 +1,8 @@
 using AuthAPI.Application;
 using AuthAPI.Extensions;
 using AuthAPI.Infrastructure;
+using AuthAPI.Services;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 namespace AuthAPI;
 
@@ -16,11 +18,22 @@ public class Program
         builder.Services.AddSwaggerGen();
         builder.Configuration.AddUserSecrets<Program>();
 
+        builder.WebHost.ConfigureKestrel(options =>
+        {
+            options.ListenAnyIP(5000, listenOptions =>
+            {
+                listenOptions.Protocols = HttpProtocols.Http2;
+            });
+        });
+
+
         builder.ConfigureJwtSettings();
         var connectionString = builder.ConfigureAuthDbSettings();
 
         builder.Services.AddApplicationLayer();
         builder.Services.AddInfrastructureLayer(connectionString);
+
+        builder.Services.AddGrpc();
 
         var app = builder.Build();
 
@@ -34,8 +47,8 @@ public class Program
 
         app.UseAuthorization();
 
-
         app.MapControllers();
+        app.MapGrpcService<AuthGrpcService>();
 
         app.Run();
     }

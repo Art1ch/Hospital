@@ -45,6 +45,7 @@ internal class DoctorRepository : Repository<DoctorEntity, Guid>, IDoctorReposit
             .Where(d => d.Id == id)
             .Select(d => new GetDoctorInfoByIdResult(
                 d.Id,
+                d.AccountId,
                 d.FirstName,
                 d.LastName,
                 d.MiddleName,
