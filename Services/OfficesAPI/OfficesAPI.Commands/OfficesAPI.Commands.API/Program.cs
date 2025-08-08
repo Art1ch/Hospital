@@ -19,8 +19,8 @@ public class Program
         var messageBrokerSettings = builder.ConfigureMessageBroker();
         var eventStoreSettings = builder.ConfigureEventStore();
 
-        builder.Services.AddApplicationLayer();
-        builder.Services.AddInfrastructureLayer(eventStoreSettings, messageBrokerSettings);
+        builder.Services.AddApplicationLayer()
+            .AddInfrastructureLayer(eventStoreSettings, messageBrokerSettings);
 
         var app = builder.Build();
 

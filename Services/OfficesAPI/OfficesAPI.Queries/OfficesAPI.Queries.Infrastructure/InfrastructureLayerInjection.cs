@@ -9,25 +9,33 @@ namespace OfficesAPI.Queries.Infrastructure;
 
 public static class InfrastructureLayerInjection
 {
-    public static void AddInfrastructureLayer(this IServiceCollection services)
+    public static IServiceCollection AddInfrastructureLayer(this IServiceCollection services)
     {
-        AddDbContext(services);
-        AddRepositories(services);
-        AddUnitOfWork(services);
+        services.AddDbContext().
+            AddRepositories().
+            AddUnitOfWork();
+
+        return services;
     }
 
-    private static void AddDbContext(IServiceCollection services)
+    private static IServiceCollection AddDbContext(this IServiceCollection services)
     {
         services.AddScoped<OfficeDbContext>();
+
+        return services;
     }
 
-    private static void AddRepositories(IServiceCollection services)
+    private static IServiceCollection AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<IOfficeRepository, OfficeRepository>();
+
+        return services;
     }
 
-    private static void AddUnitOfWork(IServiceCollection services)
+    private static IServiceCollection AddUnitOfWork(this IServiceCollection services)
     {
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        return services;
     }
 }

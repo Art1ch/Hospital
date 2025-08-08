@@ -10,30 +10,34 @@ namespace OfficesAPI.Infrastructure;
 
 public static class InfrastructureLayerInjection
 {
-    public static void AddInfrastructureLayer(
+    public static IServiceCollection AddInfrastructureLayer(
         this IServiceCollection services,
         EventStoreSettings eventStoreSettings,
         MessageBrokerSettings messageBrokerSettings
     )
     {
-        AddEventStore(services, eventStoreSettings);
-        AddMessageBroker(services, messageBrokerSettings);
-        AddMessagePublisher(services);
+        services.AddEventStore(eventStoreSettings).
+            AddMessageBroker(messageBrokerSettings).
+            AddMessagePublisher();
+
+        return services;
     }
 
 
-    private static void AddEventStore(this IServiceCollection services, EventStoreSettings settings)
+    private static IServiceCollection AddEventStore(this IServiceCollection services, EventStoreSettings settings)
     {
-        services.AddSingleton(sp => 
+        services.AddSingleton(sp =>
         {
             var options = EventStoreClientSettings.Create(settings.ConnectionString);
             return new EventStoreClient(options);
         });
 
         services.AddScoped(typeof(IEventStore<>), typeof(EventStore<>));
-    } 
 
-    private static void AddMessageBroker(this IServiceCollection services, MessageBrokerSettings messageBrokerSettings)
+        return services;
+    }
+
+    private static IServiceCollection AddMessageBroker(this IServiceCollection services, MessageBrokerSettings messageBrokerSettings)
     {
         services.AddMassTransit(x =>
         {
@@ -46,10 +50,14 @@ public static class InfrastructureLayerInjection
                 });
             });
         });
+
+        return services;
     }
 
-    private static void AddMessagePublisher(IServiceCollection services)
+    private static IServiceCollection AddMessagePublisher(this IServiceCollection services)
     {
         services.AddScoped<IMessagePublisher, MessagePublisher>();
+
+        return services;
     }
 }

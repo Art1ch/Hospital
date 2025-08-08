@@ -5,7 +5,7 @@ using OfficesAPI.Shared.Events;
 
 namespace OfficesAPI.Application.Mapping;
 
-internal class OfficeProfile : Profile
+internal sealed class OfficeProfile : Profile
 {
     public OfficeProfile()
     {

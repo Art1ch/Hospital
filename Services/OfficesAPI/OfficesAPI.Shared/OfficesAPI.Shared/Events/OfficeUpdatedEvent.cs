@@ -1,5 +1,10 @@
-﻿namespace OfficesAPI.Shared.Events;
+﻿using OfficesAPI.Shared.Enum;
 
-public class OfficeUpdatedEvent
-{
-}
+namespace OfficesAPI.Shared.Events;
+
+public record OfficeUpdatedEvent(
+    Guid Id,
+    string Address,
+    string RegistryPhoneNumber,
+    OfficeStatus Status
+);

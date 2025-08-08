@@ -11,47 +11,57 @@ namespace OfficesAPI.Queries.Application;
 
 public static class ApplicationLayerInjection
 {
-    public static void AddApplicationLayer(this IServiceCollection services, MessageBrokerSettings messageBrokerSettings)
-    {
-        var assembly = typeof(ApplicationLayerInjection).Assembly;
+    private static readonly Assembly _assembly = typeof(ApplicationLayerInjection).Assembly;
 
-        AddValidation(services, assembly);
-        AddQueries(services, assembly);
-        AddMapping(services, assembly);
-        AddPipelineBehavior(services);
-        AddConsumers(services, assembly, messageBrokerSettings);
+    public static IServiceCollection AddApplicationLayer(this IServiceCollection services, MessageBrokerSettings messageBrokerSettings)
+    {
+        services.AddValidation().
+            AddQueries().
+            AddMapping().
+            AddPipelineBehavior().
+            AddConsumers(messageBrokerSettings);
+
+        return services;
     }
 
 
-    private static void AddValidation(IServiceCollection services, Assembly assembly)
+    private static IServiceCollection AddValidation(this IServiceCollection services)
     {
         services.AddFluentValidationAutoValidation();
-        services.AddValidatorsFromAssembly(assembly);
+        services.AddValidatorsFromAssembly(_assembly);
+
+        return services;
     }
 
-    private static void AddQueries(IServiceCollection services, Assembly assembly)
+    private static IServiceCollection AddQueries(this IServiceCollection services)
     {
         services.AddMediatR(opt =>
         {
-            opt.RegisterServicesFromAssembly(assembly);
+            opt.RegisterServicesFromAssembly(_assembly);
         });
+
+        return services;
     }
 
-    private static void AddMapping(IServiceCollection services, Assembly assembly)
+    private static IServiceCollection AddMapping(this IServiceCollection services)
     {
-        services.AddAutoMapper(assembly);
+        services.AddAutoMapper(_assembly);
+
+        return services;
     }
 
-    private static void AddPipelineBehavior(IServiceCollection services)
+    private static IServiceCollection AddPipelineBehavior(this IServiceCollection services)
     {
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
+
+        return services;
     }
 
-    private static void AddConsumers(IServiceCollection services, Assembly assembly, MessageBrokerSettings messageBrokerSettings)
+    private static IServiceCollection AddConsumers(this IServiceCollection services, MessageBrokerSettings messageBrokerSettings)
     {
         services.AddMassTransit(x =>
         {
-            x.AddConsumers(assembly);
+            x.AddConsumers(_assembly);
             x.UsingRabbitMq((context, cfg) =>
             {
                 cfg.Host(messageBrokerSettings.Hostname, messageBrokerSettings.VirtualHost, h =>
@@ -64,5 +74,7 @@ public static class ApplicationLayerInjection
             });
 
         });
+
+        return services;
     }
 }

@@ -7,31 +7,39 @@ namespace OfficesAPI.Commands.Application;
 
 public static class ApplicationLayerInjection
 {
-    public static void AddApplicationLayer(this IServiceCollection services)
-    {
-        var assembly = typeof(ApplicationLayerInjection).Assembly;
+    private static readonly Assembly _assembly = typeof(ApplicationLayerInjection).Assembly;
 
-        AddValidation(services, assembly);
-        AddCommands(services, assembly);
-        AddMapping(services, assembly);
+    public static IServiceCollection AddApplicationLayer(this IServiceCollection services)
+    {
+        services.AddValidation().
+            AddCommands().
+            AddMapping();
+
+        return services;
     }
 
-    private static void AddValidation(IServiceCollection services, Assembly assembly)
+    private static IServiceCollection AddValidation(this IServiceCollection services)
     {
         services.AddFluentValidationAutoValidation();
-        services.AddValidatorsFromAssembly(assembly);
+        services.AddValidatorsFromAssembly(_assembly);
+
+        return services;
     }
 
-    private static void AddCommands(IServiceCollection services, Assembly assembly)
+    private static IServiceCollection AddCommands(this IServiceCollection services)
     {
         services.AddMediatR(opt =>
         {
-            opt.RegisterServicesFromAssembly(assembly);
+            opt.RegisterServicesFromAssembly(_assembly);
         });
+
+        return services;
     }
 
-    private static void AddMapping(IServiceCollection services, Assembly assembly)
+    private static IServiceCollection AddMapping(this IServiceCollection services)
     {
-        services.AddAutoMapper(assembly);
+        services.AddAutoMapper(_assembly);
+
+        return services;
     }
 }

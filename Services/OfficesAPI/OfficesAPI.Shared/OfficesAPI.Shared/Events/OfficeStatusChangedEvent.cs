@@ -2,8 +2,7 @@
 
 namespace OfficesAPI.Shared.Events;
 
-public class OfficeStatusChangedEvent
-{
-    public Guid Id { get; set; }
-    public OfficeStatus Status { get; set; }
-}
+public record OfficeStatusChangedEvent(
+   Guid Id,
+   OfficeStatus Status
+);

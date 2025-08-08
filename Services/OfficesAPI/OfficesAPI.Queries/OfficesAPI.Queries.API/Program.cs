@@ -18,8 +18,8 @@ public class Program
         builder.ConfigureDbSettings();
         var messageBrokerSettings = builder.ConfigureMessageBroker();
 
-        builder.Services.AddApplicationLayer(messageBrokerSettings);
-        builder.Services.AddInfrastructureLayer();
+        builder.Services.AddApplicationLayer(messageBrokerSettings)
+            .AddInfrastructureLayer();
 
         var app = builder.Build();
 
