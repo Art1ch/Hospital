@@ -44,8 +44,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OfficesAPI.Infrastructure",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OfficeAPI", "Services\OfficesAPI\OfficeAPI\OfficeAPI.csproj", "{F37B5761-A1AD-46E2-BD80-C11CEBB8379A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DoctorAPI", "DoctorAPI", "{A828BBF2-6509-45F1-B805-A5188ADCFE55}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoctorAPI.UnitTests", "Tests\DoctorAPI\DoctorAPI.UnitTests\DoctorAPI.UnitTests.csproj", "{5A00F800-2BA5-4799-A458-289FA1601C9D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoctorAPI.IntegrationTests", "Tests\DoctorAPI\DoctorAPI.IntegrationTests\DoctorAPI.IntegrationTests.csproj", "{92CBF4AF-51F8-45F2-B40E-3C0493DFC6CC}"
