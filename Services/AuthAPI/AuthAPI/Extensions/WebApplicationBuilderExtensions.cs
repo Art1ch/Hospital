@@ -5,6 +5,8 @@ namespace AuthAPI.Extensions;
 
 internal static class WebApplicationBuilderExtensions
 {
+    private const string ResourcesPath = "Resources";
+
     public static void ConfigureJwtSettings(this WebApplicationBuilder builder)
     {
         var sectionName = nameof(JwtSettings);
@@ -21,6 +23,6 @@ internal static class WebApplicationBuilderExtensions
 
     public static void AddResourcePathForLocalization(this WebApplicationBuilder builder)
     {
-        builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+        builder.Services.AddLocalization(options => options.ResourcesPath = ResourcesPath);
     }
 }

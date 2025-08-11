@@ -43,14 +43,14 @@ internal class ExceptionMiddleware
 
         switch (exception)
         {
-            //case ValidationException validationException:
-            //    status = StatusCodes.Status400BadRequest;
-            //    errorTitle = _localizer["ValidationError"];
-            //    detail = string.Join(";", validationException.Errors.Select(e =>
-            //    {
-            //        return _localizer[e.ErrorCode];
-            //    }));
-            //    break;
+            case ValidationException validationException:
+                status = StatusCodes.Status400BadRequest;
+                errorTitle = _localizer["ValidationError"];
+                detail = string.Join(";", validationException.Errors.Select(e =>
+                {
+                    return _localizer[e.ErrorCode];
+                }));
+                break;
             case AccountAlreadyExistsException accountAlreadyExistsException:
                 status = StatusCodes.Status409Conflict;
                 errorTitle = _localizer["AccountAlreadyExists"];
