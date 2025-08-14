@@ -2,6 +2,7 @@
 
 public interface IRepository<TEntity, TId> where TEntity : class
 {
+    IQueryable<TEntity> GetEntitiesQuery();
     Task<TEntity> GetAsync(TId id, CancellationToken cancellationToken = default);
     Task CreateAsync(TEntity entity, CancellationToken cancellationToken = default);
     Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default);

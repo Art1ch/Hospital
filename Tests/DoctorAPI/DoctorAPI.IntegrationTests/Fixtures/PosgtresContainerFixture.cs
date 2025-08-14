@@ -13,6 +13,7 @@ public sealed class PostgresContainerFixture : IAsyncLifetime
     public IUnitOfWork UnitOfWork;
     public PostgreSqlContainer Container;
     internal DoctorDbContext _dbContext;
+    private const string EnvFilePath = "../../../../../../.env";
     private PostgresDbSettings _settings;
 
     public async Task InitializeAsync()
@@ -37,14 +38,14 @@ public sealed class PostgresContainerFixture : IAsyncLifetime
 
     private void ConfigureDbSettings()
     {
-        var config = new ConfigurationBuilder()
-           .AddUserSecrets<PostgresDbSettings>()
-           .Build();
-        var sectionName = typeof(PostgresDbSettings).Name;
+        DotNetEnv.Env.Load(EnvFilePath);
 
-        _settings = config
-            .GetSection(sectionName)
-            .Get<PostgresDbSettings>()!;
+        var config = new ConfigurationBuilder()
+            .AddEnvironmentVariables()
+            .Build();
+
+        var configRoot = config.GetSection(nameof(PostgresDbSettings));
+        _settings = configRoot.Get<PostgresDbSettings>()!;
     }
 
     private void CreateContainer()

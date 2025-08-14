@@ -65,6 +65,7 @@ public class GetDoctorByIdQueryHandlerTests
 
         var repositoryResult = new GetDoctorInfoByIdResult(
             Id: id,
+            AccountId: Guid.NewGuid(),
             FirstName: "TestFirstName",
             LastName: "TestLastName",
             MiddleName: "TestMiddleName",

@@ -6,6 +6,8 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
+using AuthAPI.Services;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 namespace AuthAPI;
 
@@ -21,11 +23,14 @@ public class Program
         builder.Services.AddSwaggerGen();
         builder.Configuration.AddUserSecrets<Program>();
         builder.AddResourcePathForLocalization();
+        builder.ConfigureWebHostKestrel();
         builder.ConfigureJwtSettings();
         var connectionString = builder.ConfigureAuthDbSettings();
 
         builder.Services.AddApplicationLayer();
         builder.Services.AddInfrastructureLayer(connectionString);
+
+        builder.Services.AddGrpc();
 
         var app = builder.Build();
 
@@ -39,7 +44,10 @@ public class Program
         app.UseMiddleware<ExceptionMiddleware>();
         app.UseHttpsRedirection();
         app.UseAuthorization();
+        app.UseAuthorization();
         app.MapControllers();
+        app.MapGrpcService<AuthGrpcService>();
+
         app.Run();
     }
 }

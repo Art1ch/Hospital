@@ -14,32 +14,39 @@ services:
       - authapi
       - officeapi
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:80
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ASPNETCORE_URLS=${ASPNETCORE_URLS}
     restart: unless-stopped
     
   doctorapi:
     image: ${DOCKER_REGISTRY-}doctorapi
     build:
-      context: ./Services/DoctorAPI
-      dockerfile: Dockerfile
+      context: ./Services
+      dockerfile: DoctorDockerfile
     networks:
       - backend
     depends_on:
       - doctor.db
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:80
-    volumes:
-      - "${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets/:ro"
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ASPNETCORE_URLS=${ASPNETCORE_URLS}
+      - Kestrel__Certificates__Development__Password=${Kestrel__Certificates__Development__Password}
+      - JwtSettings__ValidateIssuer=${JwtSettings__ValidateIssuer}
+      - JwtSettings__ValidateAudience=${JwtSettings__ValidateAudience}
+      - JwtSettings__SecretKey=${JwtSettings__SecretKey}
+      - JwtSettings__Issuer=${JwtSettings__Issuer}
+      - JwtSettings__Audience=${JwtSettings__Audience}
+      - DoctorDbSettings__ConnectionString=${DoctorDbSettings__ConnectionString}
+      - CacheSettings__InstanceName=${CacheSettings__InstanceName}
+      - CacheSettings__ConnectionString=${CacheSettings__ConnectionString}
     restart: unless-stopped
     
   doctor.db:
     image: postgres:latest
     environment:
-      - POSTGRES_DB=doctor-db
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=${POSTGRES_DB_DOCTOR}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     networks:
@@ -47,39 +54,7 @@ services:
     volumes:
       - doctordata:/var/lib/postgresql/data
     restart: unless-stopped
-    
-  authapi:
-    image: ${DOCKER_REGISTRY-}authapi
-    build:
-      context: ./Services/AuthAPI
-      dockerfile: Dockerfile
-    networks:
-      - backend
-    depends_on:
-      - auth.db
-    ports:
-      - "5101:5100"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:80
-    volumes:
-      - "${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets/:ro"
-    restart: unless-stopped
-    
-  auth.db:
-    image: postgres:latest
-    environment:
-      - POSTGRES_DB=auth-db
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=pass
-    ports:
-      - "5433:5432"
-    networks:
-      - backend
-    volumes:
-      - authdata:/var/lib/postgresql/data
-    restart: unless-stopped
- 
+
   doctor.cache:
     image: redis:7.0-alpine
     command: redis-server --requirepass CachePassword --appendonly yes --enable-debug-command yes
@@ -93,6 +68,46 @@ services:
       - "6379:6379"
     volumes:
       - doctor_cachedata:/data
+    
+  authapi:
+    image: ${DOCKER_REGISTRY-}authapi
+    build:
+      context: ./Services
+      dockerfile: AuthDockerfile
+    networks:
+      - backend
+    depends_on:
+      - auth.db
+    ports:
+      - "5101:5100"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ASPNETCORE_URLS=${ASPNETCORE_URLS}
+      - JwtSettings__ValidateIssuer=${JwtSettings__ValidateIssuer}
+      - JwtSettings__ValidateAudience=${JwtSettings__ValidateAudience}
+      - JwtSettings__SecretKey=${JwtSettings__SecretKey}
+      - JwtSettings__RefreshTokenExpiryDats=${JwtSettings__RefreshTokenExpiryDats}
+      - JwtSettings__ReferenceTokenExpiryMinutes=${JwtSettings__ReferenceTokenExpiryMinutes}
+      - JwtSettings__Issuer=${JwtSettings__Issuer}
+      - JwtSettings__IdTokenExpiryMinutes=${JwtSettings__IdTokenExpiryMinutes}
+      - JwtSettings__Audience=${JwtSettings__Audience}
+      - JwtSettings__AccessTokenExpiryMinutes=${JwtSettings__AccessTokenExpiryMinutes}
+      - AuthDbSettings__ConnectionString=${AuthDbSettings__ConnectionString}
+    restart: unless-stopped
+    
+  auth.db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB_AUTH}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - "5433:5432"
+    networks:
+      - backend
+    volumes:
+      - authdata:/var/lib/postgresql/data
+    restart: unless-stopped
 
   officeapi:
     image: ${DOCKER_REGISTRY-}officeapi
@@ -104,10 +119,10 @@ services:
     depends_on:
       - office.db
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:80
-    volumes:
-      - "${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets/:ro"
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ASPNETCORE_URLS=${ASPNETCORE_URLS}
+      - OfficeDbSettings__DatabaseName=${OfficeDbSettings__DatabaseName}
+      - OfficeDbSettings__ConnectionString=${OfficeDbSettings__ConnectionString}
     restart: unless-stopped
     
   office.db:
@@ -129,12 +144,58 @@ services:
       - "officedata:/data/configdb"
     restart: unless-stopped
     
-volumes:
-  doctordata:
-  authdata:
-  officedata:
-  doctor_cachedata:
-  
+  appointmentapi:
+    image: ${DOCKER_REGISTRY-}appointmentapi
+    build:
+      context:  ./Services
+      dockerfile: AppointmentDockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ASPNETCORE_URLS=${ASPNETCORE_URLS}
+      - AppointmentDbSettings__ConnectionString=${AppointmentDbSettings__ConnectionString}
+      - GrpcSettings__DoctorServiceAddress=${GrpcSettings__DoctorServiceAddress}
+      - GrpcSettings__AuthServiceAddress=${GrpcSettings__AuthServiceAddress}
+      - SmtpSettings__Server=${SmtpSettings__Server}
+      - SmtpSettings__Port=${SmtpSettings__Port}
+      - SmtpSettings__Username=${SmtpSettings__Username}
+      - SmtpSettings__Password=${SmtpSettings__Password}
+      - SmtpSettings__FromName=${SmtpSettings__FromName}
+      - SmtpSettings__FromAddress=${SmtpSettings__FromAddress}
+      - NotificationSettings__CheckIntervalMinutes=${NotificationSettings__CheckIntervalMinutes}
+      - NotificationSettings__NotificationConfigs__0__MinutesBefore=${NotificationSettings__NotificationConfigs__0__MinutesBefore}
+      - NotificationSettings__NotificationConfigs__0__Subject=${NotificationSettings__NotificationConfigs__0__Subject}
+      - NotificationSettings__NotificationConfigs__0__Body=${NotificationSettings__NotificationConfigs__0__Body}
+      - NotificationSettings__NotificationConfigs__1__MinutesBefore=${NotificationSettings__NotificationConfigs__1__MinutesBefore}
+      - NotificationSettings__NotificationConfigs__1__Subject=${NotificationSettings__NotificationConfigs__1__Subject}
+      - NotificationSettings__NotificationConfigs__1__Body=${NotificationSettings__NotificationConfigs__1__Body}
+      - NotificationSettings__NotificationConfigs__2__MinutesBefore=${NotificationSettings__NotificationConfigs__2__MinutesBefore}
+      - NotificationSettings__NotificationConfigs__2__Subject=${NotificationSettings__NotificationConfigs__2__Subject}
+      - NotificationSettings__NotificationConfigs__2__Body=${NotificationSettings__NotificationConfigs__2__Body}
+    depends_on:
+      - appointment.db
+    restart: unless-stopped
+    networks:
+      - backend 
+
+  appointment.db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "1433:1433"
+    environment:
+      - SA_PASSWORD=${SA_PASSWORD}
+      - ACCEPT_EULA=Y
+    volumes:
+      - appointmentdata:/var/opt/mssql
+    networks:
+      - backend
+
 networks:
   backend:
     driver: bridge
+
+volumes:
+  doctordata:
+  authdata:
+  doctor_cachedata:
+  officedata:
+  appointmentdata:

@@ -7,6 +7,7 @@ internal class DoctorDbContext : DbContext
 {
     public DoctorDbContext(DbContextOptions<DoctorDbContext> options) : base(options)
     {
+        Database.EnsureDeleted();
         Database.EnsureCreated();
     }
 

@@ -1,5 +1,6 @@
 ﻿using AuthAPI.Configuration.DbSettings;
 using AuthAPI.Configuration.JwtSettings;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 namespace AuthAPI.Extensions;
 
@@ -24,5 +25,21 @@ internal static class WebApplicationBuilderExtensions
     public static void AddResourcePathForLocalization(this WebApplicationBuilder builder)
     {
         builder.Services.AddLocalization(options => options.ResourcesPath = ResourcesPath);
+    }
+
+    public static void ConfigureWebHostKestrel(this WebApplicationBuilder builder)
+    {
+        builder.WebHost.ConfigureKestrel(options =>
+        {
+            options.ListenAnyIP(80, listenOptions =>
+            {
+                listenOptions.Protocols = HttpProtocols.Http1;
+            });
+
+            options.ListenAnyIP(5000, listenOptions =>
+            {
+                listenOptions.Protocols = HttpProtocols.Http2;
+            });
+        });
     }
 }
