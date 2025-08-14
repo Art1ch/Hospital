@@ -1,17 +1,24 @@
 ﻿using AuthAPI.Application.Exceptions;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 
 namespace AuthAPI.Middlewares;
 
 internal class ExceptionMiddleware
 {
     private readonly RequestDelegate _next;
+    private readonly IStringLocalizer _localizer;
     private readonly ILogger<ExceptionMiddleware> _logger;
 
-    public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
+    public ExceptionMiddleware(
+        RequestDelegate next,
+        IStringLocalizer<ExceptionMiddleware> localizer,
+        ILogger<ExceptionMiddleware> logger
+    )
     {
         _next = next;
+        _localizer = localizer;
         _logger = logger;
     }
 
@@ -38,27 +45,30 @@ internal class ExceptionMiddleware
         {
             case ValidationException validationException:
                 status = StatusCodes.Status400BadRequest;
-                errorTitle = "Validation Error";
-                detail = string.Join(";", validationException.Errors.Select(e => e.ErrorMessage));
+                errorTitle = _localizer["ValidationError"];
+                detail = string.Join(";", validationException.Errors.Select(e =>
+                {
+                    return _localizer[e.ErrorCode];
+                }));
                 break;
             case AccountAlreadyExistsException accountAlreadyExistsException:
                 status = StatusCodes.Status409Conflict;
-                errorTitle = "Account already exists";
+                errorTitle = _localizer["AccountAlreadyExists"];
                 detail = accountAlreadyExistsException.Message;
                 break;
             case TokenIsExpiredException tokenIsExpiredException:
                 status = StatusCodes.Status401Unauthorized;
-                errorTitle = "Token is expired";
+                errorTitle = _localizer["TokenIsExpired"];
                 detail = tokenIsExpiredException.Message;
                 break;
             case WrongCredentialsGivenException wrongCredentialsGivenException:
                 status = StatusCodes.Status401Unauthorized;
-                errorTitle = "Wrong credentials given";
+                errorTitle = _localizer["WrongCredentials"];
                 detail = wrongCredentialsGivenException.Message;
                 break;
             default:
                 status = StatusCodes.Status500InternalServerError;
-                errorTitle = "Server error";
+                errorTitle = _localizer["ServerError"];
                 detail = exception.Message;
                 break;
         }

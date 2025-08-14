@@ -1,6 +1,11 @@
 using AuthAPI.Application;
 using AuthAPI.Extensions;
 using AuthAPI.Infrastructure;
+using AuthAPI.Middlewares;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
 using AuthAPI.Services;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 
@@ -17,7 +22,7 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Configuration.AddUserSecrets<Program>();
-
+        builder.AddResourcePathForLocalization();
         builder.ConfigureWebHostKestrel();
         builder.ConfigureJwtSettings();
         var connectionString = builder.ConfigureAuthDbSettings();
@@ -35,8 +40,11 @@ public class Program
             app.UseSwaggerUI();
         }
 
+        app.UseLocalization();
+        app.UseMiddleware<ExceptionMiddleware>();
+        app.UseHttpsRedirection();
         app.UseAuthorization();
-
+        app.UseAuthorization();
         app.MapControllers();
         app.MapGrpcService<AuthGrpcService>();
 
