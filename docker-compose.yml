@@ -78,8 +78,6 @@ services:
       - backend
     depends_on:
       - auth.db
-    ports:
-      - "5101:5100"
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
       - ASPNETCORE_URLS=${ASPNETCORE_URLS}
