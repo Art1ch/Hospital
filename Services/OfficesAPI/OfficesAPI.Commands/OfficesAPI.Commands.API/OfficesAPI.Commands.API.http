@@ -1,0 +1,6 @@
+@OfficesAPI.Commands.API_HostAddress = http://localhost:5227
+
+GET {{OfficesAPI.Commands.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

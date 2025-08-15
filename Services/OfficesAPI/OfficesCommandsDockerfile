@@ -1,0 +1,22 @@
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /app
+EXPOSE 80
+EXPOSE  433
+
+COPY OfficesAPI.Commands/OfficesAPI.Commands.API/*.csproj OfficesAPI.Commands.API/
+COPY OfficesAPI.Commands/OfficesAPI.Commands.Application/*.csproj OfficesAPI.Commands.Application/
+COPY OfficesAPI.Commands/OfficesAPI.Commands.Infrastructure/*.csproj OfficesAPI.Commands.Infrastructure/
+COPY OfficesAPI.Commands/OfficesAPI.Commands.Core/*.csproj OfficesAPI.Commands.Core/
+COPY OfficesAPI.Shared/OfficesAPI.Shared/*.csproj OfficesAPI.Shared/
+
+RUN dotnet restore OfficesAPI.Commands.API/OfficesAPI.Commands.API.csproj
+
+COPY . .
+
+RUN dotnet publish OfficesAPI.Commands/OfficesAPI.Commands.API/OfficesAPI.Commands.API.csproj -c Release -o out
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+WORKDIR /app
+COPY --from=build /app/out .
+
+ENTRYPOINT ["dotnet", "OfficesAPI.Commands.API.dll"]

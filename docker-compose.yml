@@ -12,7 +12,8 @@ services:
     depends_on:
       - doctorapi
       - authapi
-      - officeapi
+      - office.queries.api
+      - office.commands.api
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
       - ASPNETCORE_URLS=${ASPNETCORE_URLS}
@@ -107,20 +108,64 @@ services:
       - authdata:/var/lib/postgresql/data
     restart: unless-stopped
 
-  officeapi:
-    image: ${DOCKER_REGISTRY-}officeapi
+  doctor.cache:
+    image: redis:7.0-alpine
+    command: redis-server --requirepass CachePassword --appendonly yes --enable-debug-command yes
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+    ports:
+      - "6379:6379"
+    volumes:
+      - doctor_cachedata:/data
+  
+  office.commands.api:
+    image: ${DOCKER_REGISTRY-}office.commands.api
     build:
       context: ./Services/OfficesAPI
-      dockerfile: Dockerfile
+      dockerfile: OfficesCommandsDockerfile
     networks:
       - backend
     depends_on:
-      - office.db
+      eventstore:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - EventStoreSettings__ConnectionString=${EventStoreSettings__ConnectionString}
+      - MessageBrokerSettings__Hostname=${MessageBrokerSettings__Hostname}
+      - MessageBrokerSettings__VirtualHost=${MessageBrokerSettings__VirtualHost}
+      - MessageBrokerSettings__Username=${MessageBrokerSettings__Username}
+      - MessageBrokerSettings__Password=${MessageBrokerSettings__Password}
+  
+    restart: unless-stopped
+
+  office.queries.api:
+    image: ${DOCKER_REGISTRY-}office.queries.api
+    build:
+      context: ./Services/OfficesAPI
+      dockerfile: OfficesQueriesDockerfile
+    networks:
+      - backend
+    depends_on:
+      office.db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
       - ASPNETCORE_URLS=${ASPNETCORE_URLS}
       - OfficeDbSettings__DatabaseName=${OfficeDbSettings__DatabaseName}
       - OfficeDbSettings__ConnectionString=${OfficeDbSettings__ConnectionString}
+      - MessageBrokerSettings__Hostname=${MessageBrokerSettings__Hostname}
+      - MessageBrokerSettings__VirtualHost=${MessageBrokerSettings__VirtualHost}
+      - MessageBrokerSettings__Username=${MessageBrokerSettings__Username}
+      - MessageBrokerSettings__Password=${MessageBrokerSettings__Password}
     restart: unless-stopped
     
   office.db:
@@ -138,10 +183,31 @@ services:
       start_interval: 1s
       retries: 30
     volumes:
-      - "officedata:/data/db"
-      - "officedata:/data/configdb"
+      - "officedata.queries:/data/db"
+      - "officedata.queries:/data/configdb"
     restart: unless-stopped
+
+  eventstore:
+    image: eventstore/eventstore:21.10.0-buster-slim
+    networks:
+      - backend
+    environment:
+      EVENTSTORE_INSECURE: "true"
+      EVENTSTORE_RUN_PROJECTIONS: "All"
     
+  rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   appointmentapi:
     image: ${DOCKER_REGISTRY-}appointmentapi
     build:
@@ -195,5 +261,5 @@ volumes:
   doctordata:
   authdata:
   doctor_cachedata:
-  officedata:
+  officedata.queries:
   appointmentdata:
