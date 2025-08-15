@@ -3,8 +3,6 @@ using DoctorAPI.Infrastructure;
 using DoctorAPI.Middlewares;
 using DoctorAPI.Extensions;
 using DoctorAPI.Caching;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Doctor.API.Services;
 
 namespace DoctorAPI;
 

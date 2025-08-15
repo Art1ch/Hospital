@@ -5,7 +5,19 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "office.commands.api",
+          "Host": "authapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/auth/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PATCH", "DELETE" ]
+    },
+    {
+      "DownstreamPathTemplate": "/doctor/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "doctorapi",
           "Port": 80
         }
       ],
@@ -17,18 +29,6 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "authapi",
-          "Port": 80
-        }
-      ],
-      "UpstreamPathTemplate": "/office/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PATCH", "DELETE" ]
-    },
-    {
-      "DownstreamPathTemplate": "/Office/{everything}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
           "Host": "office.commands.api",
           "Port": 80
         }
@@ -37,7 +37,7 @@
       "UpstreamHttpMethod": [ "POST", "PATCH", "DELETE" ]
     },
     {
-      "DownstreamPathTemplate": "/Office/{everything}",
+      "DownstreamPathTemplate": "/office/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {

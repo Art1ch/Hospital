@@ -177,55 +177,12 @@ services:
 
   eventstore:
     image: eventstore/eventstore:21.10.0-buster-slim
+    networks:
+      - backend
     environment:
       EVENTSTORE_INSECURE: "true"
       EVENTSTORE_RUN_PROJECTIONS: "All"
     
-  appointmentapi:
-    image: ${DOCKER_REGISTRY-}appointmentapi
-    build:
-      context:  ./Services
-      dockerfile: AppointmentDockerfile
-    environment:
-      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
-      - ASPNETCORE_URLS=${ASPNETCORE_URLS}
-      - AppointmentDbSettings__ConnectionString=${AppointmentDbSettings__ConnectionString}
-      - GrpcSettings__DoctorServiceAddress=${GrpcSettings__DoctorServiceAddress}
-      - GrpcSettings__AuthServiceAddress=${GrpcSettings__AuthServiceAddress}
-      - SmtpSettings__Server=${SmtpSettings__Server}
-      - SmtpSettings__Port=${SmtpSettings__Port}
-      - SmtpSettings__Username=${SmtpSettings__Username}
-      - SmtpSettings__Password=${SmtpSettings__Password}
-      - SmtpSettings__FromName=${SmtpSettings__FromName}
-      - SmtpSettings__FromAddress=${SmtpSettings__FromAddress}
-      - NotificationSettings__CheckIntervalMinutes=${NotificationSettings__CheckIntervalMinutes}
-      - NotificationSettings__NotificationConfigs__0__MinutesBefore=${NotificationSettings__NotificationConfigs__0__MinutesBefore}
-      - NotificationSettings__NotificationConfigs__0__Subject=${NotificationSettings__NotificationConfigs__0__Subject}
-      - NotificationSettings__NotificationConfigs__0__Body=${NotificationSettings__NotificationConfigs__0__Body}
-      - NotificationSettings__NotificationConfigs__1__MinutesBefore=${NotificationSettings__NotificationConfigs__1__MinutesBefore}
-      - NotificationSettings__NotificationConfigs__1__Subject=${NotificationSettings__NotificationConfigs__1__Subject}
-      - NotificationSettings__NotificationConfigs__1__Body=${NotificationSettings__NotificationConfigs__1__Body}
-      - NotificationSettings__NotificationConfigs__2__MinutesBefore=${NotificationSettings__NotificationConfigs__2__MinutesBefore}
-      - NotificationSettings__NotificationConfigs__2__Subject=${NotificationSettings__NotificationConfigs__2__Subject}
-      - NotificationSettings__NotificationConfigs__2__Body=${NotificationSettings__NotificationConfigs__2__Body}
-    depends_on:
-      - appointment.db
-    restart: unless-stopped
-    networks:
-      - backend 
-
-  appointment.db:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    ports:
-      - "1433:1433"
-    environment:
-      - SA_PASSWORD=${SA_PASSWORD}
-      - ACCEPT_EULA=Y
-    volumes:
-      - appointmentdata:/var/opt/mssql
-    networks:
-      - backend
-
   rabbitmq:
     image: rabbitmq:3-management
     environment:
@@ -248,5 +205,5 @@ volumes:
   doctordata:
   authdata:
   doctor_cachedata:
-  officedata:
+  officedata.queries:
   appointmentdata:
