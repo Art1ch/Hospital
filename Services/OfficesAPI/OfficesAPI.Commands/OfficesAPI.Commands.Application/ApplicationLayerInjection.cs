@@ -26,20 +26,12 @@ public static class ApplicationLayerInjection
         return services;
     }
 
-    private static IServiceCollection AddCommands(this IServiceCollection services)
-    {
-        services.AddMediatR(opt =>
+    private static IServiceCollection AddCommands(this IServiceCollection services) =>
+        services.AddMediatR(x =>
         {
-            opt.RegisterServicesFromAssembly(_assembly);
+            x.RegisterServicesFromAssembly(_assembly);
         });
 
-        return services;
-    }
-
-    private static IServiceCollection AddMapping(this IServiceCollection services)
-    {
+    private static IServiceCollection AddMapping(this IServiceCollection services) =>
         services.AddAutoMapper(_assembly);
-
-        return services;
-    }
 }

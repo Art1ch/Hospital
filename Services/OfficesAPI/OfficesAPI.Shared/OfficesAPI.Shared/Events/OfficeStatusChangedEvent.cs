@@ -2,7 +2,7 @@
 
 namespace OfficesAPI.Shared.Events;
 
-public record OfficeStatusChangedEvent(
+public sealed record OfficeStatusChangedEvent(
    Guid Id,
    OfficeStatus Status
 );

@@ -5,4 +5,5 @@ using OfficesAPI.Commands.Application.Requests.Office;
 namespace OfficesAPI.Commands.Application.Office.Update;
 
 public record UpdateOfficeCommand(
-    UpdateOfficeRequest Request) : BaseRequest<UpdateOfficeRequest, Unit>(Request);
+    UpdateOfficeRequest Request
+) : BaseRequest<UpdateOfficeRequest, Unit>(Request);

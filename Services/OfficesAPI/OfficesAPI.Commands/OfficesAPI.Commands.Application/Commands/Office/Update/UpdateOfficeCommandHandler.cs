@@ -2,6 +2,7 @@
 using MediatR;
 using OfficesAPI.Commands.Application.Contracts;
 using OfficesAPI.Commands.Core.Entities;
+using OfficesAPI.Shared.Entities;
 using OfficesAPI.Shared.Events;
 
 namespace OfficesAPI.Commands.Application.Office.Update;
@@ -15,10 +16,14 @@ internal sealed class UpdateOfficeCommandHandler(
     public async Task<Unit> Handle(UpdateOfficeCommand command, CancellationToken cancellationToken)
     {
         var request = command.Request;
-        var eventEntity = mapper.Map<UpdateOfficeEntity>(request);
-        var @event = mapper.Map<OfficeUpdatedEvent>(request);
+        var entity = mapper.Map<OfficeEntity>(request);
+
+        var eventEntity = mapper.Map<UpdateOfficeEntity>(entity);
+        var @event = mapper.Map<OfficeUpdatedEvent>(entity);
+
         await eventStore.AppendAsync(eventEntity, cancellationToken);
         await messagePublisher.PublishMessageAsync(eventEntity, cancellationToken);
+
         return Unit.Value;
     }
 }   

@@ -18,24 +18,12 @@ public static class InfrastructureLayerInjection
         return services;
     }
 
-    private static IServiceCollection AddDbContext(this IServiceCollection services)
-    {
+    private static IServiceCollection AddDbContext(this IServiceCollection services) =>
         services.AddScoped<OfficeDbContext>();
 
-        return services;
-    }
-
-    private static IServiceCollection AddRepositories(this IServiceCollection services)
-    {
+    private static IServiceCollection AddRepositories(this IServiceCollection services) =>
         services.AddScoped<IOfficeRepository, OfficeRepository>();
 
-        return services;
-    }
-
-    private static IServiceCollection AddUnitOfWork(this IServiceCollection services)
-    {
+    private static IServiceCollection AddUnitOfWork(this IServiceCollection services) =>
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-        return services;
-    }
 }

@@ -1,5 +1,5 @@
 ﻿namespace OfficesAPI.Shared.Events;
 
-public record OfficeDeletedEvent(
+public sealed record OfficeDeletedEvent(
     Guid Id
 );

@@ -16,7 +16,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\OfficesAPI.Shared\OfficesAPI.Shared\OfficesAPI.Shared.csproj" />
-    <ProjectReference Include="..\OfficesAPI.Queries.Core\OfficesAPI.Queries.Core.csproj" />
   </ItemGroup>
 
 </Project>

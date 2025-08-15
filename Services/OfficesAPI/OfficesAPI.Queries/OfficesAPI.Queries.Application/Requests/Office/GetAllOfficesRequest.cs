@@ -2,4 +2,5 @@
 
 public record GetAllOfficesRequest(
     int Page,
-    int PageSize);
+    int PageSize
+);

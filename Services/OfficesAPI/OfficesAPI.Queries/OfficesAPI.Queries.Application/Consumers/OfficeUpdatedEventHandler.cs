@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using MassTransit;
 using OfficesAPI.Queries.Application.Contracts.Repository.Office;
-using OfficesAPI.Queries.Core.Entities;
 using OfficesAPI.Shared.Events;
 
 namespace OfficesAPI.Queries.Application.Consumers;
@@ -13,7 +12,7 @@ public class OfficeUpdatedEventHandler(
 {
     public async Task Consume(ConsumeContext<OfficeUpdatedEvent> context)
     {
-        var entity = mapper.Map<OfficeEntity>(context.Message);
+        var entity = context.Message.Entity;
         await officeRepository.UpdateAsync(entity);
     }
 }

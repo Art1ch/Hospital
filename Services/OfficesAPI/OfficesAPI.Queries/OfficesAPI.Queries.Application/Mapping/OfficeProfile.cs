@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using OfficesAPI.Queries.Application.RepositoryResults.Office;
 using OfficesAPI.Queries.Application.Responses.Office;
-using OfficesAPI.Queries.Core.Entities;
+using OfficesAPI.Shared.Entities;
 using OfficesAPI.Shared.Events;
 
 namespace OfficesAPI.Queries.Application.Mapping;

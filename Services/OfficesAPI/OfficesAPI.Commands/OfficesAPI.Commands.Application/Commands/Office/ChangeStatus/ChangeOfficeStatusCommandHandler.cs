@@ -15,10 +15,13 @@ internal sealed class ChangeOfficeStatusCommandHandler(
     public async Task<Unit> Handle(ChangeOfficeStatusCommand command, CancellationToken cancellationToken)
     {
         var request = command.Request;
+
         var eventEntity = mapper.Map<ChangeOfficeStatusEntity>(request);
         var @event = mapper.Map<OfficeStatusChangedEvent>(request);
+
         await eventStore.AppendAsync(eventEntity, cancellationToken);
         await messagePublisher.PublishMessageAsync(@event, cancellationToken);
+
         return Unit.Value;
     }
 }

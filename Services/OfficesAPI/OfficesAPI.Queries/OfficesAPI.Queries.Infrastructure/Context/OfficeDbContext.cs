@@ -4,7 +4,7 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using OfficesAPI.Queries.Infrastructure.Settings;
-using OfficesAPI.Queries.Core.Entities;
+using OfficesAPI.Shared.Entities;
 
 namespace OfficesAPI.Queries.Infrastructure.Context;
 

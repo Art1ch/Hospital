@@ -33,29 +33,17 @@ public static class ApplicationLayerInjection
         return services;
     }
 
-    private static IServiceCollection AddQueries(this IServiceCollection services)
-    {
-        services.AddMediatR(opt =>
+    private static IServiceCollection AddQueries(this IServiceCollection services) =>
+        services.AddMediatR(x =>
         {
-            opt.RegisterServicesFromAssembly(_assembly);
+            x.RegisterServicesFromAssembly(_assembly);
         });
 
-        return services;
-    }
-
-    private static IServiceCollection AddMapping(this IServiceCollection services)
-    {
+    private static IServiceCollection AddMapping(this IServiceCollection services) =>
         services.AddAutoMapper(_assembly);
 
-        return services;
-    }
-
-    private static IServiceCollection AddPipelineBehavior(this IServiceCollection services)
-    {
+    private static IServiceCollection AddPipelineBehavior(this IServiceCollection services) =>
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
-
-        return services;
-    }
 
     private static IServiceCollection AddConsumers(this IServiceCollection services, MessageBrokerSettings messageBrokerSettings)
     {

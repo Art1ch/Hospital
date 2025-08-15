@@ -2,4 +2,5 @@
 namespace OfficesAPI.Queries.Application.Responses.Office;
 
 public record GetOfficeInfoResponse(
-    GetOfficeInfoResult Office);
+    GetOfficeInfoResult Office
+);

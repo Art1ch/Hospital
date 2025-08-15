@@ -1,10 +1,7 @@
-﻿using OfficesAPI.Shared.Enum;
+﻿using OfficesAPI.Shared.Entities;
 
 namespace OfficesAPI.Shared.Events;
 
-public record OfficeCreatedEvent(
-    Guid Id,
-    string Address,
-    string RegistryPhoneNumber,
-    OfficeStatus Status
+public sealed record OfficeCreatedEvent(
+    OfficeEntity Entity
 );

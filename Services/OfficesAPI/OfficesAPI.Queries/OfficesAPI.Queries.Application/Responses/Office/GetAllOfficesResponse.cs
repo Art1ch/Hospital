@@ -3,4 +3,5 @@
 namespace OfficesAPI.Queries.Application.Responses.Office;
 
 public record GetAllOfficesResponse(
-    GetAllOfficesResult Result);
+    GetAllOfficesResult Result
+);

@@ -1,9 +1,9 @@
 ﻿using MongoDB.Driver;
 using OfficesAPI.Queries.Application.Contracts.Repository.Office;
 using OfficesAPI.Queries.Application.RepositoryResults.Office;
-using OfficesAPI.Queries.Core.Entities;
 using OfficesAPI.Queries.Infrastructure.Context;
 using OfficesAPI.Queries.Infrastructure.Repositories.Abstract;
+using OfficesAPI.Shared.Entities;
 using OfficesAPI.Shared.Enum;
 
 namespace OfficesAPI.Queries.Infrastructure.Repositories;

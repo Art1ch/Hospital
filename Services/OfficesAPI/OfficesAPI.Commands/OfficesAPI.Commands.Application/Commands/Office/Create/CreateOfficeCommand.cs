@@ -5,4 +5,5 @@ using OfficesAPI.Commands.Application.Requests.Office;
 namespace OfficesAPI.Commands.Application.Office.Create;
 
 public record CreateOfficeCommand(
-    CreateOfficeRequest Request) : BaseRequest<CreateOfficeRequest, Unit>(Request);
+    CreateOfficeRequest Request
+) : BaseRequest<CreateOfficeRequest, Unit>(Request);

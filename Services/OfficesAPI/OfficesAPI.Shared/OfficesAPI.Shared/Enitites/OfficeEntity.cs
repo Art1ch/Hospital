@@ -1,8 +1,8 @@
 ﻿using OfficesAPI.Shared.Enum;
 
-namespace OfficesAPI.Queries.Core.Entities;
+namespace OfficesAPI.Shared.Entities;
 
-public class OfficeEntity
+public sealed class OfficeEntity
 {
     public Guid Id { get; set; }
     public string Address { get; set; }

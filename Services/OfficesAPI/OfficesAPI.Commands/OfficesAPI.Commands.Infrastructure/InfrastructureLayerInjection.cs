@@ -26,7 +26,7 @@ public static class InfrastructureLayerInjection
 
     private static IServiceCollection AddEventStore(this IServiceCollection services, EventStoreSettings settings)
     {
-        services.AddSingleton(sp =>
+        services.AddSingleton(_ =>
         {
             var options = EventStoreClientSettings.Create(settings.ConnectionString);
             return new EventStoreClient(options);
@@ -54,10 +54,6 @@ public static class InfrastructureLayerInjection
         return services;
     }
 
-    private static IServiceCollection AddMessagePublisher(this IServiceCollection services)
-    {
+    private static IServiceCollection AddMessagePublisher(this IServiceCollection services) =>
         services.AddScoped<IMessagePublisher, MessagePublisher>();
-
-        return services;
-    }
 }

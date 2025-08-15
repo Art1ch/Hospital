@@ -5,4 +5,5 @@ using OfficesAPI.Queries.Application.Responses.Office;
 namespace OfficesAPI.Queries.Application.Office.GetAll;
 
 public record GetAllOfficesQuery(
-    GetAllOfficesRequest Request) : BaseRequest<GetAllOfficesRequest, GetAllOfficesResponse>(Request);
+    GetAllOfficesRequest Request
+) : BaseRequest<GetAllOfficesRequest, GetAllOfficesResponse>(Request);
