@@ -22,8 +22,8 @@ services:
   doctorapi:
     image: ${DOCKER_REGISTRY-}doctorapi
     build:
-      context: ./Services/DoctorAPI
-      dockerfile: Dockerfile
+      context: ./Services
+      dockerfile: DoctorDockerfile
     networks:
       - backend
     depends_on:
@@ -55,12 +55,26 @@ services:
     volumes:
       - doctordata:/var/lib/postgresql/data
     restart: unless-stopped
+
+  doctor.cache:
+    image: redis:7.0-alpine
+    command: redis-server --requirepass CachePassword --appendonly yes --enable-debug-command yes
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+    ports:
+      - "6379:6379"
+    volumes:
+      - doctor_cachedata:/data
     
   authapi:
     image: ${DOCKER_REGISTRY-}authapi
     build:
-      context: ./Services/AuthAPI
-      dockerfile: Dockerfile
+      context: ./Services
+      dockerfile: AuthDockerfile
     networks:
       - backend
     depends_on:
@@ -93,7 +107,7 @@ services:
     volumes:
       - authdata:/var/lib/postgresql/data
     restart: unless-stopped
- 
+
   doctor.cache:
     image: redis:7.0-alpine
     command: redis-server --requirepass CachePassword --appendonly yes --enable-debug-command yes
@@ -120,7 +134,6 @@ services:
         condition: service_started
       rabbitmq:
         condition: service_healthy
-    
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
@@ -153,7 +166,6 @@ services:
       - MessageBrokerSettings__VirtualHost=${MessageBrokerSettings__VirtualHost}
       - MessageBrokerSettings__Username=${MessageBrokerSettings__Username}
       - MessageBrokerSettings__Password=${MessageBrokerSettings__Password}
-      
     restart: unless-stopped
     
   office.db:
@@ -195,8 +207,52 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    
-  
+
+  appointmentapi:
+    image: ${DOCKER_REGISTRY-}appointmentapi
+    build:
+      context:  ./Services
+      dockerfile: AppointmentDockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ASPNETCORE_URLS=${ASPNETCORE_URLS}
+      - AppointmentDbSettings__ConnectionString=${AppointmentDbSettings__ConnectionString}
+      - GrpcSettings__DoctorServiceAddress=${GrpcSettings__DoctorServiceAddress}
+      - GrpcSettings__AuthServiceAddress=${GrpcSettings__AuthServiceAddress}
+      - SmtpSettings__Server=${SmtpSettings__Server}
+      - SmtpSettings__Port=${SmtpSettings__Port}
+      - SmtpSettings__Username=${SmtpSettings__Username}
+      - SmtpSettings__Password=${SmtpSettings__Password}
+      - SmtpSettings__FromName=${SmtpSettings__FromName}
+      - SmtpSettings__FromAddress=${SmtpSettings__FromAddress}
+      - NotificationSettings__CheckIntervalMinutes=${NotificationSettings__CheckIntervalMinutes}
+      - NotificationSettings__NotificationConfigs__0__MinutesBefore=${NotificationSettings__NotificationConfigs__0__MinutesBefore}
+      - NotificationSettings__NotificationConfigs__0__Subject=${NotificationSettings__NotificationConfigs__0__Subject}
+      - NotificationSettings__NotificationConfigs__0__Body=${NotificationSettings__NotificationConfigs__0__Body}
+      - NotificationSettings__NotificationConfigs__1__MinutesBefore=${NotificationSettings__NotificationConfigs__1__MinutesBefore}
+      - NotificationSettings__NotificationConfigs__1__Subject=${NotificationSettings__NotificationConfigs__1__Subject}
+      - NotificationSettings__NotificationConfigs__1__Body=${NotificationSettings__NotificationConfigs__1__Body}
+      - NotificationSettings__NotificationConfigs__2__MinutesBefore=${NotificationSettings__NotificationConfigs__2__MinutesBefore}
+      - NotificationSettings__NotificationConfigs__2__Subject=${NotificationSettings__NotificationConfigs__2__Subject}
+      - NotificationSettings__NotificationConfigs__2__Body=${NotificationSettings__NotificationConfigs__2__Body}
+    depends_on:
+      - appointment.db
+    restart: unless-stopped
+    networks:
+      - backend 
+
+  appointment.db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "1433:1433"
+    environment:
+      - SA_PASSWORD=${SA_PASSWORD}
+      - ACCEPT_EULA=Y
+    volumes:
+      - appointmentdata:/var/opt/mssql
+    networks:
+      - backend
+
 networks:
   backend:
     driver: bridge

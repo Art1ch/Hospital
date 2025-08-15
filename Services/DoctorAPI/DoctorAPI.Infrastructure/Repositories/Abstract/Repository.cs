@@ -26,6 +26,11 @@ internal abstract class Repository<TEntity, TId> : IRepository<TEntity, TId> whe
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
+    public IQueryable<TEntity> GetEntitiesQuery()
+    {
+        return _dbSet;
+    }
+
     public async Task<TEntity> GetAsync(TId id, CancellationToken cancellationToken = default)
     {
         var entity = await _dbSet.FindAsync(id, cancellationToken);

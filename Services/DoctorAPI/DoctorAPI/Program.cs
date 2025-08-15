@@ -3,6 +3,8 @@ using DoctorAPI.Infrastructure;
 using DoctorAPI.Middlewares;
 using DoctorAPI.Extensions;
 using DoctorAPI.Caching;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Doctor.API.Services;
 
 namespace DoctorAPI;
 
@@ -28,7 +30,9 @@ public class Program
 
         builder.Services.AddApplicationLayer();
         builder.Services.AddInfrastructureLayer(connectionString);
-        builder.Services.AddCaching();
+        builder.Services.AddCacheService();
+
+        builder.Services.AddGrpc();
 
         var app = builder.Build();
 
@@ -46,6 +50,7 @@ public class Program
         app.UseAuthorization();
 
         app.MapControllers();
+        app.MapGrpcService<DoctorGrpcService>();
 
         app.Run();
     }

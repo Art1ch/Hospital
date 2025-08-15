@@ -6,7 +6,7 @@ namespace DoctorAPI.Caching;
 
 public static class CacheInjection
 {
-    public static void AddCaching(this IServiceCollection services)
+    public static void AddCacheService(this IServiceCollection services)
     {
         services.AddScoped<ICacheService, CacheService>();
     }

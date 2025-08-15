@@ -10,6 +10,6 @@ public class TokenBaseValidator<T> : AbstractValidator<T>
     {
         RuleFor(expression)
             .NotEmpty()
-            .WithMessage(ValidationConstants.OnFailedNullValidation);
+            .WithErrorCode(ErrorCodeConstants.TokenRequired);
     }
 }
