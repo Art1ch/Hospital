@@ -55,20 +55,6 @@ services:
     volumes:
       - doctordata:/var/lib/postgresql/data
     restart: unless-stopped
-
-  doctor.cache:
-    image: redis:7.0-alpine
-    command: redis-server --requirepass CachePassword --appendonly yes --enable-debug-command yes
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 3s
-      retries: 3
-    ports:
-      - "6379:6379"
-    volumes:
-      - doctor_cachedata:/data
     
   authapi:
     image: ${DOCKER_REGISTRY-}authapi
@@ -107,7 +93,7 @@ services:
     volumes:
       - authdata:/var/lib/postgresql/data
     restart: unless-stopped
-
+ 
   doctor.cache:
     image: redis:7.0-alpine
     command: redis-server --requirepass CachePassword --appendonly yes --enable-debug-command yes
@@ -142,7 +128,7 @@ services:
       - MessageBrokerSettings__VirtualHost=${MessageBrokerSettings__VirtualHost}
       - MessageBrokerSettings__Username=${MessageBrokerSettings__Username}
       - MessageBrokerSettings__Password=${MessageBrokerSettings__Password}
-  
+
     restart: unless-stopped
 
   office.queries.api:
@@ -194,7 +180,7 @@ services:
     environment:
       EVENTSTORE_INSECURE: "true"
       EVENTSTORE_RUN_PROJECTIONS: "All"
-    
+
   rabbitmq:
     image: rabbitmq:3-management
     environment:
@@ -207,7 +193,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-
+    
   appointmentapi:
     image: ${DOCKER_REGISTRY-}appointmentapi
     build:
@@ -244,22 +230,22 @@ services:
   appointment.db:
     image: mcr.microsoft.com/mssql/server:2022-latest
     ports:
-      - "1433:1433"
+     - "1433:1433"
     environment:
-      - SA_PASSWORD=${SA_PASSWORD}
-      - ACCEPT_EULA=Y
+      SA_PASSWORD: "YourStrong!Passw0rd"
+      ACCEPT_EULA: "Y"
     volumes:
-      - appointmentdata:/var/opt/mssql
-    networks:
-      - backend
+     - appointmentdata:/var/opt/mssql
+    networks: 
+     - backend
 
 networks:
   backend:
     driver: bridge
 
 volumes:
-  doctordata:
-  authdata:
-  doctor_cachedata:
-  officedata.queries:
-  appointmentdata:
+    doctordata:
+    authdata:
+    doctor_cachedata:
+    officedata.queries:
+    appointmentdata:

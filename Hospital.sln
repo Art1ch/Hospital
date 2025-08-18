@@ -48,7 +48,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OfficesAPI.Queries", "OfficesAPI.Queries", "{29E38A5F-2BCD-4599-BB26-5E118461D113}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OfficesAPI.Commands.Core", "Services\OfficesAPI\OfficesAPI.Commands\OfficesAPI.Commands.Core\OfficesAPI.Commands.Core.csproj", "{030A0770-4D9B-453D-9C2C-66A672C4BB53}"
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoctorAPI.UnitTests", "Tests\DoctorAPI\DoctorAPI.UnitTests\DoctorAPI.UnitTests.csproj", "{5A00F800-2BA5-4799-A458-289FA1601C9D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OfficesAPI.Commands.Application", "Services\OfficesAPI\OfficesAPI.Commands\OfficesAPI.Commands.Application\OfficesAPI.Commands.Application.csproj", "{07B9CBE0-76A2-4C5D-ADF4-09FE6A1CE5BB}"
 EndProject
@@ -78,7 +77,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppointmentAPI", "Services\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{223F2336-2321-47D3-A590-859442DE20F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Services\Shared\Shared\Shared.csproj", "{301269C0-CBF9-43B5-96E8-48B091A479D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Services\Shared\Shared\Shared.csproj", "{301269C0-CBF9-43B5-96E8-48B091A479D0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
