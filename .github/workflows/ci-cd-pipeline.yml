@@ -23,7 +23,7 @@ jobs:
         run: dotnet restore Hospital.sln
 
       - name: Build
-        run: dotnet build --no-restore --configuration Release
+        run: dotnet build Hospital.sln --no-restore --configuration Release
 
       - name: Run unit tests
         run: dotnet test ./Tests/DoctorAPI/DoctorAPI.UnitTests/DoctorAPI.UnitTests.csproj --no-build --configuration Release --verbosity normal
