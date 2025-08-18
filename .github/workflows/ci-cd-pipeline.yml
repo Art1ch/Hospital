@@ -20,10 +20,10 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore Hospital.sln
 
       - name: Build
         run: dotnet build --no-restore --configuration Release
 
       - name: Run unit tests
-        run: dotnet test --no-build --configuration Release --verbosity normal
+        run: dotnet test ./Tests/DoctorAPI/DoctorAPI.UnitTests/DoctorAPI.UnitTests.csproj --no-build --configuration Release --verbosity normal
