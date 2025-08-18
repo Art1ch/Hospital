@@ -1,25 +1,15 @@
-﻿using DoctorAPI.Application.Contracts.Repository.Doctor;
-using DoctorAPI.Application.Contracts.Repository.Specialization;
-using DoctorAPI.Application.Contracts.UnitOfWork;
+﻿using DoctorAPI.Application.Contracts.UnitOfWork;
 using DoctorAPI.Infrastructure.Context;
 
 namespace DoctorAPI.Infrastructure.UnitOfWorkImplementation;
 
 internal class UnitOfWork : IUnitOfWork
 {
-    public IDoctorRepository DoctorRepository { get; set; }
-    public ISpecializationRepository SpecializationRepository { get ; set ; }
     private readonly DoctorDbContext _dbContext;
 
-    public UnitOfWork(
-        DoctorDbContext dbContext,
-        IDoctorRepository doctorRepository,
-        ISpecializationRepository specializationRepository)
+    public UnitOfWork(DoctorDbContext dbContext)
     {
-
         _dbContext = dbContext;
-        DoctorRepository = doctorRepository;
-        SpecializationRepository = specializationRepository;
     }
 
     public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)

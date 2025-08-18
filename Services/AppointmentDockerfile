@@ -1,0 +1,21 @@
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+
+COPY AppointmentAPI/AppointmentAPI/*.csproj AppointmentAPI/AppointmentAPI/
+COPY AppointmentAPI/AppointmentAPI.Application/*.csproj AppointmentAPI/AppointmentAPI.Application/
+COPY AppointmentAPI/AppointmentAPI.Core/*.csproj AppointmentAPI/AppointmentAPI.Core/
+COPY AppointmentAPI/AppointmentAPI.Infrastructure/*.csproj AppointmentAPI/AppointmentAPI.Infrastructure/
+COPY Shared/Shared/*.csproj Shared/Shared/
+
+RUN dotnet restore AppointmentAPI/AppointmentAPI/AppointmentAPI.csproj
+
+COPY . .
+
+RUN dotnet publish AppointmentAPI/AppointmentAPI/AppointmentAPI.csproj -c Release -o out
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+WORKDIR /app
+COPY --from=build /app/out .
+ENTRYPOINT ["dotnet", "AppointmentAPI.dll"]

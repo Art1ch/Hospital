@@ -1,19 +1,23 @@
-﻿using DoctorAPI.Application.Contracts.UnitOfWork;
+﻿using DoctorAPI.Application.Contracts.Cache;
+using DoctorAPI.Application.Contracts.Repository.Doctor;
 using MediatR;
 
 namespace DoctorAPI.Application.Commands.Doctor.Delete;
 
 internal class DeleteDoctorCommandHandler : IRequestHandler<DeleteDoctorCommand>
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IDoctorRepository _doctorRepository;
+    private readonly ICacheService _cacheService;
 
-    public DeleteDoctorCommandHandler(IUnitOfWork unitOfWork)
+    public DeleteDoctorCommandHandler(IDoctorRepository doctorRepository, ICacheService cacheService)
     {
-        _unitOfWork = unitOfWork;
+        _doctorRepository = doctorRepository;
+        _cacheService = cacheService;
     }
 
     public async Task Handle(DeleteDoctorCommand command, CancellationToken cancellationToken)
     {
-        await _unitOfWork.DoctorRepository.DeleteAsync(command.Id);
+        await _cacheService.RemoveAsync(command.Id.ToString(), cancellationToken);
+        await _doctorRepository.DeleteAsync(command.Id);
     }
 }

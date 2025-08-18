@@ -1,0 +1,67 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/auth/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "authapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/auth/{everything}",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/doctor/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "doctorapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/doctor/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PATCH", "DELETE" ]
+    },
+    {
+      "DownstreamPathTemplate": "/office/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "office.commands.api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/office/{everything}",
+      "UpstreamHttpMethod": [ "POST", "PATCH", "DELETE" ]
+    },
+    {
+      "DownstreamPathTemplate": "/office/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "office.queries.api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/office/{everything}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/appointment/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "appointmentapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/appointment/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PATCH", "DELETE" ]
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://apigateway:80"
+  }
+}

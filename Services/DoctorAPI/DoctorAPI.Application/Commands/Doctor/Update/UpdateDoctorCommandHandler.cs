@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DoctorAPI.Application.Commands.Doctor.Create;
-using DoctorAPI.Application.Contracts.UnitOfWork;
+using DoctorAPI.Application.Contracts.Cache;
+using DoctorAPI.Application.Contracts.Repository.Doctor;
 using DoctorAPI.Application.Entities;
 using MediatR;
 
@@ -9,17 +10,20 @@ namespace DoctorAPI.Application.Commands.Doctor.Update;
 internal class UpdateDoctorCommandHandler : IRequestHandler<UpdateDoctorCommand>
 {
     private readonly IMapper _mapper;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IDoctorRepository _doctorRepository;
+    private readonly ICacheService _cacheService;
 
-    public UpdateDoctorCommandHandler(IMapper mapper, IUnitOfWork unitOfWork)
+    public UpdateDoctorCommandHandler(IMapper mapper, IDoctorRepository doctorRepository, ICacheService cacheService)
     {
         _mapper = mapper;
-        _unitOfWork = unitOfWork;
+        _doctorRepository = doctorRepository;
+        _cacheService = cacheService;
     }
 
     public async Task Handle(UpdateDoctorCommand command, CancellationToken cancellationToken)
     {
         var doctorEntity = _mapper.Map<DoctorEntity>(command.Request);
-        await _unitOfWork.DoctorRepository.UpdateAsync(doctorEntity);   
+        await _cacheService.RemoveAsync(doctorEntity.Id.ToString(), cancellationToken);
+        await _doctorRepository.UpdateAsync(doctorEntity);   
     }
 }

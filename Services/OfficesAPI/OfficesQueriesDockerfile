@@ -1,0 +1,23 @@
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /app
+EXPOSE 80
+EXPOSE  433
+
+COPY OfficesAPI.Queries/OfficesAPI.Queries.API/*.csproj OfficesAPI.Queries.API/
+COPY OfficesAPI.Queries/OfficesAPI.Queries.Application/*.csproj OfficesAPI.Queries.Application/
+COPY OfficesAPI.Queries/OfficesAPI.Queries.Infrastructure/*.csproj OfficesAPI.Queries.Infrastructure/
+COPY OfficesAPI.Queries/OfficesAPI.Queries.Core/*.csproj OfficesAPI.Queries.Core/
+COPY OfficesAPI.Shared/OfficesAPI.Shared/*.csproj OfficesAPI.Shared/
+
+RUN dotnet restore OfficesAPI.Queries.API/OfficesAPI.Queries.API.csproj
+
+COPY . .
+
+RUN dotnet publish OfficesAPI.Queries/OfficesAPI.Queries.API/OfficesAPI.Queries.API.csproj -c Release -o out
+
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+WORKDIR /app
+COPY --from=build /app/out .
+
+ENTRYPOINT ["dotnet", "OfficesAPI.Queries.API.dll"]

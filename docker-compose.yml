@@ -1,23 +1,251 @@
 version: '3.8'
-
 services:
-
+  apigateway:
+    image: ${DOCKER_REGISTRY-}apigateway
+    build:
+      context: ./Gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8000:80"
+    networks:
+      - backend
+    depends_on:
+      - doctorapi
+      - authapi
+      - office.queries.api
+      - office.commands.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ASPNETCORE_URLS=${ASPNETCORE_URLS}
+    restart: unless-stopped
+    
   doctorapi:
     image: ${DOCKER_REGISTRY-}doctorapi
     build:
-      context: .
-      dockerfile: Services/DoctorAPI/DoctorAPI/Dockerfile
-
+      context: ./Services
+      dockerfile: DoctorDockerfile
+    networks:
+      - backend
+    depends_on:
+      - doctor.db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ASPNETCORE_URLS=${ASPNETCORE_URLS}
+      - Kestrel__Certificates__Development__Password=${Kestrel__Certificates__Development__Password}
+      - JwtSettings__ValidateIssuer=${JwtSettings__ValidateIssuer}
+      - JwtSettings__ValidateAudience=${JwtSettings__ValidateAudience}
+      - JwtSettings__SecretKey=${JwtSettings__SecretKey}
+      - JwtSettings__Issuer=${JwtSettings__Issuer}
+      - JwtSettings__Audience=${JwtSettings__Audience}
+      - DoctorDbSettings__ConnectionString=${DoctorDbSettings__ConnectionString}
+      - CacheSettings__InstanceName=${CacheSettings__InstanceName}
+      - CacheSettings__ConnectionString=${CacheSettings__ConnectionString}
+    restart: unless-stopped
+    
   doctor.db:
     image: postgres:latest
     environment:
-      - POSTGRES_DB=doctor-db
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=${POSTGRES_DB_DOCTOR}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
+    networks:
+      - backend
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - doctordata:/var/lib/postgresql/data
+    restart: unless-stopped
+    
+  authapi:
+    image: ${DOCKER_REGISTRY-}authapi
+    build:
+      context: ./Services
+      dockerfile: AuthDockerfile
+    networks:
+      - backend
+    depends_on:
+      - auth.db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ASPNETCORE_URLS=${ASPNETCORE_URLS}
+      - JwtSettings__ValidateIssuer=${JwtSettings__ValidateIssuer}
+      - JwtSettings__ValidateAudience=${JwtSettings__ValidateAudience}
+      - JwtSettings__SecretKey=${JwtSettings__SecretKey}
+      - JwtSettings__RefreshTokenExpiryDats=${JwtSettings__RefreshTokenExpiryDats}
+      - JwtSettings__ReferenceTokenExpiryMinutes=${JwtSettings__ReferenceTokenExpiryMinutes}
+      - JwtSettings__Issuer=${JwtSettings__Issuer}
+      - JwtSettings__IdTokenExpiryMinutes=${JwtSettings__IdTokenExpiryMinutes}
+      - JwtSettings__Audience=${JwtSettings__Audience}
+      - JwtSettings__AccessTokenExpiryMinutes=${JwtSettings__AccessTokenExpiryMinutes}
+      - AuthDbSettings__ConnectionString=${AuthDbSettings__ConnectionString}
+    restart: unless-stopped
+    
+  auth.db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB_AUTH}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - "5433:5432"
+    networks:
+      - backend
+    volumes:
+      - authdata:/var/lib/postgresql/data
+    restart: unless-stopped
+ 
+  doctor.cache:
+    image: redis:7.0-alpine
+    command: redis-server --requirepass CachePassword --appendonly yes --enable-debug-command yes
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+    ports:
+      - "6379:6379"
+    volumes:
+      - doctor_cachedata:/data
+  
+  office.commands.api:
+    image: ${DOCKER_REGISTRY-}office.commands.api
+    build:
+      context: ./Services/OfficesAPI
+      dockerfile: OfficesCommandsDockerfile
+    networks:
+      - backend
+    depends_on:
+      eventstore:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - EventStoreSettings__ConnectionString=${EventStoreSettings__ConnectionString}
+      - MessageBrokerSettings__Hostname=${MessageBrokerSettings__Hostname}
+      - MessageBrokerSettings__VirtualHost=${MessageBrokerSettings__VirtualHost}
+      - MessageBrokerSettings__Username=${MessageBrokerSettings__Username}
+      - MessageBrokerSettings__Password=${MessageBrokerSettings__Password}
+
+    restart: unless-stopped
+
+  office.queries.api:
+    image: ${DOCKER_REGISTRY-}office.queries.api
+    build:
+      context: ./Services/OfficesAPI
+      dockerfile: OfficesQueriesDockerfile
+    networks:
+      - backend
+    depends_on:
+      office.db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ASPNETCORE_URLS=${ASPNETCORE_URLS}
+      - OfficeDbSettings__DatabaseName=${OfficeDbSettings__DatabaseName}
+      - OfficeDbSettings__ConnectionString=${OfficeDbSettings__ConnectionString}
+      - MessageBrokerSettings__Hostname=${MessageBrokerSettings__Hostname}
+      - MessageBrokerSettings__VirtualHost=${MessageBrokerSettings__VirtualHost}
+      - MessageBrokerSettings__Username=${MessageBrokerSettings__Username}
+      - MessageBrokerSettings__Password=${MessageBrokerSettings__Password}
+    restart: unless-stopped
+    
+  office.db:
+    image: mongo:7.0
+    command: ["--replSet", "rs0", "--bind_ip_all", "--port", "27017"]
+    ports:
+      - "27017:27017"
+    networks:
+      - backend
+    healthcheck:
+      test: echo "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'host.docker.internal:27017'}]}) }" | mongosh --port 27017 --quiet
+      interval: 5s
+      timeout: 30s
+      start_period: 0s
+      start_interval: 1s
+      retries: 30
+    volumes:
+      - "officedata.queries:/data/db"
+      - "officedata.queries:/data/configdb"
+    restart: unless-stopped
+
+  eventstore:
+    image: eventstore/eventstore:21.10.0-buster-slim
+    networks:
+      - backend
+    environment:
+      EVENTSTORE_INSECURE: "true"
+      EVENTSTORE_RUN_PROJECTIONS: "All"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    
+  appointmentapi:
+    image: ${DOCKER_REGISTRY-}appointmentapi
+    build:
+      context:  ./Services
+      dockerfile: AppointmentDockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ASPNETCORE_URLS=${ASPNETCORE_URLS}
+      - AppointmentDbSettings__ConnectionString=${AppointmentDbSettings__ConnectionString}
+      - GrpcSettings__DoctorServiceAddress=${GrpcSettings__DoctorServiceAddress}
+      - GrpcSettings__AuthServiceAddress=${GrpcSettings__AuthServiceAddress}
+      - SmtpSettings__Server=${SmtpSettings__Server}
+      - SmtpSettings__Port=${SmtpSettings__Port}
+      - SmtpSettings__Username=${SmtpSettings__Username}
+      - SmtpSettings__Password=${SmtpSettings__Password}
+      - SmtpSettings__FromName=${SmtpSettings__FromName}
+      - SmtpSettings__FromAddress=${SmtpSettings__FromAddress}
+      - NotificationSettings__CheckIntervalMinutes=${NotificationSettings__CheckIntervalMinutes}
+      - NotificationSettings__NotificationConfigs__0__MinutesBefore=${NotificationSettings__NotificationConfigs__0__MinutesBefore}
+      - NotificationSettings__NotificationConfigs__0__Subject=${NotificationSettings__NotificationConfigs__0__Subject}
+      - NotificationSettings__NotificationConfigs__0__Body=${NotificationSettings__NotificationConfigs__0__Body}
+      - NotificationSettings__NotificationConfigs__1__MinutesBefore=${NotificationSettings__NotificationConfigs__1__MinutesBefore}
+      - NotificationSettings__NotificationConfigs__1__Subject=${NotificationSettings__NotificationConfigs__1__Subject}
+      - NotificationSettings__NotificationConfigs__1__Body=${NotificationSettings__NotificationConfigs__1__Body}
+      - NotificationSettings__NotificationConfigs__2__MinutesBefore=${NotificationSettings__NotificationConfigs__2__MinutesBefore}
+      - NotificationSettings__NotificationConfigs__2__Subject=${NotificationSettings__NotificationConfigs__2__Subject}
+      - NotificationSettings__NotificationConfigs__2__Body=${NotificationSettings__NotificationConfigs__2__Body}
+    depends_on:
+      - appointment.db
+    restart: unless-stopped
+    networks:
+      - backend 
+
+  appointment.db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+     - "1433:1433"
+    environment:
+      SA_PASSWORD: "YourStrong!Passw0rd"
+      ACCEPT_EULA: "Y"
+    volumes:
+     - appointmentdata:/var/opt/mssql
+    networks: 
+     - backend
+
+networks:
+  backend:
+    driver: bridge
 
 volumes:
-    pgdata:
+    doctordata:
+    authdata:
+    doctor_cachedata:
+    officedata.queries:
+    appointmentdata:

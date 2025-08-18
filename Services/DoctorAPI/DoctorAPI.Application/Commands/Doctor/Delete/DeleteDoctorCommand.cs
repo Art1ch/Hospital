@@ -1,5 +1,4 @@
-﻿using DoctorAPI.Application.Requests.Doctor;
-using MediatR;
+﻿using MediatR;
 
 namespace DoctorAPI.Application.Commands.Doctor.Delete;
 
