@@ -2,6 +2,9 @@ name: Run Integration Tests
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - dev
 
 jobs:
   integration_tests:
