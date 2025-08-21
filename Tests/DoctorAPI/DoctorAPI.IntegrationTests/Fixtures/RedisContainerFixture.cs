@@ -21,19 +21,24 @@ public sealed class RedisContainerFixture : IAsyncLifetime
     {
         ConfigureRedisSettings();
         CreateContainer();
-        await Container.StartAsync();
-        await CreateConnection();
+        await Container.StartAsync();   
+
+        await CreateConnection();      
 
         CreateDatabase();
         CreateCacheMemory();
     }
 
-
     public async Task DisposeAsync()
     {
         await ClearCacheStorage();
-        //await _connection.CloseAsync();
-        await _connection.DisposeAsync();
+
+        if (_connection != null)
+        {
+            await _connection.CloseAsync();
+            await _connection.DisposeAsync();
+        }
+        
         await Container.StopAsync();
         await Container.DisposeAsync();
     }
@@ -54,7 +59,7 @@ public sealed class RedisContainerFixture : IAsyncLifetime
     {
         var cacheOptions = new RedisCacheOptions()
         {
-            Configuration = _settings.ConnectionString,
+            Configuration = Container.GetConnectionString(),
             InstanceName = _settings.InstanceName,
         };
         var optionAccessor = Options.Create(cacheOptions);
@@ -70,7 +75,7 @@ public sealed class RedisContainerFixture : IAsyncLifetime
 
     private async Task CreateConnection()
     {
-        _connection = await ConnectionMultiplexer.ConnectAsync(_settings.ConnectionString);
+        _connection = await ConnectionMultiplexer.ConnectAsync(Container.GetConnectionString());
     }
 
     private void CreateDatabase()
@@ -83,9 +88,11 @@ public sealed class RedisContainerFixture : IAsyncLifetime
         if (_database != null)
         {
             var endpoints = _connection.GetEndPoints();
-            var firstEndpoint = endpoints.First();
-            var server = _connection.GetServer(firstEndpoint);
-            await server.FlushDatabaseAsync(_database.Database);
+            var server = _connection.GetServer(endpoints.First());
+            foreach (var key in server.Keys())
+            {
+                await _database.KeyDeleteAsync(key);
+            }
         }
     }
 }
