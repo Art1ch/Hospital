@@ -20,10 +20,11 @@ public sealed class PostgresContainerFixture : IAsyncLifetime
     {
         ConfigureDbSettings();
         CreateContainer();
-        CreateDbContext();
+        await Container.StartAsync();  
+
+        CreateDbContext();             
         CreateUnitOfWork();
 
-        await Container.StartAsync();
         await _dbContext.Database.MigrateAsync();
         await UnitOfWork.BeginTransactionAsync();
     }
@@ -62,7 +63,8 @@ public sealed class PostgresContainerFixture : IAsyncLifetime
     private void CreateDbContext()
     {
         var options = new DbContextOptionsBuilder<DoctorDbContext>()
-            .UseNpgsql(_settings.ConnectionString).Options;
+            .UseNpgsql(Container.GetConnectionString()) 
+            .Options;
         _dbContext = new DoctorDbContext(options);
     }
 
