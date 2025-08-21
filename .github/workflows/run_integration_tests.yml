@@ -7,10 +7,16 @@ jobs:
   integration_tests:
     runs-on: ubuntu-latest
 
-    services:
-      docker:
-        image: docker:dind
-        options: --privileged
+    env:
+      PostgresDbSettings__ConnectionString: "Host=localhost;Port=5433;Database=doctor-db;Username=postgres;Password=pass"
+      PostgresDbSettings__Username: "postgres"
+      PostgresDbSettings__Password: "pass"
+      PostgresDbSettings__Database: "doctor-db"
+      PostgresDbSettings__Image: "postgres:14-alpine"
+
+      RedisSettings__ConnectionString: "localhost:6379,password=CachePassword,allowAdmin=true"
+      RedisSettings__InstanceName: "test_"
+      RedisSettings__Image: "redis:7.2-alpine"
 
     steps:
       - name: Checkout code
