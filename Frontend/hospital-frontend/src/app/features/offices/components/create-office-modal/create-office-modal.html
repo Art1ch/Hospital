@@ -1,0 +1,15 @@
+<div class="modal-overlay" *ngIf="isVisible">
+  <div class="modal">
+    <h3>Add New Office</h3>
+    
+    <div class="form">
+      <input [(ngModel)]="newOffice.address" placeholder="📍 Address" class="form-input">
+      <input [(ngModel)]="newOffice.registryPhoneNumber" placeholder="📞 Phone Number" class="form-input">
+      
+      <div class="buttons">
+        <button class="cancel-button" (click)="onCancel()">Cancel</button>
+        <button class="submit-button" (click)="onSubmit()">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
