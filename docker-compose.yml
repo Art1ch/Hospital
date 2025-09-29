@@ -31,6 +31,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
       - ASPNETCORE_URLS=${ASPNETCORE_URLS}
+      - Kestrel__Certificates__Development__Password=${Kestrel__Certificates__Development__Password}
       - JwtSettings__ValidateIssuer=${JwtSettings__ValidateIssuer}
       - JwtSettings__ValidateAudience=${JwtSettings__ValidateAudience}
       - JwtSettings__SecretKey=${JwtSettings__SecretKey}
@@ -127,8 +128,6 @@ services:
       - MessageBrokerSettings__VirtualHost=${MessageBrokerSettings__VirtualHost}
       - MessageBrokerSettings__Username=${MessageBrokerSettings__Username}
       - MessageBrokerSettings__Password=${MessageBrokerSettings__Password}
-      - CorsSettings__PolicyName=${CorsSettings__PolicyName}
-      - CorsSettings__Origin=${CorsSettings__Origin}
 
     restart: unless-stopped
 
@@ -153,8 +152,6 @@ services:
       - MessageBrokerSettings__VirtualHost=${MessageBrokerSettings__VirtualHost}
       - MessageBrokerSettings__Username=${MessageBrokerSettings__Username}
       - MessageBrokerSettings__Password=${MessageBrokerSettings__Password}
-      - CorsSettings__PolicyName=${CorsSettings__PolicyName}
-      - CorsSettings__Origin=${CorsSettings__Origin}
     restart: unless-stopped
     
   office.db:

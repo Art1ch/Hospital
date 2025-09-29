@@ -18,12 +18,4 @@ internal static class WebApplicationBuilderExtensions
         builder.Services.Configure<MessageBrokerSettings>(builder.Configuration.GetSection(sectionName));
         return settings;
     }
-
-    public static CorsSettings ConfigureCors(this WebApplicationBuilder builder)
-    {
-        var sectionName = nameof(CorsSettings);
-        var settings = builder.Configuration.GetSection(sectionName).Get<CorsSettings>()!;
-        builder.Services.Configure<CorsSettings>(builder.Configuration.GetSection(sectionName));
-        return settings;
-    }
 }

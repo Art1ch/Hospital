@@ -3,8 +3,7 @@
 namespace OfficesAPI.Queries.Application.RepositoryResults.Office;
 
 public record GetAllOfficesCollectionItem(
-    Guid Id,
     string Address,
-    string RegistryPhoneNumber,
+    string RegisteryPhoneNumber,
     OfficeStatus Status
 );

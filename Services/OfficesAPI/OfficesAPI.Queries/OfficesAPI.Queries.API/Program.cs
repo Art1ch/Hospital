@@ -1,6 +1,4 @@
 using OfficeAPI.Queries.API.Extensions;
-using OfficeAPI.Queries.API.Middlewares;
-using OfficesAPI.Queries.API.Extensions;
 using OfficesAPI.Queries.Application;
 using OfficesAPI.Queries.Infrastructure;
 
@@ -19,12 +17,9 @@ public class Program
 
         builder.ConfigureDbSettings();
         var messageBrokerSettings = builder.ConfigureMessageBroker();
-        var corsSettings = builder.ConfigureCors();
 
         builder.Services.AddApplicationLayer(messageBrokerSettings)
             .AddInfrastructureLayer();
-
-        builder.Services.AddCorsPolicy(corsSettings);
 
         var app = builder.Build();
 
@@ -35,10 +30,12 @@ public class Program
         }
 
         app.UseHttpsRedirection();
-        app.UseCors(corsSettings.PolicyName);
-        app.UseMiddleware<ExceptionMiddleware>();
+
         app.UseAuthorization();
+
+
         app.MapControllers();
+
         app.Run();
     }
 }

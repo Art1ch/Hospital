@@ -27,7 +27,6 @@ internal class OfficeRepository : Repository<OfficeEntity, Guid>, IOfficeReposit
     {
         var projection = Builders<OfficeEntity>.Projection
             .Expression(o => new GetAllOfficesCollectionItem(
-                o.Id,
                 o.Address,
                 o.RegistryPhoneNumber,
                 o.Status
@@ -36,25 +35,17 @@ internal class OfficeRepository : Repository<OfficeEntity, Guid>, IOfficeReposit
         var offices = await _collection
             .Find(FilterDefinition<OfficeEntity>.Empty)
             .Skip((page - 1) * pageSize)
-            .Limit(pageSize + 1)
+            .Limit(pageSize)
             .Project(projection)
             .ToListAsync(cancellationToken);
 
-        var hasNextPage = offices.Count > pageSize;
-
-        if (hasNextPage)
-        {
-            offices = offices.Take(pageSize).ToList();
-        }
-
-        return new GetAllOfficesResult(hasNextPage, offices);
+        return new GetAllOfficesResult(offices);
     }
 
     public async Task<GetOfficeInfoResult> GetOfficeInfoAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var projection = Builders<OfficeEntity>.Projection
             .Expression(o => new GetOfficeInfoItem(
-                o.Id,
                 o.Address,
                 o.RegistryPhoneNumber,
                 o.Status
