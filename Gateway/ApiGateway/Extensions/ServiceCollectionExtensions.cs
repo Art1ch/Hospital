@@ -1,6 +1,6 @@
-﻿using OfficesAPI.Shared.Settings;
+using Ocelot.Settings;
 
-namespace OfficesAPI.Commands.API.Extensions;
+namespace Ocelot.Extensions;
 
 internal static class ServiceCollectionExtensions
 {

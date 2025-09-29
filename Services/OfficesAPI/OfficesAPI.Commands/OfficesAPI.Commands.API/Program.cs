@@ -18,12 +18,9 @@ public class Program
 
         var messageBrokerSettings = builder.ConfigureMessageBroker();
         var eventStoreSettings = builder.ConfigureEventStore();
-        var corsSettings = builder.ConfigureCors();
 
         builder.Services.AddApplicationLayer()
             .AddInfrastructureLayer(eventStoreSettings, messageBrokerSettings);
-
-        builder.Services.AddCorsPolicy(corsSettings);
 
         var app = builder.Build();
 
@@ -34,7 +31,6 @@ public class Program
         }
 
         app.UseHttpsRedirection();
-        app.UseCors(corsSettings.PolicyName);
         app.UseMiddleware<ExceptionMiddleware>();
         app.UseAuthorization();
         app.MapControllers();

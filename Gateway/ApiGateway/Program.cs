@@ -1,4 +1,5 @@
 using Ocelot.DependencyInjection;
+using Ocelot.Extensions;
 using Ocelot.Middleware;
 
 namespace ApiGateway
@@ -14,6 +15,9 @@ namespace ApiGateway
             builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
             builder.Services.AddOcelot();
 
+            var corsSettings = builder.ConfigureCors();
+            builder.Services.AddCorsPolicy(corsSettings);
+
             var app = builder.Build();
             if (app.Environment.IsDevelopment())
             {
@@ -21,6 +25,7 @@ namespace ApiGateway
                 app.UseSwaggerUI();
             }
             app.UseHttpsRedirection();
+            app.UseCors(corsSettings.PolicyName);
             app.UseAuthorization();
             app.MapControllers();
             app.UseOcelot().Wait();

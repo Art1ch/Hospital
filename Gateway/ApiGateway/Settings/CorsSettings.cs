@@ -1,4 +1,4 @@
-﻿namespace OfficesAPI.Shared.Settings;
+namespace Ocelot.Settings;
 
 public class CorsSettings
 {
