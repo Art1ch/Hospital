@@ -4,6 +4,7 @@ using OfficesAPI.Commands.Application.Office.Delete;
 using OfficesAPI.Commands.Application.Office.Update;
 using OfficesAPI.Commands.Application.Requests.Office;
 using MediatR;
+using OfficesAPI.Commands.Application.Requests;
 
 namespace OfficesAPI.Commands.API.Controllers;
 
@@ -14,7 +15,7 @@ public class OfficeController(
 ) : ControllerBase
 {
     [HttpPost]
-    public async Task<ActionResult> Create([FromBody] CreateOfficeRequest request)
+    public async Task<ActionResult> Create([FromForm] CreateOfficeRequest request)
     {
         var command = new CreateOfficeCommand(request);
         await sender.Send(command);
@@ -22,7 +23,7 @@ public class OfficeController(
     }
 
     [HttpPatch]
-    public async Task<ActionResult> Update([FromBody] UpdateOfficeRequest request)
+    public async Task<ActionResult> Update([FromForm] UpdateOfficeRequest request)
     {
         var command = new UpdateOfficeCommand(request);
         await sender.Send(command);
@@ -30,9 +31,9 @@ public class OfficeController(
     }
 
     [HttpDelete]
-    public async Task<ActionResult> Delete([FromQuery] Guid id)
+    public async Task<ActionResult> Delete([FromBody] DeleteOfficeRequest request)
     {
-        var command = new DeleteOfficeCommand(id);
+        var command = new DeleteOfficeCommand(request);
         await sender.Send(command);
         return NoContent();
     }

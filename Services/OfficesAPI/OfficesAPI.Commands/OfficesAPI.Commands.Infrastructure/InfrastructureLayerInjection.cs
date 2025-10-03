@@ -14,11 +14,13 @@ public static class InfrastructureLayerInjection
         this IServiceCollection services,
         EventStoreSettings eventStoreSettings,
         MessageBrokerSettings messageBrokerSettings
+        
     )
     {
         services.AddEventStore(eventStoreSettings).
             AddMessageBroker(messageBrokerSettings).
-            AddMessagePublisher();
+            AddMessagePublisher().
+            AddImageService();
 
         return services;
     }
@@ -56,4 +58,7 @@ public static class InfrastructureLayerInjection
 
     private static IServiceCollection AddMessagePublisher(this IServiceCollection services) =>
         services.AddScoped<IMessagePublisher, MessagePublisher>();
+
+    private static IServiceCollection AddImageService(this IServiceCollection services) =>
+        services.AddScoped<IImageService, CloudinaryImageService>();
 }

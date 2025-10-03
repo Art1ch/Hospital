@@ -6,5 +6,6 @@ public record GetOfficeInfoItem(
     Guid Id,
     string Address,
     string RegistryPhoneNumber,
-    OfficeStatus Status
+    OfficeStatus Status,
+    string ImageUrl
 );

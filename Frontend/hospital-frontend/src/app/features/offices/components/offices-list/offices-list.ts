@@ -6,6 +6,7 @@ import { GetOfficesResponse } from '../../models/get-offices-response';
 import { CreateOfficeModel } from '../../models/create-office-model';
 import { UpdateOfficeModel } from '../../models/update-office-model';
 import { UpdateOfficeModal } from '../update-office-modal/update-office-modal';
+import { DeleteOfficeModel } from '../../models/delete-office-model';
 
 @Component({
   selector: 'app-offices-list',
@@ -41,12 +42,13 @@ export class OfficesList {
         this.isLoading = false;
       }
     });
+
+    console.log(this.offices);
   }
 
   onOfficeCreated(office: CreateOfficeModel): void {
     this.officeService.createOffice(office).subscribe({
       next: () => {
-        this.page = 1;
         this.loadOffices();
       },
       error: (error) => {
@@ -70,10 +72,9 @@ export class OfficesList {
     });
   }
 
-  onOfficeDelete(officeId: string): void {
-    const office = this.offices.find(o => o.id === officeId);
-    if (office && confirm(`Are you sure you want to delete office "${office.address}"?`)) {
-      this.officeService.deleteOffice(officeId).subscribe({
+  onOfficeDelete(office: DeleteOfficeModel): void {
+    if (office && confirm('Are you sure you want to delete office?')) {
+      this.officeService.deleteOffice(office).subscribe({
         next: () => {
           this.loadOffices();
         },

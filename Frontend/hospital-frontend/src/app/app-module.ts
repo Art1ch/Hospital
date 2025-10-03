@@ -7,7 +7,7 @@ import { App } from './app';
 import { OfficesModule } from './features/offices/offices-module';
 import { SharedModule } from './shared/shared.module';
 import { HomeModule } from './features/home/home-module';
-import { HttpClientModule, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 @NgModule({
   declarations: [

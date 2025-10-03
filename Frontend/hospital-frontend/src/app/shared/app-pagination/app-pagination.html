@@ -3,23 +3,26 @@
     class="pagination-button first-button"
     (click)="goToFirst()" 
     [disabled]="!canGoFirst"
-    title="First page">
+    title="First page"
+    aria-label="Go to first page">
     ⇤
   </button>
   
   <button 
     class="pagination-button" 
     (click)="goToPrevious()" 
-    [disabled]="!canGoPrevious">
+    [disabled]="!canGoPrevious"
+    aria-label="Go to previous page">
     ←
   </button>
   
-  <span class="page-number">Page {{ page }}</span>
+  <span class="page-number" aria-live="polite">Page {{ page }}</span>
   
   <button 
     class="pagination-button" 
     (click)="goToNext()" 
-    [disabled]="!canGoNext">
+    [disabled]="!canGoNext"
+    aria-label="Go to next page">
     →
   </button>
 </div>

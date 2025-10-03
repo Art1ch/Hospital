@@ -1,9 +1,10 @@
-<app-app-header/>
+<app-app-header></app-app-header>
+
 <div class="offices-container">
   <div class="header">
-    <h2>📍 Our Offices </h2>
-    <button class="create-button" (click)="createModal.open()">
-      ➕ Create Office
+    <h2>Our Offices</h2>
+    <button class="create-button" (click)="createModal.open()" aria-label="Create new office">
+      Create Office
     </button>
   </div>
 
@@ -13,29 +14,31 @@
   </app-create-office-modal>
 
   <app-update-office-modal
+    #updateModal
     (officeUpdated)="onOfficeUpdated($event)">
   </app-update-office-modal>
 
-  <div *ngIf="isLoading" class="loading">Loading offices</div>
+  <div *ngIf="isLoading" class="loading" aria-live="polite">Loading offices...</div>
 
-  <div class="offices-grid" *ngIf="!isLoading">
+  <div class="offices-grid" *ngIf="!isLoading" role="list" aria-label="List of offices">
     <app-office-card 
       *ngFor="let office of offices"
       [office]="office"
       (edit)="onOfficeEdit($event)"     
-      (delete)="onOfficeDelete($event)">
+      (delete)="onOfficeDelete($event)"
+      role="listitem">
     </app-office-card>
   </div>
 
   <app-app-pagination
-  [page]="page"
-  [pageSize]="pageSize"
-  [hasNextPage]="hasNextPage"
-  [isLoading]="isLoading"
-  (onGoToNext)="goToNextPage()"
-  (onGoToPrevious)="goToPreviousPage()"
-  (onGoToFirst)="goToFirstPage()">
+    [page]="page"
+    [pageSize]="pageSize"
+    [hasNextPage]="hasNextPage"
+    [isLoading]="isLoading"
+    (onGoToNext)="goToNextPage()"
+    (onGoToPrevious)="goToPreviousPage()"
+    (onGoToFirst)="goToFirstPage()">
   </app-app-pagination>
-
 </div>
-<app-app-footer/>
+
+<app-app-footer></app-app-footer>

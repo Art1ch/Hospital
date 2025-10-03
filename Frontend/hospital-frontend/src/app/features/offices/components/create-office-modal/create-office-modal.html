@@ -3,12 +3,31 @@
     <h3>Add New Office</h3>
     
     <div class="form">
-      <input [(ngModel)]="newOffice.address" placeholder="📍 Address" class="form-input">
-      <input [(ngModel)]="newOffice.registryPhoneNumber" placeholder="📞 Phone Number" class="form-input">
+      <input 
+        [(ngModel)]="newOffice.address" 
+        placeholder="Address" 
+        class="form-input"
+        aria-label="Office address">
+      <input 
+        [(ngModel)]="newOffice.registryPhoneNumber" 
+        placeholder="Phone Number" 
+        class="form-input"
+        aria-label="Phone number">
       
+      <div class="image-upload">
+        <label>Office Image</label>
+        <input 
+          type="file" 
+          (change)="onImageSelected($event)" 
+          accept="image/*"
+          class="file-input"
+          aria-label="Upload office image">
+        <img [src]="imagePreview" *ngIf="imagePreview" class="image-preview" alt="Office image preview">
+      </div>
+
       <div class="buttons">
-        <button class="cancel-button" (click)="onCancel()">Cancel</button>
-        <button class="submit-button" (click)="onSubmit()">Add</button>
+        <button class="cancel-button" (click)="onCancel()" aria-label="Cancel creation">Cancel</button>
+        <button class="submit-button" (click)="onSubmit()" aria-label="Add new office">Add</button>
       </div>
     </div>
   </div>

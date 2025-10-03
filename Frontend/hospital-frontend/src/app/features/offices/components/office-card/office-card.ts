@@ -11,13 +11,13 @@ import { OfficeStatus } from '../../models/office-status';
 export class OfficeCard {
   @Input() office!: GetOfficeModel;
   @Output() edit = new EventEmitter<GetOfficeModel>(); 
-  @Output() delete = new EventEmitter<string>(); 
+  @Output() delete = new EventEmitter<GetOfficeModel>(); 
 
   getNameOfStatus(status: OfficeStatus): string {
     switch(status) {
       case OfficeStatus.Active: return "Active";
       case OfficeStatus.Inactive: return "Inactive";
-      default: return "Undefined";
+      default: return "Unspecified";
     }
   }
 
@@ -26,6 +26,6 @@ export class OfficeCard {
   }
 
   onDelete(): void {
-    this.delete.emit(this.office.id);
+    this.delete.emit(this.office);
   }
 }

@@ -30,7 +30,8 @@ internal class OfficeRepository : Repository<OfficeEntity, Guid>, IOfficeReposit
                 o.Id,
                 o.Address,
                 o.RegistryPhoneNumber,
-                o.Status
+                o.Status,
+                o.ImageUrl
             ));
 
         var offices = await _collection
@@ -57,7 +58,8 @@ internal class OfficeRepository : Repository<OfficeEntity, Guid>, IOfficeReposit
                 o.Id,
                 o.Address,
                 o.RegistryPhoneNumber,
-                o.Status
+                o.Status,
+                o.ImageUrl
             ));
 
         var filter = this.GetIdFilter(id);

@@ -20,4 +20,12 @@ internal static class WebApplicationBuilderExtensions
         builder.Services.Configure<EventStoreSettings>(builder.Configuration.GetSection(sectionName));
         return settings;
     }
+
+    public static CloudinarySettings ConfigureCloudinary(this WebApplicationBuilder builder)
+    {
+        var sectionName = nameof(CloudinarySettings);
+        var settings = builder.Configuration.GetSection(sectionName).Get<CloudinarySettings>()!;
+        builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection(sectionName));
+        return settings;
+    }
 }

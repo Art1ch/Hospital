@@ -1,69 +1,52 @@
+:host {
+  display: block;
+}
+
 .pagination-element {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
-  padding: 2rem 0;
+  gap: 12px;
+  padding: 20px 0;
 }
 
 .pagination-button {
-  background: white;
-  border: 2px solid #e9ecef;
-  color: #495057;
-  padding: 0.75rem 1rem;
+  padding: 10px 16px;
+  border: 2px solid var(--hospital-border);
   border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
-  font-size: 1rem;
-  font-weight: 500;
   transition: all 0.3s ease;
-  min-width: 44px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-
+  gap: 8px;
+  background-color: var(--hospital-white);
+  color: var(--hospital-green);
+  
   &:hover:not(:disabled) {
-    background: #667eea;
-    border-color: #667eea;
-    color: white;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: var(--hospital-mint);
+    border-color: var(--hospital-green);
   }
-
+  
   &:disabled {
-    opacity: 0.5;
+    color: #bdbdbd;
+    border-color: #e0e0e0;
     cursor: not-allowed;
-    transform: none;
+    opacity: 0.6;
   }
+}
 
-  &.first-button {
-    font-weight: bold;
-  }
+.first-button {
+  font-weight: bold;
 }
 
 .page-number {
-  font-size: 1.1rem;
+  color: var(--hospital-green);
   font-weight: 600;
-  color: #2c3e50;
-  min-width: 100px;
+  padding: 0 16px;
+  min-width: 80px;
   text-align: center;
-  padding: 0.5rem 1rem;
-  background: #f8f9fa;
-  border-radius: 6px;
-  border: 1px solid #e9ecef;
-}
-
-@media (max-width: 480px) {
-  .pagination-element {
-    gap: 0.5rem;
-  }
-
-  .pagination-button {
-    padding: 0.6rem 0.8rem;
-    min-width: 40px;
-  }
-
-  .page-number {
-    min-width: 80px;
-    font-size: 1rem;
-  }
 }

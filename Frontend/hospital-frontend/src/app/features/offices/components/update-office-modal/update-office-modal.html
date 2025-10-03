@@ -1,31 +1,46 @@
 <div class="modal-overlay" *ngIf="isVisible">
   <div class="modal">
-    <h3>✏️ Edit Office</h3>
+    <h3>Edit Office</h3>
     
     <div class="form">
       <input 
         [(ngModel)]="editedOffice.address" 
-        placeholder="📍 Address" 
-        class="form-input">
+        placeholder="Address" 
+        class="form-input"
+        aria-label="Office address">
       
       <input 
         [(ngModel)]="editedOffice.registryPhoneNumber" 
-        placeholder="📞 Phone Number" 
-        class="form-input">
+        placeholder="Phone Number" 
+        class="form-input"
+        aria-label="Phone number">
       
       <select 
         [(ngModel)]="editedOffice.status" 
-        class="form-select">
-        <option [value]="undefined" disabled>Select status</option>
-        <option [value]="officeStatus.Active">Active</option>
-        <option [value]="officeStatus.Inactive">Inactive</option>
+        class="form-select"
+        aria-label="Office status">
+        <option [ngValue]="undefined" disabled>Select status</option>
+        <option [ngValue]="officeStatus.Active">Active</option>
+        <option [ngValue]="officeStatus.Inactive">Inactive</option>
       </select>
 
+      <div class="image-upload">
+        <label>Office Image</label>
+        <input 
+          type="file" 
+          (change)="onImageSelected($event)" 
+          accept="image/*"
+          class="file-input"
+          aria-label="Upload office image">
+        <img [src]="imagePreview" *ngIf="imagePreview" class="image-preview" alt="Office image preview">
+      </div>
+
       <div class="buttons">
-        <button class="cancel-button" (click)="onCancel()">Cancel</button>
+        <button class="cancel-button" (click)="onCancel()" aria-label="Cancel editing">Cancel</button>
         <button 
           class="submit-button" 
-          (click)="onSubmit()">
+          (click)="onSubmit()"
+          aria-label="Save changes">
           Save Changes
         </button>
       </div>
