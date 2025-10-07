@@ -2,10 +2,13 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { UpdateOfficeModel } from '../../models/update-office-model';
 import { GetOfficeModel } from '../../models/get-office-model';
 import { OfficeStatus } from '../../models/office-status';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-update-office-modal',
-  standalone: false,
+  imports: [CommonModule, FormsModule],
+  standalone: true,
   templateUrl: './update-office-modal.html',
   styleUrl: './update-office-modal.scss'
 })

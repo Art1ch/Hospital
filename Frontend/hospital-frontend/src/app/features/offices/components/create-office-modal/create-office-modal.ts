@@ -1,10 +1,13 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { OfficeStatus } from '../../models/office-status';
 import { CreateOfficeModel } from '../../models/create-office-model';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-create-office-modal',
-  standalone: false,
+  imports: [CommonModule, FormsModule],
+  standalone: true,
   templateUrl: './create-office-modal.html',
   styleUrls: ['./create-office-modal.scss']
 })

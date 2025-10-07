@@ -7,10 +7,26 @@ import { CreateOfficeModel } from '../../models/create-office-model';
 import { UpdateOfficeModel } from '../../models/update-office-model';
 import { UpdateOfficeModal } from '../update-office-modal/update-office-modal';
 import { DeleteOfficeModel } from '../../models/delete-office-model';
+import { AppFooter } from '../../../../shared/app-footer/app-footer';
+import { AppHeader } from '../../../../shared/app-header/app-header';
+import { OfficeCard } from '../office-card/office-card';
+import { AppPagination } from '../../../../shared/app-pagination/app-pagination';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-offices-list',
-  standalone: false,
+  imports: [
+    AppFooter,
+    AppHeader,
+    CreateOfficeModal,
+    UpdateOfficeModal,
+    OfficeCard,
+    AppPagination,
+    CommonModule,
+    FormsModule
+  ],
+  standalone: true,
   templateUrl: './offices-list.html',
   styleUrl: './offices-list.scss'
 })

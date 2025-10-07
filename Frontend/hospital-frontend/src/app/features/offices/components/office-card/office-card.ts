@@ -1,9 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { GetOfficeModel } from '../../models/get-office-model';
 import { OfficeStatus } from '../../models/office-status';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  standalone: false,
+  standalone: true,
+  imports: [CommonModule],
   selector: 'app-office-card',
   templateUrl: './office-card.html',
   styleUrl: './office-card.scss'
