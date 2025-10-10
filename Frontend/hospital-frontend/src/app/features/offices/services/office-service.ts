@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpHandler, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { GetOfficesResponse } from "../models/get-offices-response";
@@ -6,21 +6,31 @@ import { CreateOfficeModel } from "../models/create-office-model";
 import { UpdateOfficeModel } from "../models/update-office-model";
 import { OfficeStatus } from "../models/office-status";
 import { DeleteOfficeModel } from "../models/delete-office-model";
+import { OfficeTimestampService } from "./office-timestamp-service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class OfficeService {
-  private apiUrl = 'http://localhost:8000/office';
+  private readonly apiUrl = 'http://localhost:8000/office';
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(
+    private httpClient: HttpClient,
+    private timestampService: OfficeTimestampService,
+  ) {}
 
   getOffices(page: number, pageSize: number): Observable<GetOfficesResponse> {
     const httpParams = new HttpParams()
       .set("page", page)
       .set("pageSize", pageSize);
+    
+    const needFreshData = this.timestampService.needFreshData();
+    const headers = new HttpHeaders()
+      .set("X-Need-Fresh-Data", needFreshData.toString());
 
-    return this.httpClient.get<GetOfficesResponse>(this.apiUrl, { params: httpParams });
+    return this.httpClient.get<GetOfficesResponse>(
+      this.apiUrl, { params: httpParams, headers: headers }
+    );
   }
 
   createOffice(office: CreateOfficeModel): Observable<void> {
@@ -33,7 +43,10 @@ export class OfficeService {
 
     console.log(formData);
 
-    return this.httpClient.post<void>(this.apiUrl, formData);
+    const observer = this.httpClient.post<void>(this.apiUrl, formData);
+    this.timestampService.setTimestamp();
+
+    return observer;
   }
 
   updateOffice(office: UpdateOfficeModel): Observable<void> {
@@ -53,7 +66,10 @@ export class OfficeService {
 
     console.log(formData);
 
-    return this.httpClient.patch<void>(this.apiUrl, formData);
+    const observer = this.httpClient.patch<void>(this.apiUrl, formData);
+    this.timestampService.setTimestamp();
+
+    return observer;
   }
 
   deleteOffice(office: DeleteOfficeModel): Observable<void> {
@@ -61,6 +77,9 @@ export class OfficeService {
       id: office.id,
       imageUrl: office.imageUrl ? office.imageUrl : "" 
     }
-    return this.httpClient.delete<void>(this.apiUrl, {body: deleteBody});
+    const observer = this.httpClient.delete<void>(this.apiUrl, {body: deleteBody});
+    this.timestampService.setTimestamp();
+
+    return observer;
   }
 }

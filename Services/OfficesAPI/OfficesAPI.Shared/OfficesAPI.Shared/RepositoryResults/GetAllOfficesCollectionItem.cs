@@ -1,8 +1,8 @@
 ﻿using OfficesAPI.Shared.Enum;
 
-namespace OfficesAPI.Queries.Application.RepositoryResults.Office;
+namespace OfficesAPI.Shared.RepositoryResults;
 
-public record GetOfficeInfoItem(
+public record GetAllOfficesCollectionItem(
     Guid Id,
     string Address,
     string RegistryPhoneNumber,

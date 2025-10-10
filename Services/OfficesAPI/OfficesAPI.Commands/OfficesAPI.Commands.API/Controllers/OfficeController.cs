@@ -5,6 +5,10 @@ using OfficesAPI.Commands.Application.Office.Update;
 using OfficesAPI.Commands.Application.Requests.Office;
 using MediatR;
 using OfficesAPI.Commands.Application.Requests;
+using OfficesAPI.Shared.Responses;
+using OfficesAPI.Shared.Requests;
+using OfficesAPI.Commands.Application.Queries.Office.GetAll;
+using OfficesAPI.Commands.Application.Queries.Office.GetInfo;
 
 namespace OfficesAPI.Commands.API.Controllers;
 
@@ -14,6 +18,24 @@ public class OfficeController(
     ISender sender
 ) : ControllerBase
 {
+
+    [HttpGet]
+    public async Task<ActionResult<GetAllOfficesResponse>> GetAll([FromQuery] GetAllOfficesRequest request)
+    {
+        Console.WriteLine("WRITE-SIDE WORKED!");
+        var query = new GetAllOfficesQuery(request);
+        var response = await sender.Send(query);
+        return Ok(response);
+    }
+
+    [HttpGet("info")]
+    public async Task<ActionResult<GetOfficeInfoResponse>> GetInfo([FromQuery] Guid id)
+    {
+        var query = new GetOfficeInfoQuery(id);
+        var response = await sender.Send(query);
+        return Ok(response);
+    }
+
     [HttpPost]
     public async Task<ActionResult> Create([FromForm] CreateOfficeRequest request)
     {

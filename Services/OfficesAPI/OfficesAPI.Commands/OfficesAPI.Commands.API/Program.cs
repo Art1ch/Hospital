@@ -19,6 +19,7 @@ public class Program
         var messageBrokerSettings = builder.ConfigureMessageBroker();
         var eventStoreSettings = builder.ConfigureEventStore();
         builder.ConfigureCloudinary();
+        builder.ConfigureOfficeDb();
 
         builder.Services.AddApplicationLayer()
             .AddInfrastructureLayer(eventStoreSettings, messageBrokerSettings);

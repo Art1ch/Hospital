@@ -1,4 +1,4 @@
-﻿namespace OfficesAPI.Queries.Application.Requests.Office;
+﻿namespace OfficesAPI.Shared.Requests;
 
 public record GetAllOfficesRequest(
     int Page,

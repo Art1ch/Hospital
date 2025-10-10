@@ -19,4 +19,15 @@ internal static class ServiceCollectionExtensions
 
         return services;
     }
+
+    public static IServiceCollection AddOfficeGatewayHttpClient(this IServiceCollection services)
+    {
+        services.AddHttpClient("OfficeGateway")
+                .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+                {
+                    AllowAutoRedirect = false
+                });
+
+        return services;
+    }
 }

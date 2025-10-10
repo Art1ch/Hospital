@@ -8,6 +8,6 @@ public record UpdateOfficeRequest(
     string Address,
     string RegistryPhoneNumber,
     OfficeStatus Status,
-    IFormFile? Image,
-    string? ImageUrl
+    IFormFile? NewImage,
+    string? OldImageUrl
 );

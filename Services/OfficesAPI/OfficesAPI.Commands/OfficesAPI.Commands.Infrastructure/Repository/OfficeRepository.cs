@@ -1,12 +1,12 @@
 ﻿using MongoDB.Driver;
-using OfficesAPI.Queries.Application.Contracts.Repository.Office;
-using OfficesAPI.Queries.Infrastructure.Context;
-using OfficesAPI.Queries.Infrastructure.Repositories.Abstract;
+using OfficesAPI.Commands.Application.Contracts;
+using OfficesAPI.Commands.Infrastructure.Context;
+using OfficesAPI.Commands.Infrastructure.Repositories;
 using OfficesAPI.Shared.Entities;
 using OfficesAPI.Shared.Enum;
 using OfficesAPI.Shared.RepositoryResults;
 
-namespace OfficesAPI.Queries.Infrastructure.Repositories;
+namespace OfficesAPI.Commands.Infrastructure.Repository;
 
 internal class OfficeRepository : Repository<OfficeEntity, Guid>, IOfficeRepository
 {
@@ -14,6 +14,7 @@ internal class OfficeRepository : Repository<OfficeEntity, Guid>, IOfficeReposit
 
     public OfficeRepository(OfficeDbContext context) : base(context, CollectionName)
     {
+
     }
 
     public async Task ChangeOfficeStatusAsync(Guid id, OfficeStatus status, CancellationToken cancellationToken = default)

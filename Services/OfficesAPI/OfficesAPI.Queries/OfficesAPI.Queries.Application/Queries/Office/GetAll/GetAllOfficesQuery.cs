@@ -1,6 +1,6 @@
 ﻿using OfficesAPI.Queries.Application.Abstractions.BaseRequest;
-using OfficesAPI.Queries.Application.Requests.Office;
-using OfficesAPI.Queries.Application.Responses.Office;
+using OfficesAPI.Shared.Requests;
+using OfficesAPI.Shared.Responses;
 
 namespace OfficesAPI.Queries.Application.Office.GetAll;
 

@@ -1,14 +1,14 @@
 ﻿using Microsoft.Extensions.Options;
-using MongoDB.Bson.Serialization.Serializers;
-using MongoDB.Bson.Serialization;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
-using OfficesAPI.Queries.Infrastructure.Settings;
+using OfficesAPI.Commands.Infrastructure.Settings;
 using OfficesAPI.Shared.Entities;
 
-namespace OfficesAPI.Queries.Infrastructure.Context;
+namespace OfficesAPI.Commands.Infrastructure.Context;
 
-internal class OfficeDbContext 
+internal class OfficeDbContext
 {
     private readonly IMongoDatabase _database;
     public readonly IMongoClient Client;

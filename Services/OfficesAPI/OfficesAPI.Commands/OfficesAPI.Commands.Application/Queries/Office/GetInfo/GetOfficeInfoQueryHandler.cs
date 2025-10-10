@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using MediatR;
-using OfficesAPI.Queries.Application.Contracts.Repository.Office;
+using OfficesAPI.Commands.Application.Contracts;
 using OfficesAPI.Shared.Responses;
 
-namespace OfficesAPI.Queries.Application.Queries.Office.GetInfo;
+namespace OfficesAPI.Commands.Application.Queries.Office.GetInfo;
 
 internal sealed class GetOfficeInfoQueryHandler : IRequestHandler<GetOfficeInfoQuery, GetOfficeInfoResponse>
 {

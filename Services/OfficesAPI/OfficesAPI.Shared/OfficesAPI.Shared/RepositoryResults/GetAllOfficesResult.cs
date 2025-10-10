@@ -1,4 +1,4 @@
-﻿namespace OfficesAPI.Queries.Application.RepositoryResults.Office;
+﻿namespace OfficesAPI.Shared.RepositoryResults;
 
 public record GetAllOfficesResult(
     bool HasNextPage,

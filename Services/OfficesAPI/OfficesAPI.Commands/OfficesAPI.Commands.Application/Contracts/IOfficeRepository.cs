@@ -2,7 +2,7 @@
 using OfficesAPI.Shared.Enum;
 using OfficesAPI.Shared.RepositoryResults;
 
-namespace OfficesAPI.Queries.Application.Contracts.Repository.Office;
+namespace OfficesAPI.Commands.Application.Contracts;
 
 public interface IOfficeRepository : IRepository<OfficeEntity, Guid>
 {

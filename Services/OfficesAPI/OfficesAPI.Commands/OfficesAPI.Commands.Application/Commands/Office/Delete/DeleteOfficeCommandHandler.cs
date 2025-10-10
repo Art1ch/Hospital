@@ -10,7 +10,8 @@ internal sealed class DeleteOfficeCommandHandler(
     IEventStore<DeleteOfficeEntity> eventStore,
     IMapper mapper,
     IMessagePublisher messagePublisher,
-    IImageService imageService
+    IImageService imageService,
+    IOfficeRepository repository
 ) : IRequestHandler<DeleteOfficeCommand, Unit>
 {
     public async Task<Unit> Handle(DeleteOfficeCommand command, CancellationToken cancellationToken)
@@ -25,6 +26,7 @@ internal sealed class DeleteOfficeCommandHandler(
         var eventEntity = mapper.Map<DeleteOfficeEntity>(request);
         var @event = mapper.Map<OfficeDeletedEvent>(request);
 
+        await repository.DeleteAsync(request.Id, cancellationToken);
         await eventStore.AppendAsync(eventEntity, cancellationToken);
         await messagePublisher.PublishMessageAsync(@event, cancellationToken);
 

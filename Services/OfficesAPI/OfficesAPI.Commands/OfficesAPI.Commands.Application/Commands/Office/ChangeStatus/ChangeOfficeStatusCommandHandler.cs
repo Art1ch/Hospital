@@ -9,7 +9,8 @@ namespace OfficesAPI.Commands.Application.Office.ChangeStatus;
 internal sealed class ChangeOfficeStatusCommandHandler(
     IMapper mapper,
     IEventStore<ChangeOfficeStatusEntity> eventStore,
-    IMessagePublisher messagePublisher
+    IMessagePublisher messagePublisher,
+    IOfficeRepository repository
 ) : IRequestHandler<ChangeOfficeStatusCommand, Unit>
 {
     public async Task<Unit> Handle(ChangeOfficeStatusCommand command, CancellationToken cancellationToken)
@@ -19,6 +20,7 @@ internal sealed class ChangeOfficeStatusCommandHandler(
         var eventEntity = mapper.Map<ChangeOfficeStatusEntity>(request);
         var @event = mapper.Map<OfficeStatusChangedEvent>(request);
 
+        await repository.ChangeOfficeStatusAsync(request.Id, request.Status, cancellationToken);
         await eventStore.AppendAsync(eventEntity, cancellationToken);
         await messagePublisher.PublishMessageAsync(@event, cancellationToken);
 

@@ -11,7 +11,8 @@ internal sealed class UpdateOfficeCommandHandler(
     IMapper mapper,
     IEventStore<UpdateOfficeEntity> eventStore,
     IMessagePublisher messagePublisher,
-    IImageService imageService
+    IImageService imageService,
+    IOfficeRepository repository
 ) : IRequestHandler<UpdateOfficeCommand, Unit>
 {
     public async Task<Unit> Handle(UpdateOfficeCommand command, CancellationToken cancellationToken)
@@ -20,29 +21,26 @@ internal sealed class UpdateOfficeCommandHandler(
 
         var entity = mapper.Map<OfficeEntity>(request);
 
-        if (request.Image == null && !string.IsNullOrEmpty(request.ImageUrl))
+        if (request.NewImage != null)
         {
-            entity.ImageUrl = request.ImageUrl;
+            var imageUrl = await imageService.UploadImageAsync(request.NewImage);
+            entity.ImageUrl = imageUrl;
+
+            if (!string.IsNullOrEmpty(request.OldImageUrl))
+            {
+                await imageService.DeleteImageAsync(request.OldImageUrl);
+            }
         }
 
-        if (request.Image != null && !string.IsNullOrEmpty(request.ImageUrl))
+        else
         {
-            await imageService.DeleteImageAsync(request.ImageUrl);
-            var imageUrl = await imageService.UploadImageAsync(request.Image);
-
-            entity.ImageUrl = imageUrl;
-        }
-
-        if (request.Image != null && string.IsNullOrEmpty(request.ImageUrl))
-        {
-            var imageUrl = await imageService.UploadImageAsync(request.Image);
-
-            entity.ImageUrl = imageUrl;
+            entity.ImageUrl = null;
         }
 
         var eventEntity = mapper.Map<UpdateOfficeEntity>(entity);
         var @event = mapper.Map<OfficeUpdatedEvent>(entity);
 
+        await repository.UpdateAsync(entity, cancellationToken);
         await eventStore.AppendAsync(eventEntity, cancellationToken);
         await messagePublisher.PublishMessageAsync(@event, cancellationToken);
 

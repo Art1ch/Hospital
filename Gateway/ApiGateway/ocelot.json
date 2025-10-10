@@ -29,24 +29,24 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "office.commands.api",
-          "Port": 80
-        }
-      ],
-      "UpstreamPathTemplate": "/office/{everything}",
-      "UpstreamHttpMethod": [ "POST", "PATCH", "DELETE" ]
-    },
-    {
-      "DownstreamPathTemplate": "/office/{everything}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
           "Host": "office.queries.api",
           "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/office/{everything}",
       "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/office/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "office.commands.api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/office/{everything}",
+      "UpstreamHttpMethod": [ "POST", "PATCH", "DELETE" ]
     },
     {
       "DownstreamPathTemplate": "/appointment/{everything}",

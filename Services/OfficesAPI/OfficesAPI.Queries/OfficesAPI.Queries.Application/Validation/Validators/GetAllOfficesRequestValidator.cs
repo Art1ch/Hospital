@@ -1,5 +1,5 @@
-﻿using OfficesAPI.Queries.Application.Requests.Office;
-using OfficesAPI.Queries.Application.Validation.BaseValidators;
+﻿using OfficesAPI.Queries.Application.Validation.BaseValidators;
+using OfficesAPI.Shared.Requests;
 
 namespace OfficesAPI.Queries.Application.Validation.Validators;
 

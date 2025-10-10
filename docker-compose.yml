@@ -132,7 +132,28 @@ services:
       - CloudinarySettings__CloudName=${CloudinarySettings__CloudName}
       - CloudinarySettings__ApiKey=${CloudinarySettings__ApiKey}
       - CloudinarySettings__ApiSecret=${CloudinarySettings__ApiSecret}
+      - OfficeDbSettings__DatabaseName=${OfficeDbSettingsMaster__DatabaseName}
+      - OfficeDbSettings__ConnectionString=${OfficeDbSettingsMaster__ConnectionString}
 
+    restart: unless-stopped
+
+  office.db.master:
+    image: mongo:7.0
+    command: ["--replSet", "rs0", "--bind_ip_all", "--port", "27018"]
+    ports:
+      - "27018:27018"
+    networks:
+      - backend
+    healthcheck:
+      test: echo "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'host.docker.internal:27018'}]}) }" | mongosh --port 27018 --quiet
+      interval: 5s
+      timeout: 30s
+      start_period: 0s
+      start_interval: 1s
+      retries: 30
+    volumes:
+      - "officedata.commands:/data/db"
+      - "officedata.commands:/data/configdb"
     restart: unless-stopped
 
   office.queries.api:
@@ -252,4 +273,5 @@ volumes:
     authdata:
     doctor_cachedata:
     officedata.queries:
+    officedata.commands:
     appointmentdata:
