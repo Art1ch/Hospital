@@ -56,12 +56,12 @@ export class OfficeService {
     formData.append("address", office.address);
     formData.append("registryPhoneNumber", office.registryPhoneNumber);
     formData.append("status", OfficeStatus[office.status]);
-    if (office.image instanceof File) {
-      formData.append("image", office.image);
+    if (office.newImage instanceof File) {
+      formData.append("newImage", office.newImage);
     }
   
-    if (office.imageUrl) {
-      formData.append("imageUrl", office.imageUrl);
+    if (office.oldImageUrl) {
+      formData.append("oldImageUrl", office.oldImageUrl);
     }
 
     console.log(formData);

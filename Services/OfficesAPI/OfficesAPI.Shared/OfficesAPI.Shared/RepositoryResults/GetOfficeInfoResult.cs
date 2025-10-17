@@ -1,5 +1,5 @@
 ﻿namespace OfficesAPI.Shared.RepositoryResults;
 
-public record GetOfficeInfoResult(
+public sealed record GetOfficeInfoResult(
     GetOfficeInfoItem Item
 );

@@ -5,6 +5,6 @@ export interface UpdateOfficeModel{
     address: string;
     registryPhoneNumber: string;
     status: OfficeStatus;
-    image?: File;
-    imageUrl?: string;
+    newImage?: File;
+    oldImageUrl?: string;
 }

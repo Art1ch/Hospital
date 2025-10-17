@@ -2,9 +2,9 @@
 using OfficesAPI.Shared.Enum;
 using OfficesAPI.Shared.RepositoryResults;
 
-namespace OfficesAPI.Queries.Application.Contracts.Repository.Office;
+namespace OfficesAPI.Commands.Application.Contracts;
 
-public interface IOfficeRepository : IRepository<OfficeEntity, Guid>
+public interface ICommandOfficeRepository : IRepository<OfficeEntity, Guid>
 {
     Task<GetAllOfficesResult> GetAllOfficesAsync(int page, int pageSize, CancellationToken cancellationToken = default);
     Task<GetOfficeInfoResult> GetOfficeInfoAsync(Guid id, CancellationToken cancellationToken = default);

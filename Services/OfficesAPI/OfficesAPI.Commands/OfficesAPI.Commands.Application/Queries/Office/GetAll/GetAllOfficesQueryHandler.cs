@@ -7,11 +7,11 @@ namespace OfficesAPI.Commands.Application.Queries.Office.GetAll;
 
 internal sealed class GetAllOfficesQueryHandler : IRequestHandler<GetAllOfficesQuery, GetAllOfficesResponse>
 {
-    private readonly IOfficeRepository _officeRepository;
+    private readonly ICommandOfficeRepository _officeRepository;
     private readonly IMapper _mapper;
 
     public GetAllOfficesQueryHandler(
-        IOfficeRepository officeRepository,
+        ICommandOfficeRepository officeRepository,
         IMapper mapper)
     {
         _officeRepository = officeRepository;

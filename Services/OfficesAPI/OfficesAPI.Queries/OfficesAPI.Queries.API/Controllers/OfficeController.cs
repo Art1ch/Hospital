@@ -22,7 +22,6 @@ public class OfficeController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<GetAllOfficesResponse>> GetAll([FromQuery] GetAllOfficesRequest request)
     {
-        Console.WriteLine("READ-SIDE WORKED!");
         var query = new GetAllOfficesQuery(request);
         var response = await _sender.Send(query);
         return Ok(response);

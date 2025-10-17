@@ -1,7 +1,11 @@
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using OfficeAPI.Commands.API.Middlewares;
 using OfficesAPI.Commands.API.Extensions;
+using OfficesAPI.Commands.API.Healthchecks;
 using OfficesAPI.Commands.Application;
 using OfficesAPI.Infrastructure;
+using OfficesAPI.Shared.Infrastructure;
 
 namespace OfficesAPI.Commands.API;
 
@@ -18,11 +22,15 @@ public class Program
 
         var messageBrokerSettings = builder.ConfigureMessageBroker();
         var eventStoreSettings = builder.ConfigureEventStore();
+        var dbSettings = builder.ConfigureOfficeDb();
         builder.ConfigureCloudinary();
-        builder.ConfigureOfficeDb();
 
-        builder.Services.AddApplicationLayer()
-            .AddInfrastructureLayer(eventStoreSettings, messageBrokerSettings);
+        builder.Services
+            .AddApplicationLayer()
+            .AddInfrastructureLayer(eventStoreSettings, messageBrokerSettings)
+            .AddWriteRepository(dbSettings);
+
+        builder.Services.AddAllHealthChecks();
 
         var app = builder.Build();
 
@@ -33,6 +41,10 @@ public class Program
         }
 
         app.UseHttpsRedirection();
+        app.UseHealthChecks("/commands/health", new HealthCheckOptions
+        {
+            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+        });
         app.UseMiddleware<ExceptionMiddleware>();
         app.UseAuthorization();
         app.MapControllers();

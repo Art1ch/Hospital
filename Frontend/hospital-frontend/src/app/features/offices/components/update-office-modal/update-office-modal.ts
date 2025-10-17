@@ -22,8 +22,10 @@ export class UpdateOfficeModal {
   imagePreview: string | null = null;
 
   open(office: GetOfficeModel) {
+    console.log()
     this.isVisible = true;
     this.editedOffice = { ...office };
+    this.editedOffice.oldImageUrl = office.imageUrl;
     this.imagePreview = office.imageUrl || null;
     this.selectedImage = null;
   }
@@ -53,8 +55,8 @@ export class UpdateOfficeModal {
       address: this.editedOffice.address || '',
       registryPhoneNumber: this.editedOffice.registryPhoneNumber || '',
       status: this.editedOffice.status!,
-      image: this.selectedImage || undefined,
-      imageUrl: this.editedOffice.imageUrl
+      newImage: this.selectedImage || undefined,
+      oldImageUrl: this.editedOffice.oldImageUrl || ''
     };
     this.officeUpdated.emit(office);
     this.close();

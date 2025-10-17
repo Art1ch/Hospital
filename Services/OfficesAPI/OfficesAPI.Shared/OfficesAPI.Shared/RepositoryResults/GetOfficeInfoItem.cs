@@ -2,7 +2,7 @@
 
 namespace OfficesAPI.Shared.RepositoryResults;
 
-public record GetOfficeInfoItem(
+public sealed record GetOfficeInfoItem(
     Guid Id,
     string Address,
     string RegistryPhoneNumber,

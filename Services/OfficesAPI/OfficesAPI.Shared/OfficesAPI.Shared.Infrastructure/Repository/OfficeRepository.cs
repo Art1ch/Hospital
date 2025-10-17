@@ -1,19 +1,20 @@
 ﻿using MongoDB.Driver;
+using OfficesAPI.Commands.Application.Contracts;
 using OfficesAPI.Queries.Application.Contracts.Repository.Office;
-using OfficesAPI.Queries.Infrastructure.Context;
-using OfficesAPI.Queries.Infrastructure.Repositories.Abstract;
 using OfficesAPI.Shared.Entities;
 using OfficesAPI.Shared.Enum;
+using OfficesAPI.Shared.Infrastructure.Context;
 using OfficesAPI.Shared.RepositoryResults;
 
-namespace OfficesAPI.Queries.Infrastructure.Repositories;
+namespace OfficesAPI.Shared.Infrastructure.Repository;
 
-internal class OfficeRepository : Repository<OfficeEntity, Guid>, IOfficeRepository
+internal class OfficeRepository : BaseRepository<OfficeEntity, Guid>, ICommandOfficeRepository, IQueryOfficeRepository
 {
     private const string CollectionName = "Offices";
 
     public OfficeRepository(OfficeDbContext context) : base(context, CollectionName)
     {
+        
     }
 
     public async Task ChangeOfficeStatusAsync(Guid id, OfficeStatus status, CancellationToken cancellationToken = default)
@@ -37,18 +38,18 @@ internal class OfficeRepository : Repository<OfficeEntity, Guid>, IOfficeReposit
         var offices = await _collection
             .Find(FilterDefinition<OfficeEntity>.Empty)
             .Skip((page - 1) * pageSize)
-            .Limit(pageSize + 1)
+            .Limit(pageSize)
             .Project(projection)
             .ToListAsync(cancellationToken);
 
-        var hasNextPage = offices.Count > pageSize;
+        var totalOffices = await _collection
+            .CountDocumentsAsync(FilterDefinition<OfficeEntity>.Empty);
 
-        if (hasNextPage)
-        {
-            offices = offices.Take(pageSize).ToList();
-        }
+        var totalPages = (int)Math.Ceiling((double) totalOffices / pageSize);
 
-        return new GetAllOfficesResult(hasNextPage, offices);
+
+
+        return new GetAllOfficesResult(offices, offices.Count, totalPages);
     }
 
     public async Task<GetOfficeInfoResult> GetOfficeInfoAsync(Guid id, CancellationToken cancellationToken = default)

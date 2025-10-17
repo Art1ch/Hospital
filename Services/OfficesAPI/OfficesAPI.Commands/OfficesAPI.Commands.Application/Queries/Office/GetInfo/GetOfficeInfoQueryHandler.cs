@@ -7,11 +7,11 @@ namespace OfficesAPI.Commands.Application.Queries.Office.GetInfo;
 
 internal sealed class GetOfficeInfoQueryHandler : IRequestHandler<GetOfficeInfoQuery, GetOfficeInfoResponse>
 {
-    private readonly IOfficeRepository _officeRepository;
+    private readonly ICommandOfficeRepository _officeRepository;
     private readonly IMapper _mapper;
 
     public GetOfficeInfoQueryHandler(
-        IOfficeRepository officeRepository,
+        ICommandOfficeRepository officeRepository,
         IMapper mapper)
     {
         _officeRepository = officeRepository;

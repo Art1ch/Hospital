@@ -2,7 +2,7 @@
 
 <div class="offices-container">
   <div class="header">
-    <h2>Our Offices</h2>
+    <h2>Offices on page - {{officesOnPage}}</h2>
     <button class="create-button" (click)="createModal.open()" aria-label="Create new office">
       Create Office
     </button>
@@ -33,8 +33,8 @@
   <app-app-pagination
     [page]="page"
     [pageSize]="pageSize"
-    [hasNextPage]="hasNextPage"
     [isLoading]="isLoading"
+    [totalPages]="totalPages"
     (onGoToNext)="goToNextPage()"
     (onGoToPrevious)="goToPreviousPage()"
     (onGoToFirst)="goToFirstPage()">

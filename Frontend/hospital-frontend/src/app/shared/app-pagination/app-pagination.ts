@@ -11,7 +11,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 export class AppPagination {
   @Input() page!: number;
   @Input() pageSize!: number;
-  @Input() hasNextPage!: boolean; 
+  @Input() totalPages!: number; 
   @Input() isLoading!: boolean;
 
   @Output() onGoToPrevious = new EventEmitter<void>();
@@ -23,7 +23,7 @@ export class AppPagination {
   }
 
   get canGoNext(): boolean {
-    return this.hasNextPage && !this.isLoading;
+    return this.page < this.totalPages && !this.isLoading;
   }
 
   get canGoFirst(): boolean {

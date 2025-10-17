@@ -37,7 +37,8 @@ export class OfficesList {
   offices: GetOfficeModel[] = [];
   page: number = 1;
   pageSize: number = 10;
-  hasNextPage: boolean = false;
+  totalPages!: number;
+  officesOnPage!: number;
   isLoading: boolean = false;
 
   constructor(private officeService: OfficeService) {
@@ -50,7 +51,8 @@ export class OfficesList {
     this.officeService.getOffices(this.page, this.pageSize).subscribe({
       next: (response: GetOfficesResponse) => {
         this.offices = response.result.offices;
-        this.hasNextPage = response.result.hasNextPage;
+        this.totalPages = response.result.totalPages;
+        this.officesOnPage = response.result.officesOnPage;
         this.isLoading = false;
       },
       error: (error) => {
@@ -114,7 +116,7 @@ export class OfficesList {
   }
 
   goToNextPage(): void {
-    if (this.hasNextPage) {
+    if (this.page < this.totalPages!) {
       this.page++;
       this.loadOffices();
     }

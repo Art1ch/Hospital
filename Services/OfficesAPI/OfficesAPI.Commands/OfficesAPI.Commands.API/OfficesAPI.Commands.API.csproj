@@ -10,11 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="9.0.0" />
     <PackageReference Include="MediatR" Version="13.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\OfficesAPI.Shared\OfficesAPI.Shared.Infrastructure\OfficesAPI.Shared.Infrastructure.csproj" />
     <ProjectReference Include="..\OfficesAPI.Commands.Application\OfficesAPI.Commands.Application.csproj" />
     <ProjectReference Include="..\OfficesAPI.Commands.Infrastructure\OfficesAPI.Commands.Infrastructure.csproj" />
   </ItemGroup>

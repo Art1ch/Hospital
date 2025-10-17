@@ -1,7 +1,7 @@
 using OfficeAPI.Queries.API.Extensions;
 using OfficeAPI.Queries.API.Middlewares;
 using OfficesAPI.Queries.Application;
-using OfficesAPI.Queries.Infrastructure;
+using OfficesAPI.Shared.Infrastructure;
 
 namespace OfficesAPI.Queries.API;
 
@@ -16,11 +16,13 @@ public class Program
         builder.Services.AddSwaggerGen();
         builder.Configuration.AddUserSecrets<Program>();
 
-        builder.ConfigureDbSettings();
         var messageBrokerSettings = builder.ConfigureMessageBroker();
+        var dbSettings = builder.ConfigureDbSettings();
 
-        builder.Services.AddApplicationLayer(messageBrokerSettings)
-            .AddInfrastructureLayer();
+        builder.Services
+            .AddApplicationLayer(messageBrokerSettings)
+            .AddReadRepository(dbSettings)
+            .AddUnitOfWork();
 
         var app = builder.Build();
 

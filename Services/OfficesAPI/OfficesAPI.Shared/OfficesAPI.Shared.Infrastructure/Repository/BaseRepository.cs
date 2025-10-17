@@ -1,14 +1,13 @@
 ﻿using MongoDB.Driver;
-using OfficesAPI.Commands.Application.Contracts;
-using OfficesAPI.Commands.Infrastructure.Context;
+using OfficesAPI.Shared.Infrastructure.Context;
 
-namespace OfficesAPI.Commands.Infrastructure.Repositories;
+namespace OfficesAPI.Shared.Infrastructure.Repository;
 
-internal abstract class Repository<TEntity, TId> : IRepository<TEntity, TId>
+internal abstract class BaseRepository<TEntity, TId>
 {
     protected readonly IMongoCollection<TEntity> _collection;
 
-    protected Repository(OfficeDbContext context, string collectionName)
+    protected BaseRepository(OfficeDbContext context, string collectionName)
     {
         _collection = context.GetCollection<TEntity>(collectionName);
     }
@@ -18,7 +17,7 @@ internal abstract class Repository<TEntity, TId> : IRepository<TEntity, TId>
 
     public async Task CreateAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
-        await _collection.InsertOneAsync(entity, cancellationToken : cancellationToken);
+        await _collection.InsertOneAsync(entity, cancellationToken: cancellationToken);
     }
 
     public async Task DeleteAsync(TId id, CancellationToken cancellationToken = default)
@@ -38,6 +37,6 @@ internal abstract class Repository<TEntity, TId> : IRepository<TEntity, TId>
     {
         var id = GetModelId(model);
         var filter = GetIdFilter(id);
-        await _collection.ReplaceOneAsync(filter, model, cancellationToken : cancellationToken);
+        await _collection.ReplaceOneAsync(filter, model, cancellationToken: cancellationToken);
     }
 }

@@ -2,6 +2,6 @@
 
 namespace OfficesAPI.Shared.Responses;
 
-public record GetOfficeInfoResponse(
+public sealed record GetOfficeInfoResponse(
     GetOfficeInfoResult Office
 );

@@ -1,6 +1,7 @@
 ﻿namespace OfficesAPI.Shared.RepositoryResults;
 
-public record GetAllOfficesResult(
-    bool HasNextPage,
-    List<GetAllOfficesCollectionItem> Offices
+public sealed record GetAllOfficesResult(
+    List<GetAllOfficesCollectionItem> Offices,
+    int officesOnPage,
+    int totalPages
 );

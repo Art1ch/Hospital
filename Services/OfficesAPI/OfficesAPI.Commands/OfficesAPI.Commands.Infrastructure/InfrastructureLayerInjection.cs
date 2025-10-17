@@ -2,8 +2,6 @@
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using OfficesAPI.Commands.Application.Contracts;
-using OfficesAPI.Commands.Infrastructure.Context;
-using OfficesAPI.Commands.Infrastructure.Repository;
 using OfficesAPI.Commands.Infrastructure.Services;
 using OfficesAPI.Commands.Infrastructure.Settings;
 using OfficesAPI.Shared.Settings;
@@ -22,9 +20,7 @@ public static class InfrastructureLayerInjection
         services.AddEventStore(eventStoreSettings).
             AddMessageBroker(messageBrokerSettings).
             AddMessagePublisher().
-            AddImageService().
-            AddDbContext().
-            AddRepositories();
+            AddImageService();
 
         return services;
     }
@@ -65,10 +61,4 @@ public static class InfrastructureLayerInjection
 
     private static IServiceCollection AddImageService(this IServiceCollection services) =>
         services.AddScoped<IImageService, CloudinaryImageService>();
-
-    private static IServiceCollection AddDbContext(this IServiceCollection services) =>
-       services.AddScoped<OfficeDbContext>();
-
-    private static IServiceCollection AddRepositories(this IServiceCollection services) =>
-        services.AddScoped<IOfficeRepository, OfficeRepository>();
 }

@@ -1,4 +1,4 @@
-﻿namespace OfficesAPI.Commands.Infrastructure.Settings;
+﻿namespace OfficesAPI.Shared.Infrastructure.Settings;
 
 public class OfficeDbSettings
 {

@@ -8,6 +8,7 @@ COPY OfficesAPI.Commands/OfficesAPI.Commands.Application/*.csproj OfficesAPI.Com
 COPY OfficesAPI.Commands/OfficesAPI.Commands.Infrastructure/*.csproj OfficesAPI.Commands.Infrastructure/
 COPY OfficesAPI.Commands/OfficesAPI.Commands.Core/*.csproj OfficesAPI.Commands.Core/
 COPY OfficesAPI.Shared/OfficesAPI.Shared/*.csproj OfficesAPI.Shared/
+COPY OfficesAPI.Shared/OfficesAPI.Shared.Infrastructure/*.csproj OfficesAPI.Shared.Infrastructure/
 
 RUN dotnet restore OfficesAPI.Commands.API/OfficesAPI.Commands.API.csproj
 

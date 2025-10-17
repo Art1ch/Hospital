@@ -11,7 +11,7 @@ internal sealed class DeleteOfficeCommandHandler(
     IMapper mapper,
     IMessagePublisher messagePublisher,
     IImageService imageService,
-    IOfficeRepository repository
+    ICommandOfficeRepository repository
 ) : IRequestHandler<DeleteOfficeCommand, Unit>
 {
     public async Task<Unit> Handle(DeleteOfficeCommand command, CancellationToken cancellationToken)

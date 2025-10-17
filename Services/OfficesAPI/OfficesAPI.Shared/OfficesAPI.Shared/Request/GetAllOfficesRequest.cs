@@ -1,6 +1,6 @@
 ﻿namespace OfficesAPI.Shared.Requests;
 
-public record GetAllOfficesRequest(
+public sealed record GetAllOfficesRequest(
     int Page,
     int PageSize
 );

@@ -11,7 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OfficesAPI.Queries.Application\OfficesAPI.Queries.Application.csproj" />
+    <ProjectReference Include="..\..\OfficesAPI.Commands\OfficesAPI.Commands.Application\OfficesAPI.Commands.Application.csproj" />
+    <ProjectReference Include="..\..\OfficesAPI.Queries\OfficesAPI.Queries.Application\OfficesAPI.Queries.Application.csproj" />
   </ItemGroup>
 
 </Project>

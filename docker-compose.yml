@@ -19,6 +19,8 @@ services:
       - ASPNETCORE_URLS=${ASPNETCORE_URLS}
       - CorsSettings__PolicyName=${CorsSettings__PolicyName}
       - CorsSettings__Origin=${CorsSettings__Origin}
+      - OfficeServiceAddressesSettings__OfficeWriteSideAddress=${OfficeServiceAddressesSettings__OfficeWriteSideAddress}
+      - OfficeServiceAddressesSettings__OfficeReadSideAddress=${OfficeServiceAddressesSettings__OfficeReadSideAddress}
     restart: unless-stopped
     
   doctorapi:

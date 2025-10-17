@@ -12,7 +12,7 @@ internal sealed class UpdateOfficeCommandHandler(
     IEventStore<UpdateOfficeEntity> eventStore,
     IMessagePublisher messagePublisher,
     IImageService imageService,
-    IOfficeRepository repository
+    ICommandOfficeRepository repository
 ) : IRequestHandler<UpdateOfficeCommand, Unit>
 {
     public async Task<Unit> Handle(UpdateOfficeCommand command, CancellationToken cancellationToken)
@@ -34,7 +34,7 @@ internal sealed class UpdateOfficeCommandHandler(
 
         else
         {
-            entity.ImageUrl = null;
+            entity.ImageUrl = request.OldImageUrl;
         }
 
         var eventEntity = mapper.Map<UpdateOfficeEntity>(entity);

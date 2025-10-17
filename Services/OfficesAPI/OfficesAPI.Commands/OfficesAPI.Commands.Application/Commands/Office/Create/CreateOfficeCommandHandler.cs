@@ -12,7 +12,7 @@ internal sealed class CreateOfficeCommandHandler(
     IEventStore<CreateOfficeEntity> eventStore,
     IMessagePublisher messagePublisher,
     IImageService imageService,
-    IOfficeRepository repository
+    ICommandOfficeRepository repository
 ) : IRequestHandler<CreateOfficeCommand, Unit>
 {
     public async Task<Unit> Handle(CreateOfficeCommand command, CancellationToken cancellationToken)

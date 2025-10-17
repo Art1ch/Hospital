@@ -10,7 +10,7 @@ internal sealed class ChangeOfficeStatusCommandHandler(
     IMapper mapper,
     IEventStore<ChangeOfficeStatusEntity> eventStore,
     IMessagePublisher messagePublisher,
-    IOfficeRepository repository
+    ICommandOfficeRepository repository
 ) : IRequestHandler<ChangeOfficeStatusCommand, Unit>
 {
     public async Task<Unit> Handle(ChangeOfficeStatusCommand command, CancellationToken cancellationToken)

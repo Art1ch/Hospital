@@ -2,6 +2,6 @@
 
 namespace OfficesAPI.Shared.Responses;
 
-public record GetAllOfficesResponse(
+public sealed record GetAllOfficesResponse(
     GetAllOfficesResult Result
 );

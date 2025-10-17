@@ -3,20 +3,20 @@ using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using OfficesAPI.Queries.Infrastructure.Settings;
 using OfficesAPI.Shared.Entities;
+using OfficesAPI.Shared.Infrastructure.Settings;
 
-namespace OfficesAPI.Queries.Infrastructure.Context;
+namespace OfficesAPI.Shared.Infrastructure.Context;
 
-internal class OfficeDbContext 
+internal class OfficeDbContext
 {
     private readonly IMongoDatabase _database;
     public readonly IMongoClient Client;
 
-    public OfficeDbContext(IOptions<OfficeDbSettings> options)
+    public OfficeDbContext(OfficeDbSettings settings)
     {
-        Client = new MongoClient(options.Value.ConnectionString);
-        _database = Client.GetDatabase(options.Value.DatabaseName);
+        Client = new MongoClient(settings.ConnectionString);
+        _database = Client.GetDatabase(settings.DatabaseName);
     }
 
     public IMongoCollection<T> GetCollection<T>(string collectionName)
@@ -38,6 +38,5 @@ internal class OfficeDbContext
             cm.SetIgnoreExtraElements(true);
             cm.MapIdProperty(x => x.Id);
         });
-
     }
 }

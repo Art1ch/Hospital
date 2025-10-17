@@ -1,4 +1,5 @@
 ﻿using OfficesAPI.Commands.Infrastructure.Settings;
+using OfficesAPI.Shared.Infrastructure.Settings;
 using OfficesAPI.Shared.Settings;
 
 namespace OfficesAPI.Commands.API.Extensions;
@@ -33,7 +34,6 @@ internal static class WebApplicationBuilderExtensions
     {
         var sectionName = nameof(OfficeDbSettings);
         var settings = builder.Configuration.GetSection(sectionName).Get<OfficeDbSettings>()!;
-        builder.Services.Configure<OfficeDbSettings>(builder.Configuration.GetSection(sectionName));
         return settings;
     }
 }

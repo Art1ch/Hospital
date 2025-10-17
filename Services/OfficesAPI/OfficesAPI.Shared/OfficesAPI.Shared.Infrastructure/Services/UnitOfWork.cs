@@ -1,8 +1,8 @@
 ﻿using MongoDB.Driver;
 using OfficesAPI.Queries.Application.Contracts.UnitOfWork;
-using OfficesAPI.Queries.Infrastructure.Context;
+using OfficesAPI.Shared.Infrastructure.Context;
 
-namespace OfficesAPI.Infrastructure.Services;
+namespace OfficesAPI.Shared.Infrastructure.Services;
 
 internal class UnitOfWork : IUnitOfWork
 {
