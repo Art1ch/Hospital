@@ -28,9 +28,13 @@ public static class SharedInfrastructureInjection
     public static IServiceCollection AddUnitOfWork(this IServiceCollection services) =>
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-    private static IServiceCollection AddDbContext(this IServiceCollection services, OfficeDbSettings settings) =>
+    private static IServiceCollection AddDbContext(this IServiceCollection services, OfficeDbSettings settings)
+    {
         services.AddScoped(x =>
         {
             return new OfficeDbContext(settings);
         });
+
+        return services;
+    }
 }

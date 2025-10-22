@@ -14,7 +14,6 @@ public static class InfrastructureLayerInjection
         this IServiceCollection services,
         EventStoreSettings eventStoreSettings,
         MessageBrokerSettings messageBrokerSettings
-
     )
     {
         services.AddEventStore(eventStoreSettings).
