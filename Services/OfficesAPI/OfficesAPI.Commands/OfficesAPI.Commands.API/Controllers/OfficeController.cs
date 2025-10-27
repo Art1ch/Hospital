@@ -4,6 +4,11 @@ using OfficesAPI.Commands.Application.Office.Delete;
 using OfficesAPI.Commands.Application.Office.Update;
 using OfficesAPI.Commands.Application.Requests.Office;
 using MediatR;
+using OfficesAPI.Commands.Application.Requests;
+using OfficesAPI.Shared.Responses;
+using OfficesAPI.Shared.Requests;
+using OfficesAPI.Commands.Application.Queries.Office.GetAll;
+using OfficesAPI.Commands.Application.Queries.Office.GetInfo;
 
 namespace OfficesAPI.Commands.API.Controllers;
 
@@ -13,8 +18,25 @@ public class OfficeController(
     ISender sender
 ) : ControllerBase
 {
+
+    [HttpGet]
+    public async Task<ActionResult<GetAllOfficesResponse>> GetAll([FromQuery] GetAllOfficesRequest request)
+    {
+        var query = new GetAllOfficesQuery(request);
+        var response = await sender.Send(query);
+        return Ok(response);
+    }
+
+    [HttpGet("info")]
+    public async Task<ActionResult<GetOfficeInfoResponse>> GetInfo([FromQuery] Guid id)
+    {
+        var query = new GetOfficeInfoQuery(id);
+        var response = await sender.Send(query);
+        return Ok(response);
+    }
+
     [HttpPost]
-    public async Task<ActionResult> Create([FromBody] CreateOfficeRequest request)
+    public async Task<ActionResult> Create([FromForm] CreateOfficeRequest request)
     {
         var command = new CreateOfficeCommand(request);
         await sender.Send(command);
@@ -22,7 +44,7 @@ public class OfficeController(
     }
 
     [HttpPatch]
-    public async Task<ActionResult> Update([FromBody] UpdateOfficeRequest request)
+    public async Task<ActionResult> Update([FromForm] UpdateOfficeRequest request)
     {
         var command = new UpdateOfficeCommand(request);
         await sender.Send(command);
@@ -30,9 +52,9 @@ public class OfficeController(
     }
 
     [HttpDelete]
-    public async Task<ActionResult> Delete([FromQuery] Guid id)
+    public async Task<ActionResult> Delete([FromBody] DeleteOfficeRequest request)
     {
-        var command = new DeleteOfficeCommand(id);
+        var command = new DeleteOfficeCommand(request);
         await sender.Send(command);
         return NoContent();
     }

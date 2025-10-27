@@ -1,5 +1,5 @@
 ﻿using OfficesAPI.Queries.Application.Abstractions.BaseRequest;
-using OfficesAPI.Queries.Application.Responses.Office;
+using OfficesAPI.Shared.Responses;
 
 namespace OfficesAPI.Queries.Application.Queries.Office.GetInfo;
 

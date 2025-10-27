@@ -5,7 +5,7 @@ using OfficesAPI.Shared.Events;
 namespace OfficesAPI.Queries.Application.Consumers;
 
 public class OfficeStatusChangedEventHandler(
-    IOfficeRepository officeRepository    
+    IQueryOfficeRepository officeRepository    
 ) : IConsumer<OfficeStatusChangedEvent>
 {
     public async Task Consume(ConsumeContext<OfficeStatusChangedEvent> context)

@@ -1,17 +1,17 @@
 ﻿using AutoMapper;
 using MediatR;
 using OfficesAPI.Queries.Application.Contracts.Repository.Office;
-using OfficesAPI.Queries.Application.Responses.Office;
+using OfficesAPI.Shared.Responses;
 
 namespace OfficesAPI.Queries.Application.Queries.Office.GetInfo;
 
 internal sealed class GetOfficeInfoQueryHandler : IRequestHandler<GetOfficeInfoQuery, GetOfficeInfoResponse>
 {
-    private readonly IOfficeRepository _officeRepository;
+    private readonly IQueryOfficeRepository _officeRepository;
     private readonly IMapper _mapper;
 
     public GetOfficeInfoQueryHandler(
-        IOfficeRepository officeRepository,
+        IQueryOfficeRepository officeRepository,
         IMapper mapper)
     {
         _officeRepository = officeRepository;

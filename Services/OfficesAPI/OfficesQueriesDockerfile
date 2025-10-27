@@ -5,9 +5,8 @@ EXPOSE  433
 
 COPY OfficesAPI.Queries/OfficesAPI.Queries.API/*.csproj OfficesAPI.Queries.API/
 COPY OfficesAPI.Queries/OfficesAPI.Queries.Application/*.csproj OfficesAPI.Queries.Application/
-COPY OfficesAPI.Queries/OfficesAPI.Queries.Infrastructure/*.csproj OfficesAPI.Queries.Infrastructure/
-COPY OfficesAPI.Queries/OfficesAPI.Queries.Core/*.csproj OfficesAPI.Queries.Core/
 COPY OfficesAPI.Shared/OfficesAPI.Shared/*.csproj OfficesAPI.Shared/
+COPY OfficesAPI.Shared/OfficesAPI.Shared.Infrastructure/*.csproj OfficesAPI.Shared.Infrastructure/
 
 RUN dotnet restore OfficesAPI.Queries.API/OfficesAPI.Queries.API.csproj
 

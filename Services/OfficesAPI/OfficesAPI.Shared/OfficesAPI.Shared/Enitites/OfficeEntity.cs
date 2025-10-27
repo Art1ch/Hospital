@@ -8,4 +8,5 @@ public sealed class OfficeEntity
     public string Address { get; set; }
     public string RegistryPhoneNumber { get; set; }
     public OfficeStatus Status { get; set; }
+    public string? ImageUrl { get; set; }
 }

@@ -5,7 +5,7 @@ using OfficesAPI.Shared.Events;
 namespace OfficesAPI.Queries.Application.Consumers;
 
 public class OfficeDeletedEventHandler(
-    IOfficeRepository officeRepository    
+    IQueryOfficeRepository officeRepository    
 ) : IConsumer<OfficeDeletedEvent>
 {
     public async Task Consume(ConsumeContext<OfficeDeletedEvent> context)

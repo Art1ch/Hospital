@@ -1,0 +1,52 @@
+:host {
+  display: block;
+}
+
+.pagination-element {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 20px 0;
+}
+
+.pagination-button {
+  padding: 10px 16px;
+  border: 2px solid var(--hospital-border);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--hospital-white);
+  color: var(--hospital-green);
+  
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: var(--hospital-mint);
+    border-color: var(--hospital-green);
+  }
+  
+  &:disabled {
+    color: #bdbdbd;
+    border-color: #e0e0e0;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+.first-button {
+  font-weight: bold;
+}
+
+.page-number {
+  color: var(--hospital-green);
+  font-weight: 600;
+  padding: 0 16px;
+  min-width: 80px;
+  text-align: center;
+}

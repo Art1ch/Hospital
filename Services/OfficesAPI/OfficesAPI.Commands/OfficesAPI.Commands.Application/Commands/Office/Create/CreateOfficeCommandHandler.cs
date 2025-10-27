@@ -10,17 +10,27 @@ namespace OfficesAPI.Commands.Application.Office.Create;
 internal sealed class CreateOfficeCommandHandler(
     IMapper mapper,
     IEventStore<CreateOfficeEntity> eventStore,
-    IMessagePublisher messagePublisher
+    IMessagePublisher messagePublisher,
+    IImageService imageService,
+    ICommandOfficeRepository repository
 ) : IRequestHandler<CreateOfficeCommand, Unit>
 {
     public async Task<Unit> Handle(CreateOfficeCommand command, CancellationToken cancellationToken)
     {
         var request = command.Request;
+
         var entity = mapper.Map<OfficeEntity>(request);
 
-        var eventEntity = mapper.Map<CreateOfficeEntity>(entity);
-        var @event = new OfficeCreatedEvent(entity);
+        if (request.Image != null)
+        {
+            var imageUrl = await imageService.UploadImageAsync(request.Image);
+            entity.ImageUrl = imageUrl;
+        }
 
+        var eventEntity = mapper.Map<CreateOfficeEntity>(entity);
+        var @event = mapper.Map<OfficeCreatedEvent>(entity);
+
+        await repository.CreateAsync(entity, cancellationToken);
         await eventStore.AppendAsync(eventEntity, cancellationToken);
         await messagePublisher.PublishMessageAsync(@event);
 

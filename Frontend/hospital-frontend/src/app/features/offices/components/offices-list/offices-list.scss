@@ -1,0 +1,67 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background-color: var(--hospital-gray);
+}
+
+.offices-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 20px;
+  min-height: calc(100vh - 120px);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  
+  h2 {
+    color: var(--hospital-green);
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0;
+  }
+}
+
+.create-button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--hospital-green);
+  color: var(--hospital-white);
+  
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: var(--hospital-light-green);
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.offices-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: var(--hospital-green);
+  font-size: 18px;
+  font-weight: 500;
+}

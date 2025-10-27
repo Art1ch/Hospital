@@ -1,4 +1,5 @@
-﻿using OfficesAPI.Shared.Enum;
+﻿using Microsoft.AspNetCore.Http;
+using OfficesAPI.Shared.Enum;
 
 namespace OfficesAPI.Commands.Application.Requests.Office;
 
@@ -6,4 +7,7 @@ public record UpdateOfficeRequest(
     Guid Id,
     string Address,
     string RegistryPhoneNumber,
-    OfficeStatus Status);
+    OfficeStatus Status,
+    IFormFile? NewImage,
+    string? OldImageUrl
+);

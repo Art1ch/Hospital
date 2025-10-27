@@ -7,7 +7,7 @@ namespace OfficesAPI.Queries.Application.Consumers;
 
 public class OfficeUpdatedEventHandler(
     IMapper mapper,
-    IOfficeRepository officeRepository    
+    IQueryOfficeRepository officeRepository    
 ) : IConsumer<OfficeUpdatedEvent>
 {
     public async Task Consume(ConsumeContext<OfficeUpdatedEvent> context)

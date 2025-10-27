@@ -1,0 +1,122 @@
+:host {
+  display: block;
+}
+
+.office-card {
+  background: var(--hospital-white);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 2px solid var(--hospital-border);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(46, 125, 50, 0.15);
+    border-color: var(--hospital-light-green);
+  }
+}
+
+.office-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  border: 2px solid var(--hospital-border);
+}
+
+.office-address {
+  color: var(--hospital-green);
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.office-phone {
+  color: var(--hospital-dark-gray);
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.office-status {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  
+  &.active {
+    background-color: var(--hospital-mint);
+    color: var(--hospital-green);
+    border: 1px solid var(--hospital-border);
+  }
+  
+  &.inactive {
+    background-color: #ffebee;
+    color: var(--hospital-error);
+    border: 1px solid #ffcdd2;
+  }
+}
+
+.office-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.btn-edit {
+  padding: 8px 16px;
+  border: 2px solid var(--hospital-green);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--hospital-white);
+  color: var(--hospital-green);
+  flex: 1;
+  
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: var(--hospital-mint);
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.btn-delete {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--hospital-error);
+  color: var(--hospital-white);
+  flex: 1;
+  
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #c62828;
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}

@@ -2,8 +2,8 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using OfficesAPI.Queries.Application.Office.GetAll;
 using OfficesAPI.Queries.Application.Queries.Office.GetInfo;
-using OfficesAPI.Queries.Application.Requests.Office;
-using OfficesAPI.Queries.Application.Responses.Office;
+using OfficesAPI.Shared.Requests;
+using OfficesAPI.Shared.Responses;
 
 namespace OfficeAPI.Queries.API.Controllers;
 

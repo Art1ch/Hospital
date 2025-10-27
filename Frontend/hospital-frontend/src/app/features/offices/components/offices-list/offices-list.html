@@ -1,0 +1,44 @@
+<app-app-header></app-app-header>
+
+<div class="offices-container">
+  <div class="header">
+    <h2>Offices on page - {{officesOnPage}}</h2>
+    <button class="create-button" (click)="createModal.open()" aria-label="Create new office">
+      Create Office
+    </button>
+  </div>
+
+  <app-create-office-modal 
+    #createModal
+    (officeCreated)="onOfficeCreated($event)">
+  </app-create-office-modal>
+
+  <app-update-office-modal
+    #updateModal
+    (officeUpdated)="onOfficeUpdated($event)">
+  </app-update-office-modal>
+
+  <div *ngIf="isLoading" class="loading" aria-live="polite">Loading offices...</div>
+
+  <div class="offices-grid" *ngIf="!isLoading" role="list" aria-label="List of offices">
+    <app-office-card 
+      *ngFor="let office of offices"
+      [office]="office"
+      (edit)="onOfficeEdit($event)"     
+      (delete)="onOfficeDelete($event)"
+      role="listitem">
+    </app-office-card>
+  </div>
+
+  <app-app-pagination
+    [page]="page"
+    [pageSize]="pageSize"
+    [isLoading]="isLoading"
+    [totalPages]="totalPages"
+    (onGoToNext)="goToNextPage()"
+    (onGoToPrevious)="goToPreviousPage()"
+    (onGoToFirst)="goToFirstPage()">
+  </app-app-pagination>
+</div>
+
+<app-app-footer></app-app-footer>

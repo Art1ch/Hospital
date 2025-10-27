@@ -1,1 +1,17 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --hospital-green: #037328;
+  --hospital-light-green: #13dd1a;
+  --hospital-mint: #e5f7e7;
+  --hospital-white: #ffffff;
+  --hospital-gray: #e6e6e6;
+  --hospital-dark-gray: #333333;
+  --hospital-border: #aedaaf;
+  --hospital-error: #d34e4e;
+  --hospital-warning: #f4b921;
+}
+
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: var(--hospital-gray);
+}

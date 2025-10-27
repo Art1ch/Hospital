@@ -1,4 +1,6 @@
+using ApiGateway.DelegateHandlers;
 using Ocelot.DependencyInjection;
+using Ocelot.Extensions;
 using Ocelot.Middleware;
 
 namespace ApiGateway
@@ -12,7 +14,16 @@ namespace ApiGateway
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
-            builder.Services.AddOcelot();
+            builder.Services.AddOfficeGatewayHttpClient();
+            builder.Services
+                .AddOcelot()
+                .AddDelegatingHandler<HeaderOfficeRoutingHandler>(global: true);
+
+
+            var corsSettings = builder.ConfigureCors();
+            builder.ConfigureOfficeServiceAddresses();
+
+            builder.Services.AddCorsPolicy(corsSettings);
 
             var app = builder.Build();
             if (app.Environment.IsDevelopment())
@@ -21,10 +32,11 @@ namespace ApiGateway
                 app.UseSwaggerUI();
             }
             app.UseHttpsRedirection();
+            app.UseCors(corsSettings.PolicyName);
             app.UseAuthorization();
             app.MapControllers();
-            app.UseOcelot().Wait();
+            app.UseOcelot();
             app.Run();
         }
-    }
+    }    
 }
