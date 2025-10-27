@@ -13,8 +13,12 @@
   </ng-container>
   <h2 class="office-address">{{ office.address }}</h2>
   <p class="office-phone">{{ office.registryPhoneNumber }}</p>
-  <p class="office-status" [class]="getNameOfStatus(office.status).toLowerCase()">
-    {{ getNameOfStatus(office.status) }}
+  <p class="office-status"
+     [ngClass]="{
+      'active' : office.status === OfficeStatus.Active,
+      'inactive' : office.status === OfficeStatus.Inactive
+     }">
+     {{office.status | enumToLabel: OfficeStatus}}
   </p>
   
   <div class="office-actions">

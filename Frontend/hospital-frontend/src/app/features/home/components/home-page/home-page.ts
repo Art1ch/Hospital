@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { AppHeader } from '../../../../shared/app-header/app-header';
-import { AppFooter } from '../../../../shared/app-footer/app-footer';
+import { AppHeader } from '../../../../shared/components/app-header/app-header';
+import { AppFooter } from '../../../../shared/components/app-footer/app-footer';
 
 @Component({
   selector: 'app-home-page',
