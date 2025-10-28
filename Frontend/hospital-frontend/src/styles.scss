@@ -1,3 +1,22 @@
+@import 'ngx-toastr/toastr';
+
+.toast-success {
+  background-color: #28a745 !important;
+}
+
+.toast-error {
+  background-color: #dc3545 !important;
+}
+
+.toast-warning {
+  background-color: #ffc107 !important;
+  color: #212529 !important;
+}
+
+.toast-info {
+  background-color: #17a2b8 !important;
+}
+
 :root {
   --hospital-green: #037328;
   --hospital-light-green: #13dd1a;

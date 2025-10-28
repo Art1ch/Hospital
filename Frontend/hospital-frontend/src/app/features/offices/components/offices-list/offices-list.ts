@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { GetOfficeModel } from '../../models/get-office-model';
 import { CreateOfficeModal } from '../create-office-modal/create-office-modal';
 import { OfficeService } from '../../services/office-service';
@@ -13,6 +13,7 @@ import { OfficeCard } from '../office-card/office-card';
 import { AppPagination } from '../../../../shared/components/app-pagination/app-pagination';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ToastService } from '../../../../shared/services/toast-service';
 
 @Component({
   selector: 'app-offices-list',
@@ -24,13 +25,13 @@ import { FormsModule } from '@angular/forms';
     OfficeCard,
     AppPagination,
     CommonModule,
-    FormsModule
+    FormsModule,
   ],
   standalone: true,
   templateUrl: './offices-list.html',
   styleUrl: './offices-list.scss'
 })
-export class OfficesList {
+export class OfficesList implements OnInit {
   @ViewChild(CreateOfficeModal) createModal!: CreateOfficeModal;
   @ViewChild(UpdateOfficeModal) updateModal!: UpdateOfficeModal;
 
@@ -41,7 +42,12 @@ export class OfficesList {
   officesOnPage!: number;
   isLoading: boolean = false;
 
-  constructor(private officeService: OfficeService) {
+  constructor(
+    private officeService: OfficeService,
+    private toastService: ToastService,
+  ){}
+
+  ngOnInit(): void {
     this.loadOffices();
   }
 
@@ -53,24 +59,26 @@ export class OfficesList {
         this.offices = response.result.offices;
         this.totalPages = response.result.totalPages;
         this.officesOnPage = response.result.officesOnPage;
+      },
+      complete: () => {
+        this.toastService.showSuccessNotification('Offices loaded!');
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Error loading offices:', error);
+        this.toastService.showFailedNotification('Error', error)
         this.isLoading = false;
       }
     });
-
-    console.log(this.offices);
   }
 
   onOfficeCreated(office: CreateOfficeModel): void {
     this.officeService.createOffice(office).subscribe({
-      next: () => {
+      complete: () => {
+        this.toastService.showSuccessNotification('Office created!');
         this.loadOffices();
       },
       error: (error) => {
-        console.error('Error creating office:', error);
+        this.toastService.showFailedNotification('Error', error);
       }
     });
   }
@@ -81,11 +89,12 @@ export class OfficesList {
 
   onOfficeUpdated(updatedOffice: UpdateOfficeModel): void {
     this.officeService.updateOffice(updatedOffice).subscribe({
-      next: () => {
+      complete: () => {
+        this.toastService.showSuccessNotification('Office updated!');
         this.loadOffices();
       },
       error: (error) => {
-        console.error('Error updating office:', error);
+        this.toastService.showFailedNotification('Error', error);
       }
     });
   }
@@ -93,11 +102,12 @@ export class OfficesList {
   onOfficeDelete(office: DeleteOfficeModel): void {
     if (office && confirm('Are you sure you want to delete office?')) {
       this.officeService.deleteOffice(office).subscribe({
-        next: () => {
+        complete: () => {
+          this.toastService.showSuccessNotification('Office deleted!');
           this.loadOffices();
         },
         error: (error) => {
-          console.error('Error deleting office:', error);
+          this.toastService.showFailedNotification('Error', error);
         }
       });
     }
