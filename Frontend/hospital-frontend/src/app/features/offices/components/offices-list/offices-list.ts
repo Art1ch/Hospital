@@ -65,7 +65,12 @@ export class OfficesList implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        this.toastService.showFailedNotification('Error', error)
+        const errorArray = error.error.errors;
+        Object.entries(errorArray).forEach(([field, messages]) => {
+          (messages as string[]).forEach(msg => {
+            this.toastService.showFailedNotification(field, msg);
+          });
+        });
         this.isLoading = false;
       }
     });
@@ -78,7 +83,12 @@ export class OfficesList implements OnInit {
         this.loadOffices();
       },
       error: (error) => {
-        this.toastService.showFailedNotification('Error', error);
+        const errorArray = error.error.errors;
+        Object.entries(errorArray).forEach(([field, messages]) => {
+          (messages as string[]).forEach(msg => {
+            this.toastService.showFailedNotification(field, msg);
+          });
+        });
       }
     });
   }
@@ -94,7 +104,12 @@ export class OfficesList implements OnInit {
         this.loadOffices();
       },
       error: (error) => {
-        this.toastService.showFailedNotification('Error', error);
+        const errorArray = error.error.errors;
+        Object.entries(errorArray).forEach(([field, messages]) => {
+          (messages as string[]).forEach(msg => {
+            this.toastService.showFailedNotification(field, msg);
+          });
+        });
       }
     });
   }
@@ -107,7 +122,12 @@ export class OfficesList implements OnInit {
           this.loadOffices();
         },
         error: (error) => {
-          this.toastService.showFailedNotification('Error', error);
+          const errorArray = error.error.errors;
+          Object.entries(errorArray).forEach(([field, messages]) => {
+            (messages as string[]).forEach(msg => {
+              this.toastService.showFailedNotification(field, msg);
+            });
+          });
         }
       });
     }

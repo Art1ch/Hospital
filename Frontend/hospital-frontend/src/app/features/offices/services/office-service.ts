@@ -1,4 +1,4 @@
-import { HttpClient, HttpHandler, HttpHeaders, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { GetOfficesResponse } from "../models/get-offices-response";
@@ -7,12 +7,13 @@ import { UpdateOfficeModel } from "../models/update-office-model";
 import { OfficeStatus } from "../models/office-status";
 import { DeleteOfficeModel } from "../models/delete-office-model";
 import { OfficeTimestampService } from "./office-timestamp-service";
+import { environments } from "../../../../environments/environments";
 
 @Injectable({
   providedIn: 'root'
 })
 export class OfficeService {
-  private readonly apiUrl = 'http://localhost:8000/office';
+  private readonly apiUrl = environments.officesApiUrl;
 
   constructor(
     private httpClient: HttpClient,
