@@ -1,3 +1,3 @@
-export const environments = {
+export const environment = {
     officesApiUrl: 'http://localhost:8000/office',
 }

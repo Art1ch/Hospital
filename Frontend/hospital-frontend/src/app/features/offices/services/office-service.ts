@@ -7,13 +7,13 @@ import { UpdateOfficeModel } from "../models/update-office-model";
 import { OfficeStatus } from "../models/office-status";
 import { DeleteOfficeModel } from "../models/delete-office-model";
 import { OfficeTimestampService } from "./office-timestamp-service";
-import { environments } from "../../../../environments/environments";
+import { environment } from "../../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class OfficeService {
-  private readonly apiUrl = environments.officesApiUrl;
+  private readonly apiUrl = environment.officesApiUrl;
 
   constructor(
     private httpClient: HttpClient,
