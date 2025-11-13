@@ -5,8 +5,11 @@ using AuthAPI.Application.Requests.Account;
 using AuthAPI.Application.Requests.Token;
 using AuthAPI.Application.Responses.Account;
 using AuthAPI.Application.Responses.Token;
+using AuthAPI.Configuration.JwtSettings;
+using AuthAPI.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace AuthAPI.Controllers;
 
@@ -15,10 +18,12 @@ namespace AuthAPI.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly ISender _sender;
+    private readonly JwtSettings _jwtSettings;
 
-    public AuthController(ISender sender)
+    public AuthController(ISender sender, IOptions<JwtSettings> options)
     {
         _sender = sender;
+        _jwtSettings = options.Value;
     }
 
     [HttpPost("register")]
@@ -26,6 +31,8 @@ public class AuthController : ControllerBase
     {
         var command = new RegistrationCommand(request);
         var response = await _sender.Send(command);
+        if (!response.IsSuccess)
+            return BadRequest(response.FailureMessage);
         return Ok(response);
     }
 
@@ -34,6 +41,8 @@ public class AuthController : ControllerBase
     {
         var command = new LoginCommand(request);
         var response = await _sender.Send(command);
+        if (!response.IsSuccess)
+            return BadRequest(response.FailureMessage);
         return Ok(response);
     }
 
@@ -41,7 +50,33 @@ public class AuthController : ControllerBase
     public async Task<ActionResult<ExchangeTokenResponse>> ExchangeToken([FromBody] ExchangeTokenRequest request)
     {
         var command = new ExchangeTokenCommand(request);
-        var response = await _sender.Send(command);
+        var result = await _sender.Send(command);
+        if (!result.IsSuccess)
+            return BadRequest(result.FailureMessage);
+
+        var response = new ExchangeTokenResponse(result.IdToken!);
+
+        Response.Cookies.AppendSecuredCookies(new[]
+        {
+            ("access_token", result.AccessToken!, DateTimeOffset.UtcNow.AddMinutes(_jwtSettings.AccessTokenExpiryMinutes)),
+            ("refresh_token", result.RefreshToken!.Token, result.RefreshToken.ExpiresAt)
+        });
+
         return Ok(response);
+    }
+
+    //[HttpPost("refresh")]
+    //public async Task<ActionResult> RefreshToken()
+    //{
+        
+    //}
+
+    [HttpPost("logout")]
+    public ActionResult Logout()
+    {
+        Response.Cookies.Delete("access_token");
+        Response.Cookies.Delete("refresh_token");
+
+        return NoContent();
     }
 }

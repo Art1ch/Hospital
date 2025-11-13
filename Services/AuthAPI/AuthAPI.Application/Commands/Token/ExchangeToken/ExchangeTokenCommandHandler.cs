@@ -1,12 +1,11 @@
 ﻿using AuthAPI.Application.Contracts.Repository.Account;
 using AuthAPI.Application.Contracts.Repository.Token;
 using AuthAPI.Application.Contracts.TokenProvider;
-using AuthAPI.Application.Responses.Token;
 using MediatR;
 
 namespace AuthAPI.Application.Commands.Token.ExchangeToken;
 
-internal sealed class ExchangeTokenCommandHandler : IRequestHandler<ExchangeTokenCommand, ExchangeTokenResponse>
+internal sealed class ExchangeTokenCommandHandler : IRequestHandler<ExchangeTokenCommand, ExchangeTokenResult>
 {
     private readonly ITokenProvider _tokenProvider;
     private readonly IReferenceTokenRepository _referenceTokenRepository;
@@ -25,7 +24,7 @@ internal sealed class ExchangeTokenCommandHandler : IRequestHandler<ExchangeToke
         _refreshTokenRepository = refreshTokenRepository;
     }
 
-    public async Task<ExchangeTokenResponse> Handle(ExchangeTokenCommand command, CancellationToken cancellationToken)
+    public async Task<ExchangeTokenResult> Handle(ExchangeTokenCommand command, CancellationToken cancellationToken)
     {
         var tokenValue = command.Request.ReferenceToken;
         var referenceToken = await _referenceTokenRepository.GetTokenByValueAsync(tokenValue);
@@ -33,7 +32,7 @@ internal sealed class ExchangeTokenCommandHandler : IRequestHandler<ExchangeToke
         var isExpired = _tokenProvider.IsTokenExpired(referenceToken.ExpiresAt);
         if (isExpired)
         {
-            return new ExchangeTokenResponse(false, null, null, null, "Token is expired");
+            return new ExchangeTokenResult(false, null, null, null, "Token is expired");
         }
         var account = await _accountRepository.GetAsync(referenceToken.AccountId);
 
@@ -44,6 +43,6 @@ internal sealed class ExchangeTokenCommandHandler : IRequestHandler<ExchangeToke
         await _refreshTokenRepository.CreateAsync(refreshToken, cancellationToken);
         await _referenceTokenRepository.DeleteAsync(referenceToken.Id, cancellationToken);
 
-        return new ExchangeTokenResponse(true, idToken, accessToken, refreshToken.Token, null);
+        return new ExchangeTokenResult(true, idToken, accessToken, refreshToken, null);
     }
 }

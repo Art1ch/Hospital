@@ -1,4 +1,5 @@
 using ApiGateway.DelegateHandlers;
+using ApiGateway.Middlewares;
 using Ocelot.DependencyInjection;
 using Ocelot.Extensions;
 using Ocelot.Middleware;
@@ -33,7 +34,7 @@ namespace ApiGateway
             }
             app.UseHttpsRedirection();
             app.UseCors(corsSettings.PolicyName);
-            app.UseAuthorization();
+            app.UseMiddleware<AuthorizationHeaderApplierMiddleware>();
             app.MapControllers();
             app.UseOcelot();
             app.Run();

@@ -1,0 +1,50 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h2>{{ isLoginMode ? 'Login' : 'Registration' }}</h2>
+    </div>
+
+    <form [formGroup]="authForm" (ngSubmit)="onSubmit()" class="auth-form">
+      
+      <div class="input-group">
+        <label>Email</label>
+        <input
+          type="email"
+          formControlName="email"
+          placeholder="your@email.com"
+          class="form-input"
+        >
+      </div>
+
+      <div class="input-group" *ngIf="!isLoginMode">
+        <label>Phone number</label>
+        <input
+          type="tel"
+          formControlName="phone"
+          placeholder="+7 (999) 999-99-99"
+          class="form-input"
+        >
+      </div>
+
+      <div class="input-group">
+        <label>Password</label>
+        <input
+          type="password"
+          formControlName="password"
+          placeholder="Enter password"
+          class="form-input"
+        >
+      </div>
+
+      <button type="submit" class="submit-btn">
+        {{ isLoginMode ? 'Enter' : 'Register' }}
+      </button>
+
+      <div class="switch-mode">
+        <button type="button" class="switch-btn" (click)="switchMode()">
+          {{ isLoginMode ? 'Create account' : 'Already have account' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

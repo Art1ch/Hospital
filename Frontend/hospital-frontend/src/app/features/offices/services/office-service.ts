@@ -7,7 +7,7 @@ import { UpdateOfficeModel } from "../models/update-office-model";
 import { OfficeStatus } from "../models/office-status";
 import { DeleteOfficeModel } from "../models/delete-office-model";
 import { OfficeTimestampService } from "./office-timestamp-service";
-import { environment } from "../../../../environments/environment";
+import { environment } from "../../../../environments/environments";
 
 @Injectable({
   providedIn: 'root'

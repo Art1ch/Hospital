@@ -5,4 +5,4 @@ using AuthAPI.Application.Responses.Token;
 namespace AuthAPI.Application.Commands.Token.ExchangeToken;
 
 public sealed record ExchangeTokenCommand(
-    ExchangeTokenRequest Request) : BaseRequest<ExchangeTokenRequest, ExchangeTokenResponse>(Request);
+    ExchangeTokenRequest Request) : BaseRequest<ExchangeTokenRequest, ExchangeTokenResult>(Request);

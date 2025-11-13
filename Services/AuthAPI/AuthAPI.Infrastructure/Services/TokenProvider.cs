@@ -30,7 +30,7 @@ internal class TokenProvider : ITokenProvider
             new Claim("token_type", "id"),
             new Claim(JwtRegisteredClaimNames.Sub, account.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Email, account.Email),
-            new Claim(JwtRegisteredClaimNames.PhoneNumber, account.PhoneNumber),
+            new Claim(JwtRegisteredClaimNames.PhoneNumber, account.PhoneNumber == null ? "" : account.PhoneNumber),
         };
 
         var expiry = DateTime.UtcNow.AddMinutes(_jwtSettings.IdTokenExpiryMinutes);
@@ -56,7 +56,7 @@ internal class TokenProvider : ITokenProvider
 
     public ReferenceTokenEntity GenerateReferenceToken(AccountEntity account)
     {
-        var token = GenerateDefaultToken(new byte[_randomNumberForReferenceToken]);
+        var token = GenerateDefaultToken(_randomNumberForReferenceToken);
         return new ReferenceTokenEntity()
         {
             Token = token,
@@ -68,7 +68,7 @@ internal class TokenProvider : ITokenProvider
 
     public RefreshTokenEntity GenerateRefreshToken(AccountEntity account)
     {
-        var token = GenerateDefaultToken(new byte[_randomNumberForRefreshToken]);
+        var token = GenerateDefaultToken(_randomNumberForRefreshToken);
         return new RefreshTokenEntity()
         {
             Token = token,
@@ -84,12 +84,10 @@ internal class TokenProvider : ITokenProvider
         return isExpired;
     }
 
-    private string GenerateDefaultToken(byte[] randomNumber)
+    private string GenerateDefaultToken(int randomNumber)
     {
-        using var rng = RandomNumberGenerator.Create();
-        rng.GetBytes(randomNumber);
-        var token = Convert.ToBase64String(randomNumber);
-        return token;
+        var bytes = RandomNumberGenerator.GetBytes(randomNumber);
+        return Base64UrlEncoder.Encode(bytes);
     }
 
     private string GenerateJwtToken(DateTime expiry, Claim[] claims)

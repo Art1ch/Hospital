@@ -2,5 +2,5 @@
 
 public record RegistrationRequest(
     string Email,
-    string? Password,
-    string PhoneNumber);
+    string Password,
+    string? PhoneNumber);
